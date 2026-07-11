@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TanaboatTarot - كشف الأسرار الفلكية والأعداد</title>
+    <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #090615 0%, #120b29 50%, #090615 100%);
+            --gold: #d4af37;
+            --gold-glow: #ffe891;
+            --purple-glow: rgba(147, 51, 234, 0.3);
+            --text-main: #f3efff;
+            --text-sub: #bfaecf;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        /* تأثير النجوم في الخلفية */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                              radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
+            background-size: 550px 550px, 350px 350px;
+            background-position: 0 0, 40px 60px;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 480px;
+            padding: 20px 10px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .header h1 {
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+            font-size: 1.7rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        .input-card {
+            background: rgba(20, 15, 38, 0.65);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 24px;
+            padding: 25px 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px var(--purple-glow);
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            text-align: right;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: var(--gold-glow);
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(7, 4, 15, 0.7);
+            color: #fff;
+            font-size: 1rem;
+            box-sizing: border-box;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        button {
+            background: linear-gradient(90deg, #e5c043, #b88d1b);
+            color: #07040f;
+            border: none;
+            padding: 16px 0;
+            width: 100%;
+            font-size: 1.15rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(214, 175, 55, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        .result-box {
+            display: none;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            color: var(--gold);
+            text-align: right;
+            font-size: 1.2rem;
+            margin: 25px 5px 12px 0;
+            border-right: 3px solid var(--gold);
+            padding-right: 10px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .report-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: right;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            line-height: 1.7;
+        }
+
+        .card-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .badge-num {
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold-glow);
+            border: 1px solid var(--gold);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .badge-planet {
+            color: #fff;
+            background: linear-gradient(135deg, #7c3aed, #4c1d95);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .highlight-gold {
+            color: var(--gold-glow);
+            font-weight: bold;
+        }
+
+        .sub-desc {
+            color: var(--text-sub);
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>🔮 عالم الأعداد والطاقات الكونية</h1>
+            <p>اكتشف طاقة اسمك المخفية، ومسار قدرك، وبوصلة حظك اليومية</p>
+        </div>
+        
+        <div class="input-card">
+            <label for="userName">الاسم (المراد حسابه عُرفياً):</label>
+            <input type="text" id="userName" placeholder="أدخل اسمك الذي تُنادى به" autocomplete="off" aria-label="الاسم">
+
+            <label for="birthDate">تاريخ ميلادك بالكامل:</label>
+            <input type="date" id="birthDate" aria-label="تاريخ الميلاد">
+            
+            <button id="generateBtn" type="button">✨ استخراج الخارطة العددية</button>
+        </div>
+
+        <div class="result-box" id="resultBox" role="region" aria-live="polite">
+            
+            <div class="section-title">🪐 طاقة الهوية والاسم (علم الحرف)</div>
+            <div class="report-card">
+                <div class="card-header-info">
+                    <span id="namePlanetBadge" class="badge-planet">كوكب الحساب</span>
+                    <span id="nameNumBadge" class="badge-num">0</span>
+                </div>
+                <p id="nameMainDesc"></p>
+                <p id="namePlanetInfluence" class="sub-desc"></p>
+            </div>
+
+            <div class="section-title">✨ بوصلة الحظ الأصغر (المفتاح الفطري)</div>
+            <div class="report-card">
+                <div class="card-header-info">
+                    <span>يوم الميلاد الجوهري</span>
+                    <span id="smallLuckBadge" class="badge-num">0</span>
+                </div>
+                <p id="smallLuckDesc"></p>
+            </div>
+
+            <div class="section-title">👑 مسار الحياة والحظ الأكبر (القدر الكوني)</div>
+            <div class="report-card">
+                <div class="card-header-info">
+                    <span>مجموع الميقات الشامل</span>
+                    <span id="bigLuckBadge" class="badge-num">0</span>
+                </div>
+                <p id="bigLuckDesc"></p>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        // حماية استدعاء Telegram WebApp: تجنب الخطأ في المتصفحات العادية
+        const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+        try { if (tg && typeof tg.expand === 'function') tg.expand(); } catch (e) { /* صامت */ }
+
+        // جدول أبجد (قيمي) — استخدمنا المفردات الشائعة هنا
+        const abjadTable = {
+            'ا': 1, 'أ': 1, 'إ': 1, 'آ': 1,
+            'ب': 2, 'ج': 3, 'د': 4, 'ه': 5, 'ة': 5, 'و': 6, 'ز': 7, 'ح': 8, 'ط': 9,
+            'ي': 10, 'ى': 10, 'ك': 20, 'ل': 30, 'م': 40, 'ن': 50, 'س': 60, 'ع': 70, 'ف': 80, 'ص': 90,
+            'ق': 100, 'ر': 200, 'ش': 300, 'ت': 400, 'ث': 500, 'خ': 600, 'ذ': 700, 'ض': 800, 'ظ': 900, 'غ': 1000,
+            'ؤ': 6, 'ئ': 10, 'ء': 1 // بعض الحروف الشائعة المكفوفة
+        };
+
+        // قاعدة بيانات كونية مبسطة للأرقام 1-9
+        const cosmicDatabase = {
+            1: { planet: "الشمس ☀️", nameDesc: "اسمك يحمل طاقة الإشراق والسيادة...", planetInfluence: "تأثير الشمس عليك: يمنحك 'الأنا' القوية..." , smallLuck: "مبادرتك الذاتية مفتاح نجاتك", bigLuck: "مسار القائد الملهم" },
+            2: { planet: "القمر 🌙", nameDesc: "اسمك مشحون بترددات التناغم...", planetInfluence: "تأثير القمر عليك: يجعلك عاطفياً...", smallLuck: "مرونتك وعلاقاتك تفتح الأبواب", bigLuck: "مسار الشراكات والعمق النفسي" },
+            3: { planet: "المشتري 🪐", nameDesc: "اسمك ينبض بتردد كوكب الحظ الأكبر...", planetInfluence: "تأثير المشتري عليك: يفتح لك آفاق الحظ...", smallLuck: "التفاؤل يجذب الفرص", bigLuck: "مسار التوسع والازدهار" },
+            4: { planet: "أورانوس ⚡", nameDesc: "اسمك محكوم بطاقة الابتكار...", planetInfluence: "تأثير أورانوس عليك: يجعلك متفرداً...", smallLuck: "كسر الروتين يجلب التفوق", bigLuck: "مسار المصلح والمبتكر" },
+            5: { planet: "عطارد ☿", nameDesc: "اسمك مشحون بتردد عطارد...", planetInfluence: "تأثير عطارد عليك: يمنحك سرعة بديهة...", smallLuck: "سرعة الحركة والذكاء الاجتماعي", bigLuck: "مسار العقل المدبر والتجارة" },
+            6: { planet: "الزهرة ♀️", nameDesc: "اسمك ينبض بطاقة الزهرة...", planetInfluence: "تأثير الزهرة عليك: يمنحك حظاً ممتازاً في العلاقات...", smallLuck: "الحب واللطف يفتحان لك الأبواب", bigLuck: "مسار المربي وصانع الجمال" },
+            7: { planet: "نبتون ♆", nameDesc: "اسمك محكوم بتردد نبتون...", planetInfluence: "تأثير نبتون عليك: يمنحك حساً باطنياً...", smallLuck: "العزلة المؤقتة والإنصات يجلبان الإلهام", bigLuck: "مسار العارف والروحي العميق" },
+            8: { planet: "زحل ♄", nameDesc: "اسمك يحمل طاقة زحل...", planetInfluence: "تأثير زحل عليك: يضعك في اختبارات...", smallLuck: "النظام والتخطيط يجلبان الحظ", bigLuck: "مسار القائد وباني الإمبراطوريات" },
+            9: { planet: "المريخ ♂️", nameDesc: "اسمك مشحون بتردد المريخ...", planetInfluence: "تأثير المريخ عليك: يمنحك إصراراً...", smallLuck: "الشجاعة تفتح السبل", bigLuck: "مسار المحارب والمنتصر" }
+        };
+
+        // تقليص رقم إلى رقم أحادي (1-9) بجمع أرقامه
+        function reduceToSingleDigit(num) {
+            num = Math.abs(Number(num) || 0);
+            while (num > 9) {
+                num = String(num).split('').reduce((acc, d) => acc + parseInt(d, 10), 0);
+            }
+            return num === 0 ? 1 : num;
+        }
+
+        // تنظيف الاسم العربي: إزالة حركات، تطنين، تكديس، ومسح أي رموز غير الحروف العربية
+        function normalizeArabicName(name) {
+            if (!name) return '';
+            // إزالة حركات وتطويل (تشكيل، مدّ، فراغات)
+            name = name.replace(/[\u064B-\u0652\u0640\s]/g, '');
+            // توحيد بعض الحروف المتعددة إلى شكل واحد
+            name = name.replace(/[إأآ]/g, 'ا');
+            // إزالة أي حرف غير عربي (نترك فقط: ء-ي)
+            name = name.replace(/[^ء-ي]/g, '');
+            return name;
+        }
+
+        function generateCosmicReport() {
+            try {
+                const nameInputRaw = document.getElementById('userName').value || '';
+                const dateInput = document.getElementById('birthDate').value;
+
+                if (!nameInputRaw.trim() || !dateInput) {
+                    alert("الرجاء إدخال الاسم وتاريخ الميلاد بالكامل لفتح عالم الأعداد.");
+                    return;
+                }
+
+                const name = normalizeArabicName(nameInputRaw);
+                let abjadTotal = 0;
+
+                for (let ch of name) {
+                    if (abjadTable.hasOwnProperty(ch)) {
+                        abjadTotal += abjadTable[ch];
+                    } else {
+                        // تجاهل الحروف غير المعرفة (أو نقترح تعيين قيمة افتراضية 1)
+                        // abjadTotal += 0;
+                    }
+                }
+
+                if (abjadTotal === 0) abjadTotal = 1;
+                const nameDigit = reduceToSingleDigit(abjadTotal);
+
+                const birthDateObj = new Date(dateInput + 'T00:00:00'); // تأكد من إنشاء التاريخ بدون انزياح زمني
+                if (Number.isNaN(birthDateObj.getTime())) {
+                    alert("تاريخ الميلاد غير صالح، حاول مرة أخرى.");
+                    return;
+                }
+                const day = birthDateObj.getDate();
+                const month = birthDateObj.getMonth() + 1;
+                const year = birthDateObj.getFullYear();
+
+                const smallLuckDigit = reduceToSingleDigit(day);
+                const fullDateSum = day + month + year;
+                const bigLuckDigit = reduceToSingleDigit(fullDateSum);
+
+                // الحصول على بيانات من قاعدة البيانات مع fallback عند عدم العثور
+                const nameData = cosmicDatabase[nameDigit] || cosmicDatabase[1];
+                const smallLuckData = cosmicDatabase[smallLuckDigit] || cosmicDatabase[1];
+                const bigLuckData = cosmicDatabase[bigLuckDigit] || cosmicDatabase[1];
+
+                document.getElementById('nameNumBadge').innerText = nameDigit;
+                document.getElementById('namePlanetBadge').innerText = nameData.planet;
+                document.getElementById('nameMainDesc').innerText = nameData.nameDesc;
+                document.getElementById('namePlanetInfluence').innerText = nameData.planetInfluence;
+
+                document.getElementById('smallLuckBadge').innerText = smallLuckDigit;
+                document.getElementById('smallLuckDesc').innerHTML = `رقم الحظ الأصغر والمفتاح الفطري لشخصيتك هو <span class="highlight-gold">${smallLuckDigit}</span> والمستمد من طاقة كوكب (<span class="highlight-gold">${smallLuckData.planet}</span>).<br><br><strong>كيفية الاستفادة منه:</strong> ${smallLuckData.smallLuck}`;
+
+                document.getElementById('bigLuckBadge').innerText = bigLuckDigit;
+                document.getElementById('bigLuckDesc').innerHTML = `رقم الحظ الأكبر ومسار قدرك الكوني الشامل هو <span class="highlight-gold">${bigLuckDigit}</span> الخاضع لسيطرة وتردد كوكب (<span class="highlight-gold">${bigLuckData.planet}</span>).<br><br><strong>الدلالة القدرية العميقة:</strong> ${bigLuckData.bigLuck}`;
+
+                document.getElementById('resultBox').style.display = 'block';
+
+                // هابتيك آمن داخل Telegram إن وُجد
+                try {
+                    if (tg && tg.HapticFeedback && typeof tg.HapticFeedback.impactOccurred === 'function') {
+                        tg.HapticFeedback.impactOccurred('heavy');
+                    }
+                } catch (e) { /* صامت */ }
+
+            } catch (err) {
+                console.error('خطأ أثناء توليد التقرير:', err);
+                alert('حصل خطأ غير متوقع أثناء إنشاء التقرير. افتح وحدة التحكم لمزيد من التفاصيل.');
+            }
+        }
+
+        // ربط الأزرار والأحداث (دعم لوحة المفاتيح: Enter لنموذج الإدخال)
+        document.getElementById('generateBtn').addEventListener('click', generateCosmicReport);
+        document.getElementById('userName').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                generateCosmicReport();
+            }
+        });
+        document.getElementById('birthDate').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                generateCosmicReport();
+            }
+        });
+    </script>
+</body>
+</html>
