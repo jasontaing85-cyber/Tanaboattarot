@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة تاروت تانابوت الروحية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --gold: #d4af37;
+            --purple: #9d4edd;
+            --text: #e0e0e0;
+            --light-text: #b0b0b0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: rgba(15, 52, 96, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--gold);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: var(--gold);
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            animation: floatLogo 3s ease-in-out infinite;
+        }
+
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+            color: var(--light-text);
+            margin-top: 3px;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 30px;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--gold);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--light-text);
+            margin-bottom: 15px;
+            animation: fadeIn 0.8s ease-out 0.2s both;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--light-text);
+            max-width: 600px;
+            margin: 30px auto;
+            line-height: 1.8;
+            animation: fadeIn 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin: 60px 0;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, rgba(157, 78, 221, 0.1), rgba(15, 52, 96, 0.3));
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: cardFloat 0.8s ease-out both;
+        }
+
+        .project-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .project-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .project-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes cardFloat {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.2);
+            border-color: var(--purple);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: spin 3s linear infinite;
+        }
+
+        .project-card:hover .project-icon {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .project-card h3 {
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+        }
+
+        .project-card p {
+            color: var(--light-text);
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .project-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .project-features li {
+            color: var(--light-text);
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .project-features li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+        }
+
+        .project-link {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold), var(--purple));
+            color: var(--primary);
+            padding: 12px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .project-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Features Section */
+        .features-section {
+            background: rgba(15, 52, 96, 0.3);
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            padding: 50px;
+            margin: 80px 0;
+            text-align: center;
+        }
+
+        .features-section h3 {
+            font-size: 2.2rem;
+            color: var(--gold);
+            margin-bottom: 40px;
+        }
+
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-item {
+            padding: 25px;
+            background: rgba(157, 78, 221, 0.1);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .feature-item-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-item h4 {
+            color: var(--gold);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .feature-item p {
+            color: var(--light-text);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(15, 52, 96, 0.8);
+            border-top: 2px solid var(--gold);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-content p {
+            color: var(--light-text);
+            margin: 10px 0;
+            font-size: 0.95rem;
+        }
+
+        .footer-links {
+            margin: 20px 0;
+        }
+
+        .footer-links a {
+            color: var(--gold);
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--purple);
+        }
+
+        .footer-credit {
+            color: var(--light-text);
+            font-size: 0.85rem;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            nav {
+                display: flex;
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav a {
+                margin-left: 0;
+            }
+
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .features-section {
+                padding: 30px;
+            }
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--gold), var(--purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            animation: bounce 2s infinite;
+            z-index: 50;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .scroll-indicator:hover {
+            animation: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">
+                <span class="logo-icon">🔮</span>
+                <div>
+                    <h1>تانابوت</h1>
+                    <p>منصة التاروت الروحية</p>
+                </div>
+            </a>
+            <nav>
+                <a href="#projects">المشاريع</a>
+                <a href="#features">المميزات</a>
+                <a href="#footer">تواصل</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h2>🌙 مرحباً بك في عالم التاروت الروحي 🌙</h2>
+            <p>منصتك الرقمية للشفاء الروحي والتأمل العميق</p>
+            <div class="hero-description">
+                استكشف عالم التاروت الغامض والقراءات الروحية العميقة. نحن نقدم تجارب فريدة وقراءات دقيقة تساعدك على فهم نفسك والعالم من حولك بشكل أعمق وأكثر وضوحاً.
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <h2 style="text-align: center; font-size: 2.5rem; color: var(--gold); margin-bottom: 50px;">🎴 مشاريعنا الروحية</h2>
+            
+            <div class="projects-grid">
+                <!-- Project 1: Tarot Fongan -->
+                <div class="project-card">
+                    <div class="project-icon">☕</div>
+                    <h3>تاروت الفنجان الغجري</h3>
+                    <p>غوص عميق في أسرار الفنجان والقراءات الغجرية التقليدية</p>
+                    <ul class="project-features">
+                        <li>12 ورقة تاروت غجرية فريدة</li>
+                        <li>قراءات شهرية مفصلة</li>
+                        <li>نصائح روحية وإرشادات</li>
+                        <li>واجهة غامضة وجذابة</li>
+                    </ul>
+                    <a href="https://jasontaing85-cyber.github.io/Tanaboattarot/tarot-fongan/" class="project-link" target="_blank">
+                        اكتشف الآن ✨
+                    </a>
+                </div>
+
+                <!-- Project 2: Tarot Agala -->
+                <div class="project-card">
+                    <div class="project-icon">🃏</div>
+                    <h3>تاروت الأجالا</h3>
+                    <p>قراءات تاروت شاملة باستخدام نظام الأجالا القديم</p>
+                    <ul class="project-features">
+                        <li>نظام قراءة متقدم</li>
+                        <li>تفسيرات عميقة وشاملة</li>
+                        <li>رسوم توضيحية جميلة</li>
+                        <li>دعم اللغة العربية الكاملة</li>
+                    </ul>
+                    <a href="https://jasontaing85-cyber.github.io/Tanaboattarot/tarot-agala/" class="project-link" target="_blank">
+                        اكتشف الآن ✨
+                    </a>
+                </div>
+
+                <!-- Project 3: Coming Soon -->
+                <div class="project-card">
+                    <div class="project-icon">🌟</div>
+                    <h3>مشروع جديد قريباً</h3>
+                    <p>نحن نعمل على مشروع روحي جديد وفريد من نوعه</p>
+                    <ul class="project-features">
+                        <li>تجربة روحية متقدمة</li>
+                        <li>تقنيات حديثة</li>
+                        <li>قراءات شخصية</li>
+                        <li>دعم 24/7</li>
+                    </ul>
+                    <button class="project-link" onclick="alert('هذا المشروع قيد الإعداد حالياً 🚀')">
+                        قريباً جداً 🔮
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <h3>✨ المميزات الرئيسية ✨</h3>
+            <div class="features-list">
+                <div class="feature-item">
+                    <div class="feature-item-icon">🎯</div>
+                    <h4>دقة عالية</h4>
+                    <p>قراءات دقيقة وموثوقة تعتمد على العلم والروحانية</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item-icon">🌈</div>
+                    <h4>تصميم جميل</h4>
+                    <p>واجهات مستخدم فريدة وجذابة تعكس عمق التاروت</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item-icon">📱</div>
+                    <h4>متوافق مع الجوال</h4>
+                    <p>استمتع بالتجربة على جميع الأجهزة والشاشات</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item-icon">🔒</div>
+                    <h4>آمن وخاص</h4>
+                    <p>بيانات آمنة وخصوصية تامة لجميع المستخدمين</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item-icon">🌍</div>
+                    <h4>دعم عربي كامل</h4>
+                    <p>واجهة كاملة باللغة العربية مع اتجاه من اليمين لليسار</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item-icon">⚡</div>
+                    <h4>سرعة عالية</h4>
+                    <p>تحميل سريع وأداء ممتاز على جميع الاتصالات</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="footer-content">
+            <h3 style="color: var(--gold); margin-bottom: 20px;">تانابوت - منصة التاروت الروحية 🔮</h3>
+            <p>اكتشف الحقائق العميقة واستنير طريقك عبر قراءات التاروت الدقيقة والموثوقة</p>
+            
+            <div class="footer-links">
+                <a href="https://github.com/jasontaing85-cyber/Tanaboattarot" target="_blank">GitHub</a>
+                <a href="mailto:contact@tanaboattarot.com">البريد الإلكتروني</a>
+                <a href="#projects">المشاريع</a>
+            </div>
+
+            <div class="footer-credit">
+                <p>© 2026 تانابوت - منصة التاروت الروحية. جميع الحقوق محفوظة 🌙</p>
+                <p>تم التطوير بـ ❤️ من قبل jasontaing85-cyber</p>
+                <p style="margin-top: 10px; font-size: 0.8rem;">
+                    جميع المشاريع معاينتها مباشرة عبر الإنترنت - لا يلزم تحميل إضافي
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-indicator" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        ⬆️
+    </div>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Show/hide scroll indicator
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if (window.scrollY > 300) {
+                scrollIndicator.style.display = 'flex';
+            } else {
+                scrollIndicator.style.display = 'none';
+            }
+        });
+
+        // Initial hide
+        document.querySelector('.scroll-indicator').style.display = 'none';
+    </script>
+</body>
+</html>
