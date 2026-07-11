@@ -13,6 +13,7 @@
             --purple-glow: rgba(147, 51, 234, 0.3);
             --text-main: #f3efff;
             --text-sub: #bfaecf;
+            --accent: #8f63ff;
         }
 
         body {
@@ -44,8 +45,8 @@
 
         .container {
             width: 92%;
-            max-width: 480px;
-            padding: 20px 10px;
+            max-width: 540px;
+            padding: 20px 12px;
             text-align: center;
             box-sizing: border-box;
         }
@@ -53,26 +54,26 @@
         .header h1 {
             color: var(--gold);
             text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
-            font-size: 1.7rem;
-            margin-bottom: 5px;
-            font-weight: 700;
+            font-size: 1.9rem;
+            margin-bottom: 6px;
+            font-weight: 800;
         }
 
         .header p {
             color: var(--text-sub);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin-top: 0;
-            margin-bottom: 30px;
+            margin-bottom: 26px;
         }
 
         .input-card {
             background: rgba(20, 15, 38, 0.65);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            border-radius: 24px;
-            padding: 25px 20px;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px var(--purple-glow);
-            margin-bottom: 25px;
+            border: 1px solid rgba(212, 175, 55, 0.18);
+            border-radius: 20px;
+            padding: 22px 16px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45), inset 0 0 20px var(--purple-glow);
+            margin-bottom: 22px;
         }
 
         label {
@@ -86,110 +87,134 @@
 
         input {
             width: 100%;
-            padding: 14px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            background: rgba(7, 4, 15, 0.7);
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            background: rgba(7, 4, 15, 0.65);
             color: #fff;
-            font-size: 1rem;
+            font-size: 0.98rem;
             box-sizing: border-box;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         input:focus {
             outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            border-color: var(--accent);
+            box-shadow: 0 0 18px rgba(143,99,255,0.18);
         }
 
         button {
             background: linear-gradient(90deg, #e5c043, #b88d1b);
             color: #07040f;
             border: none;
-            padding: 16px 0;
+            padding: 14px 0;
             width: 100%;
-            font-size: 1.15rem;
-            font-weight: bold;
+            font-size: 1.05rem;
+            font-weight: 800;
             border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(214, 175, 55, 0.3);
-            transition: all 0.2s ease;
+            box-shadow: 0 6px 20px rgba(214, 175, 55, 0.28);
+            transition: transform 0.12s ease;
         }
 
-        button:active {
-            transform: scale(0.97);
-        }
+        button:active { transform: scale(0.98); }
 
         .result-box {
             display: none;
             animation: fadeIn 0.6s ease-out forwards;
+            margin-top: 14px;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .section-title {
             color: var(--gold);
             text-align: right;
-            font-size: 1.2rem;
-            margin: 25px 5px 12px 0;
+            font-size: 1.15rem;
+            margin: 18px 4px 10px 0;
             border-right: 3px solid var(--gold);
             padding-right: 10px;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.25);
         }
 
         .report-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 14px;
             text-align: right;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            line-height: 1.7;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+            line-height: 1.65;
         }
 
         .card-header-info {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+            padding-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .badge-num {
-            background: rgba(212, 175, 55, 0.15);
+            background: rgba(212, 175, 55, 0.12);
             color: var(--gold-glow);
             border: 1px solid var(--gold);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 1.1rem;
+            padding: 6px 12px;
+            border-radius: 18px;
+            font-weight: 800;
+            font-size: 1.05rem;
         }
 
         .badge-planet {
             color: #fff;
             background: linear-gradient(135deg, #7c3aed, #4c1d95);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            font-weight: 700;
         }
 
         .highlight-gold {
             color: var(--gold-glow);
-            font-weight: bold;
+            font-weight: 700;
         }
 
         .sub-desc {
             color: var(--text-sub);
             margin-top: 10px;
             font-size: 0.95rem;
+        }
+
+        .detail-list { text-align: right; margin-top: 10px; color: var(--text-sub); }
+        .detail-list ul { margin: 8px 0 0 0; padding: 0 12px; text-align: right; }
+        .detail-list li { margin: 6px 0; list-style: none; padding-right: 12px; position: relative; }
+        .detail-list li::before { content: "•"; color: var(--accent); position: absolute; right: 0; }
+
+        .actions-row { display:flex; gap:10px; margin-top:12px; justify-content:flex-end; }
+        .small-btn { background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text-main); padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:700; }
+        .small-btn:active { transform: scale(0.98); }
+
+        /* Confetti canvas */
+        #confettiCanvas {
+            position: fixed;
+            pointer-events: none;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            z-index: 9999;
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 420px) {
+            .container { padding: 14px; }
+            .header h1 { font-size: 1.4rem; }
+            .badge-num, .badge-planet { font-size: 0.95rem; padding: 6px 10px; }
         }
     </style>
 </head>
@@ -198,80 +223,182 @@
     <div class="container">
         <div class="header">
             <h1>🔮 عالم الأعداد والطاقات الكونية</h1>
-            <p>اكتشف طاقة اسمك المخفية، ومسار قدرك، وبوصلة حظك اليومية</p>
+            <p>اكتشف طاقة اسمك المخفية، ومسار قدرك، وبوصلة حظك اليومية — مع تفسيرات مُفصّلة، نصائح عملية، وطقوس صغيرة تزيد من الاندماج الروحي.</p>
         </div>
         
-        <div class="input-card">
+        <div class="input-card" role="form" aria-label="نموذج الحساب العددي">
             <label for="userName">الاسم (المراد حسابه عُرفياً):</label>
             <input type="text" id="userName" placeholder="أدخل اسمك الذي تُنادى به" autocomplete="off" aria-label="الاسم">
 
             <label for="birthDate">تاريخ ميلادك بالكامل:</label>
             <input type="date" id="birthDate" aria-label="تاريخ الميلاد">
             
-            <button id="generateBtn" type="button">✨ استخراج الخارطة العددية</button>
+            <button id="generateBtn" type="button" aria-label="استخراج الخارطة">✨ استخراج الخارطة العددية</button>
         </div>
 
-        <div class="result-box" id="resultBox" role="region" aria-live="polite">
+        <div class="result-box" id="resultBox" role="region" aria-live="polite" aria-atomic="true" tabindex="-1">
             
             <div class="section-title">🪐 طاقة الهوية والاسم (علم الحرف)</div>
-            <div class="report-card">
+            <div class="report-card" id="nameReport">
                 <div class="card-header-info">
                     <span id="namePlanetBadge" class="badge-planet">كوكب الحساب</span>
                     <span id="nameNumBadge" class="badge-num">0</span>
                 </div>
-                <p id="nameMainDesc"></p>
-                <p id="namePlanetInfluence" class="sub-desc"></p>
+                <p id="nameMainDesc" class="sub-desc"></p>
+                <div id="nameFullDetail" class="detail-list"></div>
             </div>
 
-            <div class="section-title">✨ بوصلة الحظ الأصغر (المفتاح الفطري)</div>
-            <div class="report-card">
+            <div class="section-title">✨ بوصلة الحظ الأصغر (مفتاحك اليومي)</div>
+            <div class="report-card" id="smallLuckReport">
                 <div class="card-header-info">
                     <span>يوم الميلاد الجوهري</span>
                     <span id="smallLuckBadge" class="badge-num">0</span>
                 </div>
-                <p id="smallLuckDesc"></p>
+                <p id="smallLuckDesc" class="sub-desc"></p>
+                <div id="smallFullDetail" class="detail-list"></div>
             </div>
 
             <div class="section-title">👑 مسار الحياة والحظ الأكبر (القدر الكوني)</div>
-            <div class="report-card">
+            <div class="report-card" id="bigLuckReport">
                 <div class="card-header-info">
                     <span>مجموع الميقات الشامل</span>
                     <span id="bigLuckBadge" class="badge-num">0</span>
                 </div>
-                <p id="bigLuckDesc"></p>
+                <p id="bigLuckDesc" class="sub-desc"></p>
+                <div id="bigFullDetail" class="detail-list"></div>
+
+                <div class="actions-row" aria-hidden="false">
+                    <button id="copySummary" class="small-btn" title="نسخ الملخص">نسخ الملخص</button>
+                    <button id="shareSummary" class="small-btn" title="مشاركة">مشاركة</button>
+                </div>
             </div>
             
         </div>
     </div>
 
+    <!-- صوت احتفالي قصير -->
+    <audio id="chimeAudio" preload="auto" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+
+    <!-- قماش الكونفيتي -->
+    <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
     <script>
-        // حماية استدعاء Telegram WebApp: تجنب الخطأ في المتصفحات العادية
+        // حماية استدعاء Telegram WebApp
         const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
         try { if (tg && typeof tg.expand === 'function') tg.expand(); } catch (e) { /* صامت */ }
 
-        // جدول أبجد (قيمي) — استخدمنا المفردات الشائعة هنا
+        // جدول أبجد (قيمي)
         const abjadTable = {
-            'ا': 1, 'أ': 1, 'إ': 1, 'آ': 1,
-            'ب': 2, 'ج': 3, 'د': 4, 'ه': 5, 'ة': 5, 'و': 6, 'ز': 7, 'ح': 8, 'ط': 9,
-            'ي': 10, 'ى': 10, 'ك': 20, 'ل': 30, 'م': 40, 'ن': 50, 'س': 60, 'ع': 70, 'ف': 80, 'ص': 90,
-            'ق': 100, 'ر': 200, 'ش': 300, 'ت': 400, 'ث': 500, 'خ': 600, 'ذ': 700, 'ض': 800, 'ظ': 900, 'غ': 1000,
-            'ؤ': 6, 'ئ': 10, 'ء': 1 // بعض الحروف الشائعة المكفوفة
+            'ا':1,'أ':1,'إ':1,'آ':1,'ب':2,'ج':3,'د':4,'ه':5,'ة':5,'و':6,'ز':7,'ح':8,'ط':9,
+            'ي':10,'ى':10,'ك':20,'ل':30,'م':40,'ن':50,'س':60,'ع':70,'ف':80,'ص':90,
+            'ق':100,'ر':200,'ش':300,'ت':400,'ث':500,'خ':600,'ذ':700,'ض':800,'ظ':900,'غ':1000,
+            'ؤ':6,'ئ':10,'ء':1
         };
 
-        // قاعدة بيانات كونية مبسطة للأرقام 1-9
+        // قاعدة بيانات كونية مفصلة للأرقام 1-9
         const cosmicDatabase = {
-            1: { planet: "الشمس ☀️", nameDesc: "اسمك يحمل طاقة الإشراق والسيادة...", planetInfluence: "تأثير الشمس عليك: يمنحك 'الأنا' القوية..." , smallLuck: "مبادرتك الذاتية مفتاح نجاتك", bigLuck: "مسار القائد الملهم" },
-            2: { planet: "القمر 🌙", nameDesc: "اسمك مشحون بترددات التناغم...", planetInfluence: "تأثير القمر عليك: يجعلك عاطفياً...", smallLuck: "مرونتك وعلاقاتك تفتح الأبواب", bigLuck: "مسار الشراكات والعمق النفسي" },
-            3: { planet: "المشتري 🪐", nameDesc: "اسمك ينبض بتردد كوكب الحظ الأكبر...", planetInfluence: "تأثير المشتري عليك: يفتح لك آفاق الحظ...", smallLuck: "التفاؤل يجذب الفرص", bigLuck: "مسار التوسع والازدهار" },
-            4: { planet: "أورانوس ⚡", nameDesc: "اسمك محكوم بطاقة الابتكار...", planetInfluence: "تأثير أورانوس عليك: يجعلك متفرداً...", smallLuck: "كسر الروتين يجلب التفوق", bigLuck: "مسار المصلح والمبتكر" },
-            5: { planet: "عطارد ☿", nameDesc: "اسمك مشحون بتردد عطارد...", planetInfluence: "تأثير عطارد عليك: يمنحك سرعة بديهة...", smallLuck: "سرعة الحركة والذكاء الاجتماعي", bigLuck: "مسار العقل المدبر والتجارة" },
-            6: { planet: "الزهرة ♀️", nameDesc: "اسمك ينبض بطاقة الزهرة...", planetInfluence: "تأثير الزهرة عليك: يمنحك حظاً ممتازاً في العلاقات...", smallLuck: "الحب واللطف يفتحان لك الأبواب", bigLuck: "مسار المربي وصانع الجمال" },
-            7: { planet: "نبتون ♆", nameDesc: "اسمك محكوم بتردد نبتون...", planetInfluence: "تأثير نبتون عليك: يمنحك حساً باطنياً...", smallLuck: "العزلة المؤقتة والإنصات يجلبان الإلهام", bigLuck: "مسار العارف والروحي العميق" },
-            8: { planet: "زحل ♄", nameDesc: "اسمك يحمل طاقة زحل...", planetInfluence: "تأثير زحل عليك: يضعك في اختبارات...", smallLuck: "النظام والتخطيط يجلبان الحظ", bigLuck: "مسار القائد وباني الإمبراطوريات" },
-            9: { planet: "المريخ ♂️", nameDesc: "اسمك مشحون بتردد المريخ...", planetInfluence: "تأثير المريخ عليك: يمنحك إصراراً...", smallLuck: "الشجاعة تفتح السبل", bigLuck: "مسار المحارب والمنتصر" }
+            1: {
+                planet: "الشمس ☀️",
+                nameDesc: "طاقة الشمس قوية ومُهيمنة: تمنحك حضوراً طبيعياً وثقة تضيء المكان حولك.",
+                planetInfluenceLong: "الشمس تحكم الذات والإرادة والقيادة. إنها توهج داخلي يدفعك لتولي مواقع المسؤولية والمبادرة، لكنها تطلب منك التفكير بعناية في إساءة الاستخدام أو الأنا المفرطة.",
+                smallLuck: "ابدأ يومك بخطوة قيادية صغيرة — قرار واحد واضح يفتح قنوات التقدم.",
+                bigLuck: "مصيرك يعزّز القيادة والإنجاز، فرص مهمة تظهر عندما تثبت مصداقيتك وتتحمّل مسؤولية.",
+                luckyColors: ["ذهبي","أصفر شمسي","أبيض دافئ"],
+                dailyTips: ["انطق نية قوية صباحاً","استلم دور القيادة في مشروع صغير","مارس تمرين التنفس لثانية 60"],
+                affirmations: "أنا قائد حياتي، أستقبل نور الفرص بثقة وحكمة.",
+                ritual: "ضوء شمعة صفراء صباحاً مع قصاصة ورق تكتب فيها نية قيادية، احتفظ بها حتى يظهر الدليل."
+            },
+            2: {
+                planet: "القمر 🌙",
+                nameDesc: "القمر يضفي حساسية وحناناً، ويجعل حضورك مقبولاً ومرناً في العلاقات.",
+                planetInfluenceLong: "القمر يحكم المشاعر والحدس والهمسات الداخلية. يمنحك قدرة على التعبير الحنون، لكنه يدعوك للاعتناء بتوازن المشاعر حتى لا تُستهلك طاقتك.",
+                smallLuck: "قد تجد حلولاً للعلاقات عبر الإنصات الهادئ والتواصل البسيط.",
+                bigLuck: "نجاحك يكمن في الشراكات والدعم المتبادل؛ تعاون مدروس يولد فرصاً مستدامة.",
+                luckyColors: ["فضي","كحلي داكن","أزرق هادئ"],
+                dailyTips: ["اقضِ وقتاً مع من تثق به","اكتب رسالة شكر","تأمل 5 دقائق قبل النوم"],
+                affirmations: "قلبي مرن ونقي، أستقبل وأعطي بحب ووضوح.",
+                ritual: "قضاء خمس دقائق ليلاً أمام نافذة القمر، شكر بصوت هادئ على دعم من حولك."
+            },
+            3: {
+                planet: "المشتري 🪐",
+                nameDesc: "المشتري رمز الحظ والتوسع: اسمك يشحنك بتفاؤل وفرص واسعة.",
+                planetInfluenceLong: "المشتري مولّد الفرص والنمو — يدعم تعلمك، رحلاتك، وتوسيع آفاقك. لكنه يحذرك من التوسع بلا وزن أو افتراضات مبالغ فيها.",
+                smallLuck: "تفاؤلك اليومي يجذب مناحي حسن الطالع؛ قل نعم لفرصة صغيرة.",
+                bigLuck: "مسار الازدهار والفرص الكبيرة من خلال التعليم والشبكات الاجتماعية.",
+                luckyColors: ["بِني فاتح","أخضر فاتح","ذهبي فاتح"],
+                dailyTips: ["اقرأ مقالة تثري فكرك","دعوة صغيرة للتعرّف على شخص جديد","استثمر وقتاً بالتعلم"],
+                affirmations: "أنا أوسع مجالي بحكمة، الفرص تجذبني الآن.",
+                ritual: "احتفظ بقطعة صغيرة ترمز إلى الطموح (حجر صغير، ورق) وذكّر نفسك بها كل صباح."
+            },
+            4: {
+                planet: "أورانوس ⚡",
+                nameDesc: "أورانوس يمنحك روح التغيير والابتكار — فكرك سريع وغير متوقع.",
+                planetInfluenceLong: "طاقته تحفز التحوّل والإبداع، تجعلك مميزاً بطرق غير مألوفة. عليك توجيه الطاقة حتى لا تصبح فوضوية.",
+                smallLuck: "خروجك عن المألوف قد يفتح باباً جديداً؛ جرب نهجاً غير معتاد الآن.",
+                bigLuck: "مسار المصلح والمبتكر — مشاريع جريئة تقلب الموازين عندما تُدار بحكمة.",
+                luckyColors: ["أزرق كهربائي","رمادي معدني","بنفسجي"],
+                dailyTips: ["فكر بطريقة عكسية لمسألة تواجهك","دوّن فكرة غريبة وحوّلها لمشروع صغير"],
+                affirmations: "أرحّب بالتغيير، أبتكر بجرأة وحكمة.",
+                ritual: "لحظة صمت مع ورقة تكتب فيها فكرة ثورية — عد إليها خلال 7 أيام لترى تطورها."
+            },
+            5: {
+                planet: "عطارد ☿",
+                nameDesc: "عطارد يهبك سرعة بديهة ومرونة في التواصل والتعلم.",
+                planetInfluenceLong: "حاكم النقل والفكر — يجعلك بارعاً في الكلام، التفاوض، والكتابة. لكن احذر من التشتّت أو الاندفاع بالكلام.",
+                smallLuck: "محادثة قصيرة قد تفتح فرصة؛ اجعل رسالتك واضحة ومباشرة.",
+                bigLuck: "مسار العقل المدبر: التجارة، التعليم، والاتصالات تزدهر عندما تضع استراتيجيات بسيطة.",
+                luckyColors: ["رمادي فاتح","فيروزي","أبيض نظيف"],
+                dailyTips: ["رتّب أفكارك في قائمة قصيرة","شارك معلومة مفيدة مع شخص"، "اكتب رسالة قصيرة لشخص مهم"],
+                affirmations: "أفكاري واضحة وسريعة، أستخدم لغة النجاح لصالح مساري.",
+                ritual: "اكتب هدف تعلمي لثلاثين يوماً وعلّقه أمامك؛ راجع التقدم أسبوعياً."
+            },
+            6: {
+                planet: "الزهرة ♀️",
+                nameDesc: "الزهرة تمنحك ذوقاً جميلاً، حباً، وقدرة على بناء بيئات جذابة وساحرة.",
+                planetInfluenceLong: "تحكم العلاقات والجمال والقيم؛ تمنحك سحر القلب وموهبة الاستقطاب. احذر من التعلّق المفرط أو التضحية الذاتية بلا حدود.",
+                smallLuck: "لفتة لطف بسيطة اليوم قد تُكسبك مؤازرة قوية.",
+                bigLuck: "مسار المربي وصانع الجمال — فن، تصميم، أو مهن تعتمد على الجمال والعلاقات تزدهر.",
+                luckyColors: ["وردي شاحب","لافندر","ذهبي رقيق"],
+                dailyTips: ["اهتم بمظهرك البسيط","قدم مجاملة صادقة","اقضِ وقتاً في جمال الطبيعة"],
+                affirmations: "أجذب الحب والجمال بإيجابية ووعي.",
+                ritual: "نثر وردة أو عطر مفضل في مكتبك صباحاً مع نية جذب التناغم."
+            },
+            7: {
+                planet: "نبتون ♆",
+                nameDesc: "نبتون يفتح أمامك عوالم الروح، الحلم، والحدس العميق.",
+                planetInfluenceLong: "يشركك في المجال الروحي والخيال الإبداعي؛ مفيد للفنانين والباحثين عن معنى. لكنه يتطلب حدوداً واضحة للحفاظ على الواقعية.",
+                smallLuck: "الاستماع لحدسك قد يقودك لقرار صائب اليوم.",
+                bigLuck: "مسار العارف: البحث الروحي، الفن، والعمل الخفي الذي يترك أثراً طويل الأمد.",
+                luckyColors: ["أزرق بحري","فضي ضبابي","أبيض لؤلؤي"],
+                dailyTips: ["قم بتأمل قصير","دوّن حلمك وتأمل الرموز","استمع لموسيقى تبعث السكينة"],
+                affirmations: "حدسي يقودني، أسمح للروح أن ترشدني بحذر وحكمة.",
+                ritual: "كتابة حلمك الصباحي والبحث عن رسالة رمزية واحدة منه."
+            },
+            8: {
+                planet: "زحل ♄",
+                nameDesc: "زحل يُضفي صلابة، انضباطاً، وقدرة على بناء أسس قوية وطويلة الأمد.",
+                planetInfluenceLong: "قانون ونظام وتجارب تؤدي إلى حكمة ناضجة. قد يفرض اختبارات لكن مكافآته دائمة لمن يصبر ويخطط.",
+                smallLuck: "تنظيم بسيط أو خطة قصيرة تؤتي ثمراً واضحاً.",
+                bigLuck: "مسار البنّاء والقائد الطويل الأمد — نجاحات مبنية على صبر وجهد منظّم.",
+                luckyColors: ["رمادي داكن","أسود مع لمسة معدن","كستنائي"],
+                dailyTips: ["ضع جدولاً واقبل مهمة صغيرة","ضع حدود واضحة في اجتماع"],
+                affirmations: "أنا أُشيِّد مستقبلي بصبر وانضباط.",
+                ritual: "كتابة 3 خطوات عملية تطبّقها لمدة 30 يوم لتأسيس عادة قوية."
+            },
+            9: {
+                planet: "المريخ ♂️",
+                nameDesc: "المريخ يمنحك قوة فعل، حماسة، وشجاعة في تحقيق ما تريد.",
+                planetInfluenceLong: "طاقة الحركة والصراع الصحي؛ تحفز الإقدام والمواجهة. لكن احذر من الاندفاع والتحمّس غير المراقب.",
+                smallLuck: "مبادرة جسورة اليوم تفتح باباً سريعاً — تحرك بذكاء لا بعنف.",
+                bigLuck: "مسار المحارب: إنجازات سريعة عندما تُوجَّه الطاقة بشكل عقلاني وتخطيط بسيط.",
+                luckyColors: ["أحمر","برتقالي ناري","أسود على شكل حافة"],
+                dailyTips: ["مارس نشاطاً بدنياً قصيراً","اتخذ خطوة صغيرة تحدّ من الخوف"],
+                affirmations: "أنا أتحرّك بقوة وهدف، أنجز باستمرارية ووعي.",
+                ritual: "تحريك الجسم لمدة 5 دقائق مع نية تحرير طاقة كاملة يساعد في توجيه الحماسة."
+            }
         };
 
-        // تقليص رقم إلى رقم أحادي (1-9) بجمع أرقامه
+        // تقليص رقم إلى رقم أحادي (1-9) بجمع الأرقام
         function reduceToSingleDigit(num) {
             num = Math.abs(Number(num) || 0);
             while (num > 9) {
@@ -280,16 +407,65 @@
             return num === 0 ? 1 : num;
         }
 
-        // تنظيف الاسم العربي: إزالة حركات، تطنين، تكديس، ومسح أي رموز غير الحروف العربية
+        // تنظيف الاسم العربي
         function normalizeArabicName(name) {
             if (!name) return '';
-            // إزالة حركات وتطويل (تشكيل، مدّ، فراغات)
             name = name.replace(/[\u064B-\u0652\u0640\s]/g, '');
-            // توحيد بعض الحروف المتعددة إلى شكل واحد
             name = name.replace(/[إأآ]/g, 'ا');
-            // إزالة أي حرف غير عربي (نترك فقط: ء-ي)
             name = name.replace(/[^ء-ي]/g, '');
             return name;
+        }
+
+        // وظيفة الكونفيتي البسيط
+        function runConfetti(duration = 1800) {
+            const canvas = document.getElementById('confettiCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width = window.innerWidth;
+            const h = canvas.height = window.innerHeight;
+            const particles = [];
+            const colors = ['#f2c94c','#f2994a','#f76b8a','#8f63ff','#5eead4','#ffe891'];
+
+            for (let i=0;i<90;i++){
+                particles.push({
+                    x: Math.random()*w,
+                    y: -20 - Math.random()*h*0.2,
+                    r: 6 + Math.random()*8,
+                    color: colors[Math.floor(Math.random()*colors.length)],
+                    vx: (Math.random()-0.5)*4,
+                    vy: 2 + Math.random()*6,
+                    tilt: Math.random()*0.2
+                });
+            }
+
+            let start = performance.now();
+            function frame(now){
+                const t = now - start;
+                ctx.clearRect(0,0,w,h);
+                for (let p of particles){
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.03; // gravity
+                    p.tilt += 0.03;
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.tilt);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r*1.6);
+                    ctx.restore();
+                }
+                if (t < duration) {
+                    requestAnimationFrame(frame);
+                } else {
+                    ctx.clearRect(0,0,w,h);
+                }
+            }
+            requestAnimationFrame(frame);
+        }
+
+        function buildListHTML(items) {
+            if (!items || !items.length) return '';
+            return '<ul>' + items.map(i => `<li>${i}</li>`).join('') + '</ul>';
         }
 
         function generateCosmicReport() {
@@ -304,20 +480,13 @@
 
                 const name = normalizeArabicName(nameInputRaw);
                 let abjadTotal = 0;
-
                 for (let ch of name) {
-                    if (abjadTable.hasOwnProperty(ch)) {
-                        abjadTotal += abjadTable[ch];
-                    } else {
-                        // تجاهل الحروف غير المعرفة (أو نقترح تعيين قيمة افتراضية 1)
-                        // abjadTotal += 0;
-                    }
+                    if (abjadTable.hasOwnProperty(ch)) abjadTotal += abjadTable[ch];
                 }
-
                 if (abjadTotal === 0) abjadTotal = 1;
                 const nameDigit = reduceToSingleDigit(abjadTotal);
 
-                const birthDateObj = new Date(dateInput + 'T00:00:00'); // تأكد من إنشاء التاريخ بدون انزياح زمني
+                const birthDateObj = new Date(dateInput + 'T00:00:00');
                 if (Number.isNaN(birthDateObj.getTime())) {
                     alert("تاريخ الميلاد غير صالح، حاول مرة أخرى.");
                     return;
@@ -330,28 +499,56 @@
                 const fullDateSum = day + month + year;
                 const bigLuckDigit = reduceToSingleDigit(fullDateSum);
 
-                // الحصول على بيانات من قاعدة البيانات مع fallback عند عدم العثور
                 const nameData = cosmicDatabase[nameDigit] || cosmicDatabase[1];
                 const smallLuckData = cosmicDatabase[smallLuckDigit] || cosmicDatabase[1];
                 const bigLuckData = cosmicDatabase[bigLuckDigit] || cosmicDatabase[1];
 
+                // Name section
                 document.getElementById('nameNumBadge').innerText = nameDigit;
                 document.getElementById('namePlanetBadge').innerText = nameData.planet;
                 document.getElementById('nameMainDesc').innerText = nameData.nameDesc;
-                document.getElementById('namePlanetInfluence').innerText = nameData.planetInfluence;
+                document.getElementById('nameFullDetail').innerHTML =
+                    `<strong>تأثير الكوكب:</strong> ${nameData.planetInfluenceLong}` +
+                    `<div style="margin-top:8px"><strong>ألوان الحظ:</strong> <span class="highlight-gold">${nameData.luckyColors.join('، ')}</span></div>` +
+                    `<div style="margin-top:8px"><strong>نصائح يومية قصيرة:</strong> ${nameData.dailyTips.join(' · ')}</div>` +
+                    `<div style="margin-top:10px"><strong>تأكيد روحاني:</strong> <em>${nameData.affirmations}</em></div>` +
+                    `<div style="margin-top:10px"><strong>طقس صغير مقترح:</strong> ${nameData.ritual}</div>`;
 
+                // Small luck section
                 document.getElementById('smallLuckBadge').innerText = smallLuckDigit;
-                document.getElementById('smallLuckDesc').innerHTML = `رقم الحظ الأصغر والمفتاح الفطري لشخصيتك هو <span class="highlight-gold">${smallLuckDigit}</span> والمستمد من طاقة كوكب (<span class="highlight-gold">${smallLuckData.planet}</span>).<br><br><strong>كيفية الاستفادة منه:</strong> ${smallLuckData.smallLuck}`;
+                document.getElementById('smallLuckDesc').innerHTML =
+                    `رقم الحظ الأصغر والمفتاح الفطري لشخصيتك هو <span class="highlight-gold">${smallLuckDigit}</span> والمستمد من طاقة كوكب (<span class="highlight-gold">${smallLuckData.planet}</span>).`;
+                document.getElementById('smallFullDetail').innerHTML =
+                    `<strong>دلالة اليوميّة:</strong> ${smallLuckData.smallLuck}` +
+                    `<div style="margin-top:8px"><strong>مجالات الحظ اليومية:</strong> ${smallLuckData.dailyTips.join('، ')}</div>` +
+                    `<div style="margin-top:10px"><strong>نصيحة عملية سريعة:</strong> ${smallLuckData.affirmations}</div>`;
 
+                // Big luck section
                 document.getElementById('bigLuckBadge').innerText = bigLuckDigit;
-                document.getElementById('bigLuckDesc').innerHTML = `رقم الحظ الأكبر ومسار قدرك الكوني الشامل هو <span class="highlight-gold">${bigLuckDigit}</span> الخاضع لسيطرة وتردد كوكب (<span class="highlight-gold">${bigLuckData.planet}</span>).<br><br><strong>الدلالة القدرية العميقة:</strong> ${bigLuckData.bigLuck}`;
+                document.getElementById('bigLuckDesc').innerHTML =
+                    `رقم الحظ الأكبر ومسار قدرك الكوني الشامل هو <span class="highlight-gold">${bigLuckDigit}</span> الخاضع لسيطرة وتردد كوكب (<span class="highlight-gold">${bigLuckData.planet}</span>).`;
+                document.getElementById('bigFullDetail').innerHTML =
+                    `<strong>الدلالة القدرية العميقة:</strong> ${bigLuckData.bigLuck}` +
+                    `<div style="margin-top:8px"><strong>مواصفات الحظ الكبير:</strong> ألوان - ${bigLuckData.luckyColors ? bigLuckData.luckyColors.join('، ') : '—'}</div>` +
+                    `<div style="margin-top:8px"><strong>استراتيجيات للمرحلة:</strong> ${bigLuckData.dailyTips.join('، ')}</div>` +
+                    `<div style="margin-top:10px"><strong>طقوس تحفيز:</strong> ${bigLuckData.ritual}</div>`;
 
-                document.getElementById('resultBox').style.display = 'block';
+                // عرض النتيجة وتشغيل مؤثرات الإثارة
+                const box = document.getElementById('resultBox');
+                box.style.display = 'block';
+                box.focus({preventScroll:true});
 
-                // هابتيك آمن داخل Telegram إن وُجد
+                // صوت ونشاط الكونفيتي
+                try {
+                    const chime = document.getElementById('chimeAudio');
+                    if (chime) { chime.currentTime = 0; chime.volume = 0.6; chime.play().catch(()=>{}); }
+                    runConfetti(2000);
+                } catch (e) { /* صامت */ }
+
+                // هابتيك داخل Telegram إن وُجد
                 try {
                     if (tg && tg.HapticFeedback && typeof tg.HapticFeedback.impactOccurred === 'function') {
-                        tg.HapticFeedback.impactOccurred('heavy');
+                        tg.HapticFeedback.impactOccurred('medium');
                     }
                 } catch (e) { /* صامت */ }
 
@@ -361,19 +558,45 @@
             }
         }
 
-        // ربط الأزرار والأحداث (دعم لوحة المفاتيح: Enter لنموذج الإدخال)
+        // ربط الأزرار والأحداث
         document.getElementById('generateBtn').addEventListener('click', generateCosmicReport);
         document.getElementById('userName').addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                generateCosmicReport();
-            }
+            if (e.key === 'Enter') { e.preventDefault(); generateCosmicReport(); }
         });
         document.getElementById('birthDate').addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                generateCosmicReport();
-            }
+            if (e.key === 'Enter') { e.preventDefault(); generateCosmicReport(); }
+        });
+
+        // نسخ ومشاركة الملخص
+        document.getElementById('copySummary').addEventListener('click', function () {
+            try {
+                const nameNum = document.getElementById('nameNumBadge').innerText;
+                const planet = document.getElementById('namePlanetBadge').innerText;
+                const small = document.getElementById('smallLuckBadge').innerText;
+                const big = document.getElementById('bigLuckBadge').innerText;
+                const text = `خارطة الأعداد:\nالاسم => رقم ${nameNum} (${planet})\nالحظ الصغير => ${small}\nالحظ الكبير => ${big}\nاكتشف المزيد في تطبيق TanaboatTarot.`;
+                navigator.clipboard.writeText(text).then(()=> {
+                    alert('تم نسخ الملخص إلى الحافظة — شاركه مع من تحب ✨');
+                }).catch(()=> alert('لم أتمكن من النسخ آلياً. يمكنك نسخه يدوياً.'));
+            } catch (e) { alert('فشل النسخ.'); }
+        });
+
+        document.getElementById('shareSummary').addEventListener('click', function () {
+            try {
+                const url = location.href;
+                if (navigator.share) {
+                    navigator.share({ title: 'خارطة الأعداد', text: 'اطلع على خارطتي العددية!', url }).catch(()=>{});
+                } else {
+                    // بديل: نسخ الرابط
+                    navigator.clipboard.writeText(url).then(()=> alert('تم نسخ رابط الصفحة — ألصقه لمشاركته.'));
+                }
+            } catch (e) { alert('لم أتمكن من المشاركة آلياً.'); }
+        });
+
+        // ضبط الكانفاس على تغيير الحجم
+        window.addEventListener('resize', function(){
+            const c = document.getElementById('confettiCanvas');
+            if (c) { c.width = window.innerWidth; c.height = window.innerHeight; }
         });
     </script>
 </body>
