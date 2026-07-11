@@ -1,161 +1,500 @@
-import random
-import datetime
-
-# مصفوفة بطاقات أوريكل المرشدين الروحانيين (العمل والمال) الجاهزة والمضبوطة
-oracle_jewelry_box = {
-    1: {
-        "title": "💎 بطاقة مرشد التمكين (The Guide of Empowerment)",
-        "stone": "ياقوت أحمر ملكي فخم",
-        "quote": "توقف عن انتظار الإذن من أحد، أنت رئيس نفسك اليوم.",
-        "details": "يخبرك المرشد أنك تمتلك الآن كل المقومات لإدارة أموالك وقراراتك المهنية. التردد أو الخوف من الفشل هو مجرد وهم. حان الوقت لتقود مشروعك أو محفظتك الاستثمارية بنفسك دون الاعتماد على نصائح عشوائية من الآخرين.",
-        "action": "خذ القرار المالي أو المهني المؤجل فوراً وفرض شروطك وقُد أصولك بثقة."
-    },
-    2: {
-        "title": "⚡ بطاقة مرشد التدفق السريع (The Guide of Swift Flow)",
-        "stone": "زمرد أخضر مشع",
-        "quote": "الفرصة تتحرك بسرعة، كن خفيفاً لتلحق بها.",
-        "details": "هناك طاقة رزق أو صفقة خاطفة وسريعة تدور حولك الآن (مثل فرصة استثمارية طارئة أو فكرة عمل ذكية). المرشد يحذرك من كثرة التفكير والتحليل الزائد عن اللزوم لأنه يضيع الفرص الثمينة.",
-        "action": "إذا لمحت فرصة مناسبة لعملك أو مالك، تحرك فوراً ونفذ ولا تسوف."
-    },
-    3: {
-        "title": "📊 بطاقة مرشد التركيز (The Guide of Focus)",
-        "stone": "أوبال ناري مركز",
-        "quote": "اجمع شتات عقلك، فالليزر يقطع الحديد لأنه مركز.",
-        "details": "عقلك مشتت بين مشاريع كثيرة أو أفكار ماليّة متعددة، وهذا يستهلك طاقتك دون نتيجة حقيقية. المرشد يطلب منك أن تختار معركة واحدة فقط وتركز عليها كلياً لتجني أرباحها.",
-        "action": "ركز على فكرة واحدة أو أصل مالي واحد طوال الفترة القادمة وأوقف بقية المشتتات تماماً."
-    },
-    4: {
-        "title": "🔑 بطاقة مرشد فك العقد (The Code Breaker Guide)",
-        "stone": "سافير أزرق عتيق",
-        "quote": "الحل في الفكرة وليس في زيادة التعب البدني.",
-        "details": "إذا كان عملك أو دخلك عالقاً أو تعاني من ركود، فالمرشد يخبرك أن الحل ليس في أن تعمل لساعات أطول وتجهد جسدك، بل في تغيير الطريقة والأسلوب بالكامل. هناك شيفرة بسيطة لو غيرتها ستفتح العقدة.",
-        "action": "غيّر استراتيجية بيعك، تسويقك، أو طريقتك التقليدية، جرب فكرة خارج الصندوق."
-    },
-    5: {
-        "title": "🚀 بطاقة مرشد التوسع (The Expansion Guide)",
-        "stone": "جمشت أرجواني ملكي",
-        "quote": "لقد كبرت على هذا المكان، حان وقت الخروج للمحيط.",
-        "details": "أنت تعيش في منطقة أمان مالي ضيقة (مثل راتب ثابت صغير أو عملاء محدودين). المرشد يخبرك أن وعيك استعد الآن لأرقام أكبر ومشاريع أضخم، والتمسك بالقديم خوفاً من المخاطرة سيؤذيك.",
-        "action": "ارفع أسعارك، أو وسّع نطاق عملك، أو استهدف عملاء ومشاريع أكبر بلا خوف."
-    },
-    6: {
-        "title": "⚖️ بطاقة مرشد الميزان (The Balance Guide)",
-        "stone": "أكوامارين نقي صافي",
-        "quote": "نظّم ما تملك، يحفظ الله لك ما تملك.",
-        "details": "هناك تسريب غير مرئي في أموالك، أو هدر عشوائي في بنود استهلاكية لا تعود عليك بالنفع. المرشد ينصحك بوقف النزيف المالي فوراً وترتيب ميزانيتك وبناء جدار حماية صلب حول أصولك.",
-        "action": "اقتطع جزءاً ثابتاً من دخلك وضعه في أصول حقيقية، واضبط مصاريفك اليومية بحزم."
-    },
-    7: {
-        "title": "🧠 بطاقة مرشد الوفرة (The Abundance Guide)",
-        "stone": "ألماس بلاتينيوم مضيء",
-        "quote": "المال طاقة وفيّرة، والكون مليء بالخير.",
-        "details": "المرشد يذكرك بأن العائق ليس قلة المال في السوق، بل فكرة قديمة داخل عقلك الباطن تقول إن 'المال صعب' أو تجعلك تشعر بالذنب إذا ربحت بسهولة. انسف هذه البرمجة واستقبل الرزق برأس مرفوع.",
-        "action": "تخلص من عقلية الندرة، واستقبل الفرص والأموال بحب وشعور كامل بالاستحقاق العالي."
-    },
-    8: {
-        "title": "💵 بطاقة مرشد التنفيذ (The Action Guide)",
-        "stone": "حجر اليشم الأخضر الفاخر",
-        "quote": "الفكرة في الرأس لا تجلب الكاش، انزل إلى أرض الواقع.",
-        "details": "أنت تستغرق وقتاً طويلاً جداً في التخطيط والدراسة والبحث المثالية والكمال قبل أن تبدأ. المرشد يخبرك أن الرزق يحب الحركة والتجربة الواقعية، والأفكار على الورق قيمتها صفر حتى تنفذها.",
-        "action": "ابدأ مشروعك فوراً بأقل الإمكانيات المتاحة واختبر السوق على الطبيعة الآن."
-    },
-    9: {
-        "title": "🌾 بطاقة مرشد الحصاد (The Harvest Guide)",
-        "stone": "توبر أصفر ذهبي دافئ",
-        "quote": "افتح يديك وقلبك، لقد حان وقت جني الثمار.",
-        "details": "فترة التعب، والتعلم، والجهد غير المرئي التي مررت بها قد انتهت. طاقتك الحالية تتجه لاستقبال مكافأة ماليّة، أو أرباح صفقات، أو ترقية مستحقة. استقبل هذا الخير بامتنان وراحة بال.",
-        "action": "افرح بحصادك المالي العادل، وأعد استثمار جزء منه لتأمين وتكبير مستقبلك."
-    },
-    10: {
-        "title": "🎯 بطاقة مرشد السلطة المهنية (The Leader Guide)",
-        "stone": "حجر الدم القرمزي الفاخر",
-        "quote": "أنت خبير في مجالك، فلا تبيع نفسك برخيص.",
-        "details": "أنت تمتلك مهارة أو موهبة قوية جداً، لكنك تخجل مالياً أو تقبل بمبالغ ضئيلة لا تناسب قيمتك الحقيقية. المرشد يطلب منك أن تحدث وتتفاوض بكبرياء وثقة لأن السوق بحاجة ماسة إليك.",
-        "action": "ضع السعر العادل الذي تستحقه لخدماتك أو منتجاتك ولا تتنازل لمجرد إرضاء الزبائن."
-    },
-    11: {
-        "title": "🏰 بطاقة مرشد الأمان المستدام (The Sustainability Guide)",
-        "stone": "برونز مشع مرصع باللؤلؤ",
-        "quote": "ابنِ حصناً يجعلك حراً، ولا تعتمد على مصدر واحد.",
-        "details": "جني المال السريع أمر جيد، لكن المرشد يوجهك لبناء نظام مالي طويل الأمد. الهدف هو أن تجعل المال يعمل لصالحك ويشتري لك حريتك ووقتك، بدلاً من أن تظل مرهوناً لجهة واحدة أو وظيفة واحدة.",
-        "action": "ابدأ فوراً في بناء قنوات دخل سلبي (Passive Income) أو استثمارات ذكية تنمو تلقائياً."
-    },
-    12: {
-        "title": "🔄 بطاقة مرشد التحول (The Transformation Guide)",
-        "stone": "عقيق أسود بلمعات فضية",
-        "quote": "أغلق الباب القديم لتفتح بوابة الثراء الجديدة.",
-        "details": "أنت متمسك بوظيفة مستنزفة، أو مشروع خاسر، أو شراكة غير مريحة لمجرد الخوف من المجهول. المرشد يخبرك أن هذه الدورة انتهت، وإخلاء المساحة ضروري لدخول الرزق العظيم القادم.",
-        "action": "اترك ما لا يخدمك مهنياً ومالياً بشجاعة تامة، وأفرغ المساحة للبداية الجديدة كلياً."
-    }
-}
-
-# ذاكرة البوت لتخزين أوقات فتح الصندوق لكل مستخدم (تمنع التكرار قبل مرور 24 ساعة)
-user_cooldowns = {}
-
-
-def open_jewelry_box(user_id: int) -> str:
-    """
-    دالة تشغيل صندوق الكنوز المالي اليومي.
-    تضمن اختياراً عشوائياً ممتازاً وتمنع الفتح المتكرر قبل مرور 24 ساعة كاملة.
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
+    <title>صندوق المجوهرات الروحي والمالي</title>
     
-    Args:
-        user_id (int): معرف المستخدم الفريد
+    <!-- سكريبت تليجرام الرسمي للتوافق -->
+    <script src="https://telegram.org/js/telegram-webapp.js"></script>
+
+    <!-- استدعاء الخطوط الفخمة -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital@1&family=Cairo:wght@400;700&family=Tajawal:wght@500;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #07050f;
+            --purple-deep: #160e2e;
+            --gold-premium: #d4af37;
+            --gold-light: #fff3cc;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --purple-glow: rgba(139, 92, 246, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at center, #1b103c 0%, #07050f 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 30px 15px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .cosmic-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
+            background-size: 150px 150px;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+            z-index: 2;
+        }
+
+        header h1 {
+            font-family: 'Amiri', serif;
+            font-size: 26px;
+            font-style: italic;
+            color: var(--gold-premium);
+            text-shadow: 0 0 15px var(--gold-glow);
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 13px;
+            color: #b8b1db;
+        }
+
+        /* تصميم الصندوق السحري التفاعلي */
+        .box-container {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin-bottom: 30px;
+            z-index: 2;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 70px;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 0 15px var(--purple-glow));
+        }
+
+        .box-container:active {
+            transform: scale(0.9);
+        }
+
+        .box-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212,175,55,0.2) 0%, transparent 70%);
+            animation: pulseGlow 2s infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes pulseGlow {
+            from { transform: scale(0.9); opacity: 0.6; }
+            to { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* كرت البطاقة الفخمة الناتجة */
+        .oracle-card {
+            width: 100%;
+            max-width: 380px;
+            background: linear-gradient(135deg, rgba(22, 14, 46, 0.95) 0%, rgba(7, 5, 15, 0.98) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7), inset 0 0 20px rgba(139, 92, 246, 0.15);
+            display: none;
+            z-index: 3;
+            margin-top: 10px;
+            animation: cardReveal 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes cardReveal {
+            from { opacity: 0; transform: scale(0.8) translateY(40px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .card-title {
+            font-size: 18px;
+            color: var(--gold-premium);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px var(--gold-glow);
+        }
+
+        .card-stone {
+            font-size: 13px;
+            color: #d1c4e9;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-premium), transparent);
+            margin: 15px 0;
+        }
+
+        .section-label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            color: #a78bfa;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .card-quote {
+            font-size: 15px;
+            font-style: italic;
+            color: #fff3cc;
+            text-align: center;
+            line-height: 1.5;
+            background: rgba(255,255,255,0.03);
+            padding: 10px;
+            border-radius: 10px;
+            border-left: 3px solid var(--gold-premium);
+            border-right: 3px solid var(--gold-premium);
+        }
+
+        .card-details {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #e4e0f2;
+            text-align: justify;
+        }
+
+        .card-action {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #07050f;
+            background: linear-gradient(90deg, #fff3cc, #d4af37);
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(212,175,55,0.2);
+        }
+
+        /* تصميم رسالة الحظر المغلّقة */
+        .lock-card {
+            width: 100%;
+            max-width: 380px;
+            background: rgba(22, 14, 46, 0.9);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 24px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 3;
+            animation: cardReveal 0.5s ease forwards;
+        }
+
+        .lock-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .lock-title {
+            font-size: 18px;
+            color: #f87171;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .lock-text {
+            font-size: 14px;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .countdown-timer {
+            font-size: 16px;
+            color: var(--gold-premium);
+            font-weight: 800;
+            background: rgba(212,175,55,0.1);
+            padding: 8px 15px;
+            border-radius: 30px;
+            display: inline-block;
+            border: 1px solid rgba(212,175,55,0.3);
+        }
+
+        /* زر الفتح السفلي */
+        .premium-btn {
+            width: 100%;
+            max-width: 380px;
+            background: linear-gradient(90deg, #aa8417 0%, #d4af37 50%, #aa8417 100%);
+            background-size: 200% auto;
+            border: none;
+            color: #07050f;
+            padding: 16px;
+            font-size: 15px;
+            font-weight: 800;
+            border-radius: 14px;
+            margin-top: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .premium-btn:active {
+            transform: scale(0.97);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cosmic-bg"></div>
+
+    <header>
+        <h1>💎 صندوق الكنوز والمرشدين الروحانيين</h1>
+        <p>استقبل التوجيه الروحي المالي والمهني المخصص لك لليوم</p>
+    </header>
+
+    <!-- مجسم الكنز التفاعلي -->
+    <div class="box-container" id="treasureBox">
+        <div class="box-glow"></div>
+        <span id="boxEmoji">🧰</span>
+    </div>
+
+    <!-- كرت عرض بطاقات الأوريكل الناتجة -->
+    <div class="oracle-card" id="oracleCard">
+        <div class="card-title" id="cardTitle">اسم البطاقة</div>
+        <div class="card-stone" id="cardStone">الحجر الكريم</div>
         
-    Returns:
-        str: رسالة الصندوق والمرشد الروحي
-    """
-    current_time = datetime.datetime.now()
-    
-    # 1. التحقق الصارم من مرور 24 ساعة
-    if user_id in user_cooldowns:
-        last_opened = user_cooldowns[user_id]
-        time_passed = current_time - last_opened
+        <div class="divider"></div>
         
-        if time_passed < datetime.timedelta(hours=24):
-            remaining_time = datetime.timedelta(hours=24) - time_passed
-            hours, remainder = divmod(remaining_time.seconds, 3600)
-            minutes, _ = divmod(remainder, 60)
-            
-            return (
-                "🔒 **الصندوق مغلق الآن!**\n\n"
-                "لقد فتحت صندوق مجوهراتك الروحي اليوم بالفعل.\n"
-                "⏳ المرشدون يطلبون منك استيعاب رسالة اليوم والعمل بها أولاً.\n\n"
-                f"تستطيع فتح الصندوق مجدداً بعد: **{hours} ساعة و {minutes} دقيقة** ⏰"
-            )
-            
-    # 2. السحب العشوائي المضمون من قائمة المفاتيح
-    chosen_id = random.choice(list(oracle_jewelry_box.keys()))
-    card = oracle_jewelry_box[chosen_id]
-    
-    # 3. حفظ توقيت الفتح الحالي للمستخدم في الذاكرة
-    user_cooldowns[user_id] = current_time
-    
-    # 4. صياغة المخرج النهائي بأبهى وأسهل شكل للمستخدم
-    output_message = (
-        f"✨🧰 **[ينفتح صندوق الكنوز.. ليشع منه نور حجر {card['stone']}]** 🧰✨\n\n"
-        f"{card['title']}\n"
-        f"{'─' * 50}\n"
-        f"💬 **همسة المرشد الروحي لليوم:**\n"
-        f"» *{card['quote']}* «\n\n"
-        f"📖 **التوجيه الروحي المالي الموسع:**\n"
-        f"{card['details']}\n\n"
-        f"🚀 **خطوتك التنفيذية الآن:**\n"
-        f"{card['action']}\n\n"
-        f"{'─' * 50}\n"
-        f"⏳ تم قفل الصندوق تلقائياً.. نراك غداً لرسالة مالية جديدة! 🔮"
-    )
-    
-    return output_message
+        <span class="section-label">💬 همسة المرشد الروحي لليوم:</span>
+        <div class="card-quote" id="cardQuote">العبارة الاقتباسية الحكيمة</div>
+        
+        <div class="divider"></div>
+        
+        <span class="section-label">📖 التوجيه الروحي المالي الموسع:</span>
+        <div class="card-details" id="cardDetails">التفاصيل الكاملة للبطاقة هنا...</div>
+        
+        <div class="divider"></div>
+        
+        <span class="section-label">🚀 خطوتك التنفيذية الآن:</span>
+        <div class="card-action" id="cardAction">الخطوة العملية المقترحة للتنفيذ...</div>
+    </div>
 
+    <!-- كرت القفل والانتظار 24 ساعة -->
+    <div class="lock-card" id="lockCard">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">الصندوق مغلق الآن!</div>
+        <div class="lock-text">لقد فتحت صندوق مجوهراتك الروحي اليوم بالفعل.<br>⏳ المرشدون يطلبون منك استيعاب رسالة اليوم والعمل بها أولاً.</div>
+        <div class="countdown-timer" id="countdownTimer">00 ساعة و 00 دقيقة</div>
+    </div>
 
-# مثال على الاستخدام:
-if __name__ == "__main__":
-    # اختبار الدالة مع معرف مستخدم
-    user_id = 12345
-    
-    # الفتح الأول
-    print(open_jewelry_box(user_id))
-    print("\n" + "="*60 + "\n")
-    
-    # محاولة الفتح الثاني (يجب أن يظهر رسالة الانتظار)
-    print(open_jewelry_box(user_id))
+    <button class="premium-btn" id="openBtn">افتح صندوق الكنوز الروحي</button>
+
+    <script>
+        // تفعيل ميزات تليجرام
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+        }
+
+        // قاعدة بيانات الـ Oracle المدمجة بالكامل والمطابقة لكود الـ Python الخاص بك
+        const oracleJewelryBox = {
+            1: {
+                title: "💎 بطاقة مرشد التمكين (The Guide of Empowerment)",
+                stone: "ياقوت أحمر ملكي فخم",
+                quote: "توقف عن انتظار الإذن من أحد، أنت رئيس نفسك اليوم.",
+                details: "يخبرك المرشد أنك تمتلك الآن كل المقومات لإدارة أموالك وقراراتك المهنية. التردد أو الخوف من الفشل هو مجرد وهم. حان الوقت لتقود مشروعك أو محفظتك الاستثمارية بنفسك دون الاعتماد على نصائح عشوائية من الآخرين.",
+                action: "خذ القرار المالي أو المهني المؤجل فوراً وفرض شروطك وقُد أصولك بثقة."
+            },
+            2: {
+                title: "⚡ بطاقة مرشد التدفق السريع (The Guide of Swift Flow)",
+                stone: "زمرد أخضر مشع",
+                quote: "الفرصة تتحرك بسرعة، كن خفيفاً لتلحق بها.",
+                details: "هناك طاقة رزق أو صفقة خاطفة وسريعة تدور حولك الآن (مثل فرصة استثمارية طارئة أو فكرة عمل ذكية). المرشد يحذرك من كثرة التفكير والتحليل الزائد عن اللزوم لأنه يضيع الفرص الثمينة.",
+                action: "إذا لمحت فرصة مناسبة لعملك أو مالك، تحرك فوراً ونفذ ولا تسوف."
+            },
+            3: {
+                title: "📊 بطاقة مرشد التركيز (The Guide of Focus)",
+                stone: "أوبال ناري مركز",
+                quote: "اجمع شتات عقلك، فالليزر يقطع الحديد لأنه مركز.",
+                details: "عقلك مشتت بين مشاريع كثيرة أو أفكار ماليّة متعددة، وهذا يستهلك طاقتك دون نتيجة حقيقية. المرشد يطلب منك أن تختار معركة واحدة فقط وتركز عليها كلياً لتجني أرباحها.",
+                action: "ركز على فكرة واحدة أو أصل مالي واحد طوال الفترة القادمة وأوقف بقية المشتتات تماماً."
+            },
+            4: {
+                title: "🔑 بطاقة مرشد فك العقد (The Code Breaker Guide)",
+                stone: "سافير أزرق عتيق",
+                quote: "الحل في الفكرة وليس في زيادة التعب البدني.",
+                details: "إذا كان عملك أو دخلك عالقاً أو تعاني من ركود، فالمرشد يخبرك أن الحل ليس في أن تعمل لساعات أطول وتجهد جسدك، بل في تغيير الطريقة والأسلوب بالكامل. هناك شيفرة بسيطة لو غيرتها ستفتح العقدة.",
+                action: "غيّر استراتيجية بيعك، تسويقك، أو طريقتك التقليدية، جرب فكرة خارج الصندوق."
+            },
+            5: {
+                title: "🚀 بطاقة مرشد التوسع (The Expansion Guide)",
+                stone: "جمشت أرجواني ملكي",
+                quote: "لقد كبرت على هذا المكان، حان وقت الخروج للمحيط.",
+                details: "أنت تعيش في منطقة أمان مالي ضيقة (مثل راتب ثابت صغير أو عملاء محدودين). المرشد يخبرك أن وعيك استعد الآن لأرقام أكبر ومشاريع أضخم، والتمسك بالقديم خوفاً من المخاطرة سيؤذيك.",
+                action: "ارفع أسعارك، أو وسّع نطاق عملك، أو استهدف عملاء ومشاريع أكبر بلا خوف."
+            },
+            6: {
+                title: "⚖️ بطاقة مرشد الميزان (The Balance Guide)",
+                stone: "أكوامارين نقي صافي",
+                quote: "نظّم ما تملك، يحفظ الله لك ما تملك.",
+                details: "هناك تسريب غير مرئي في أموالك، أو هدر عشوائي في بنود استهلاكية لا تعود عليك بالنفع. المرشد ينصحك بوقف النزيف المالي فوراً وترتيب ميزانيتك وبناء جدار حماية صلب حول أصولك.",
+                action: "اقتطع جزءاً ثابتاً من دخلك وضعه في أصول حقيقية، واضبط مصاريفك اليومية بحزم."
+            },
+            7: {
+                title: "🧠 بطاقة مرشد الوفرة (The Abundance Guide)",
+                stone: "ألماس بلاتينيوم مضيء",
+                quote: "المال طاقة وفيّرة، والكون مليء بالخير.",
+                details: "المرشد يذكرك بأن العائق ليس قلة المال في السوق، بل فكرة قديمة داخل عقلك الباطن تقول إن 'المال صعب' أو تجعلك تشعر بالذنب إذا ربحت بسهولة. انسف هذه البرمجة واستقبل الرزق برأس مرفوع.",
+                action: "تخلص من عقلية الندرة، واستقبل الفرص والأموال بحب وشعور كامل بالاستحقاق العالي."
+            },
+            8: {
+                title: "🔑 بطاقة مرشد التنفيذ (The Action Guide)",
+                stone: "حجر اليشم الأخضر الفاخر",
+                quote: "الفكرة في الرأس لا تجلب الكاش، انزل إلى أرض الواقع.",
+                details: "أنت تستغرق وقتاً طويلاً جداً في التخطيط والدراسة والبحث المثالية والكمال قبل أن تبدأ. المرشد يخبرك أن الرزق يحب الحركة والتجربة الواقعية، والأفكار على الورق قيمتها صفر حتى تنفذها.",
+                action: "ابدأ مشروعك فوراً بأقل الإمكانيات المتاحة واختبر السوق على الطبيعة الآن."
+            },
+            9: {
+                title: "🌾 بطاقة مرشد الحصاد (The Harvest Guide)",
+                stone: "توبر أصفر ذهبي دافئ",
+                quote: "افتح يديك وقلبك، لقد حان وقت جني الثمار.",
+                details: "فترة التعب، والتعلم، والجهد غير المرئي التي مررت بها قد انتهت. طاقتك الحالية تتجه لاستقبال مكافأة ماليّة، أو أرباح صفقات، أو ترقية مستحقة. استقبل هذا الخير بامتنان وراحة بال.",
+                action: "افرح بحصادك المالي العادل، وأعد استثمار جزء منه لتأمين وتكبير مستقبلك."
+            },
+            10: {
+                title: "🎯 بطاقة مرشد السلطة المهنية (The Leader Guide)",
+                stone: "حجر الدم القرمزي الفاخر",
+                quote: "أنت خبير في مجالك، فلا تبيع نفسك برخيص.",
+                details: "أنت تمتلك مهارة أو موهبة قوية جداً، لكنك تخجل مالياً أو تقبل بمبالغ ضئيلة لا تناسب قيمتك الحقيقية. المرشد يطلب منك أن تحدث وتتفاوض بكبرياء وثقة لأن السوق بحاجة ماسة إليك.",
+                action: "ضع السعر العادل الذي تستحقه لخدماتك أو منتجاتك ولا تتنازل لمجرد إرضاء الزبائن."
+            },
+            11: {
+                title: "🏰 بطاقة مرشد الأمان المستدام (The Sustainability Guide)",
+                stone: "برونز مشع مرصع باللؤلؤ",
+                quote: "ابنِ حصناً يجعلك حراً، ولا تعتمد على مصدر واحد.",
+                details: "جني المال السريع أمر جيد، لكن المرشد يوجهك لبناء نظام مالي طويل الأمد. الهدف هو أن تجعل المال يعمل لصالحك ويشتري لك حريتك ووقتك, بدلاً من أن تظل مرهوناً لجهة واحدة أو وظيفة واحدة.",
+                action: "ابدأ فوراً في بناء قنوات دخل سلبي (Passive Income) أو استثمارات ذكية تنمو تلقائياً."
+            },
+            12: {
+                title: "🔄 بطاقة مرشد التحول (The Transformation Guide)",
+                stone: "عقيق أسود بلمعات فضية",
+                quote: "أغلق الباب القديم لتفتح بوابة الثراء الجديدة.",
+                details: "أنت متمسك بوظيفة مستنزفة، أو مشروع خاسر، أو شراكة غير مريحة لمجرد الخوف من المجهول. المرشد يخبرك أن هذه الدورة انتهت، وإخلاء المساحة ضروري لدخول الرزق العظيم القادم.",
+                action: "اترك ما لا يخدمك مهنياً ومالياً بشجاعة تامة، وأفرغ المساحة للبداية الجديدة كلياً."
+            }
+        };
+
+        const treasureBox = document.getElementById('treasureBox');
+        const boxEmoji = document.getElementById('boxEmoji');
+        const oracleCard = document.getElementById('oracleCard');
+        const lockCard = document.getElementById('lockCard');
+        const openBtn = document.getElementById('openBtn');
+        const countdownTimer = document.getElementById('countdownTimer');
+
+        let timerInterval;
+
+        function checkCooldown() {
+            // استخدام localStorage كبديل لذاكرة السيرفر للاحتفاظ بوقت الغلق لكل جهاز مستخدم بشكل مستقل
+            const lastOpened = localStorage.getItem('box_last_opened');
+            if (lastOpened) {
+                const timePassed = Date.now() - parseInt(lastOpened);
+                const cooldownTime = 24 * 60 * 60 * 1000; // 24 ساعة بالملي ثانية
+
+                if (timePassed < cooldownTime) {
+                    showLockState(cooldownTime - timePassed);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function showLockState(remainingMs) {
+            oracleCard.style.display = 'none';
+            lockCard.style.display = 'block';
+            boxEmoji.innerText = '🔒';
+            openBtn.innerText = 'الصندوق مغلق حالياً';
+            openBtn.style.opacity = '0.6';
+            openBtn.style.pointerEvents = 'none';
+
+            function updateTimer() {
+                if (remainingMs <= 0) {
+                    clearInterval(timerInterval);
+                    location.reload(); // إعادة تفعيل الفتح الفوري عند انتهاء الوقت
+                    return;
+                }
+                const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+                const minutes = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+                countdownTimer.innerText = `${hours} ساعة و ${minutes} دقيقة ⏰`;
+                remainingMs -= 60000;
+            }
+            
+            updateTimer();
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 60000);
+        }
+
+        function openBox() {
+            if (checkCooldown()) return;
+
+            // إحداث أنيميشن اهتزاز وفك القفل الفوري
+            boxEmoji.innerText = '✨';
+            openBtn.innerText = 'جاري استحضار الإرشاد المالي...';
+            
+            setTimeout(() => {
+                boxEmoji.innerText = '👑';
+                
+                // سحب عشوائي ذكي ومماثل لـ random.choice
+                const keys = Object.keys(oracleJewelryBox);
+                const randomKey = keys[Math.floor(Math.random() * keys.length)];
+                const card = oracleJewelryBox[randomKey];
+
+                // تعبئة البيانات في الواجهة الفخمة
+                document.getElementById('cardTitle').innerText = card.title;
+                document.getElementById('cardStone').innerText = `✨ يلمع بنور: [ ${card.stone} ] ✨`;
+                document.getElementById('cardQuote').innerText = card.quote;
+                document.getElementById('cardDetails').innerText = card.details;
+                document.getElementById('cardAction').innerText = card.action;
+
+                // حفظ التوقيت الحالي لفرض حظر الـ 24 ساعة
+                localStorage.setItem('box_last_opened', Date.now().toString());
+
+                // عرض الكرت النوراني النهائي للمستخدم
+                oracleCard.style.display = 'block';
+                openBtn.innerText = 'تم تلقي الرسالة بحمد وامتنان';
+                openBtn.style.pointerEvents = 'none';
+                openBtn.style.opacity = '0.5';
+
+                if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+                    window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+                }
+            }, 1200);
+        }
+
+        // ربط الأحداث
+        treasureBox.addEventListener('click', openBox);
+        openBtn.addEventListener('click', openBox);
+
+        // التحقق الأولي فور فتح الصفحة
+        checkCooldown();
+    </script>
+</body>
+</html>
