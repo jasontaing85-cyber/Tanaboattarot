@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تاروت هرمس القديم - طاقة العاطفة</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0c20, #15102a, #060214);
+            color: #e0dbe3;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            overflow-x: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(214, 175, 55, 0.2);
+            border-radius: 24px;
+            padding: 30px 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+        }
+        h1 {
+            color: #d4af37;
+            font-size: 26px;
+            margin-top: 0;
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            letter-spacing: 1px;
+        }
+        .subtitle {
+            color: #8a8195;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+        p.intro {
+            font-size: 14px;
+            color: #b4adc1;
+            line-height: 1.6;
+            padding: 0 10px;
+        }
+        .card-container {
+            perspective: 1000px;
+            width: 160px;
+            height: 260px;
+            margin: 30px auto;
+        }
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            outline: none;
+        }
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            font-size: 40px;
+        }
+        .card-front {
+            background: linear-gradient(45deg, #1d153a, #2c1f57);
+            border: 2px solid #d4af37;
+            color: #d4af37;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+        .card-back {
+            background: linear-gradient(45deg, #2c1f57, #1d153a);
+            border: 2px solid #6c5ce7;
+            transform: rotateY(180deg);
+            color: #ffe;
+        }
+        .btn {
+            background: linear-gradient(45deg, #d4af37, #aa8413);
+            color: #060214;
+            border: none;
+            padding: 14px 40px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+        }
+        .btn:disabled {
+            background: #2a2535;
+            border: 1px solid #443e50;
+            box-shadow: none;
+            cursor: not-allowed;
+            color: #6c6575;
+        }
+        .result {
+            margin-top: 25px;
+            font-size: 15px;
+            line-height: 1.8;
+            color: #fff;
+            padding: 18px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            display: none;
+            border-right: 4px solid #d4af37;
+            text-align: right;
+            animation: fadeIn 0.6s ease forwards;
+            word-break: break-word;
+        }
+        .timer {
+            color: #ff7675;
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            min-height: 1.2em;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* focus style for accessibility */
+        .card:focus {
+            box-shadow: 0 0 30px rgba(147,51,234,0.2), 0 0 0 4px rgba(147,51,234,0.08);
+            transform: translateY(-4px);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🔮 تاروت هرمس القديم</h1>
+    <div class="subtitle">طاقة العاطفة والعلاقات والحب</div>
+    <p class="intro">خذ نفساً عميقاً، ركّز طاقتك ونيتك على الشخص الذي في بالك، ثم اضغط على البطاقة أو الزر لتكشف رسالتك العشوائية لليوم...</p>
+    
+    <div class="card-container">
+        <div class="card" id="tarotCard" role="button" tabindex="0" aria-label="كشف بطاقة التاروت"></div>
+    </div>
+    
+    <button class="btn" id="drawBtn" type="button">كشف الرسالة الكونية</button>
+    
+    <div class="result" id="resultBox" aria-live="polite"></div>
+    <div class="timer" id="timerBox" aria-hidden="false"></div>
+</div>
+
+<script>
+    // الجمل الـ 12
+    const tarotResponses = [
+        "✨ البطاقة 1: هناك طاقة تجدد قادمة في علاقتك. الشريك يفكر بفتح صفحة جديدة معك، كن مستعداً للاستماع بقلب منفتح.",
+        "🌹 البطاقة 2: طاقة حب قوية تحيط بك الآن. إذا كنت عازباً، هناك إعجاب سري يتبلور خلف الكواليس وسيتضح قريباً.",
+        "⏳ البطاقة 3: العلاقة تحتاج إلى صبر حالياً. لا تتسرع في إطلاق الأحكام، الطرف الآخر يمر بضغوطات خاصة تؤثر على تواصله.",
+        "🌌 البطاقة 4: طاقة انسجام وتناغم عالية جداً. حدسك بخصوص هذا الشخص صحيح تماماً، والمشاعر متبادلة بشكل أعمق مما تظن.",
+        "⚠️ البطاقة 5: تحذير من سوء تفاهم بسيط قد يكبر. الوضوح والصراحة هما مفتاح الأمان لعلاقتكما في هذا التوقيت.",
+        "💌 البطاقة 6: رسالة غير متوقعة أو تواصل مفاجئ يحمل لك مشاعر دافئة أو اعتذاراً طال انتظاره.",
+        "🌙 البطاقة 7: طاقة غموض. الشريك يخفي مشاعره خوفاً من الرفض أو لعدم ثقته بالظروف الحالية، امنحه بعض الأمان.",
+        "💫 البطاقة 8: طاقة تحرر. أنت في مرحلة التحرر من علاقات سامة أو أفكار قديمة كانت تقيد قلبك، القادم يحمل وفرة عاطفية.",
+        "🕊️ البطاقة 9: تصالح وسلام عاطفي قريب. المشاحنات السابقة ستذوب قريباً وتعود المياه إلى مجاريها بشكل أفضل.",
+        "🔥 البطاقة 10: طاقة شغف وجاذبية مرتفعة جداً بينكما. الطرف الآخر ينجذب لك بقوة هذه الفترة ويفكر بك باستمرار.",
+        "🌱 البطاقة 11: بداية نمو علاقة جديدة أو تطور في العلاقة الحالية نحو ترسيم رسمي أو خطوات جدية ملموسة.",
+        "🔮 البطاقة 12: الكون يطلب منك التركيز على حب ذاتك أولاً اليوم. عندما ترفع استحقاقك الداخلي، ستنجذب لك الطاقة العاطفية التي تستحقها."
+    ];
+
+    const COOLDOWN_TIME = 24 * 60 * 60 * 1000; // 24 ساعة
+    const STORAGE_KEY = 'hermesTarotDraw';
+    let cooldownIntervalId = null; // لتجنّب تسرب المؤقتات
+
+    const cardEl = document.getElementById('tarotCard');
+    const drawBtn = document.getElementById('drawBtn');
+    const resultBox = document.getElementById('resultBox');
+    const timerBox = document.getElementById('timerBox');
+
+    // إعداد الواجهة: وجه البطاقة الأمامي/الخلفي عبر عناصر داخلية (للحفاظ على البنية البصرية)
+    function renderCardFaces() {
+        cardEl.innerHTML = `
+            <div class="card-face card-front">🔱</div>
+            <div class="card-face card-back">✨</div>
+        `;
+    }
+    renderCardFaces();
+
+    // تنسيق الوقت (ساعات:دقائق:ثواني)
+    function formatHMS(ms) {
+        const totalSec = Math.max(0, Math.floor(ms / 1000));
+        const hours = Math.floor(totalSec / 3600);
+        const minutes = Math.floor((totalSec % 3600) / 60);
+        const seconds = totalSec % 60;
+        return `${hours} ساعة و ${minutes} دقيقة و ${seconds} ثانية`;
+    }
+
+    // تحديث العداد المباشر؛ lastDrawString هي القيمة المخزنة (سلسلة تمثل رقم الزمن)
+    function updateTimerDisplay(lastDrawString) {
+        const lastDraw = parseInt(lastDrawString, 10);
+        if (Number.isNaN(lastDraw)) {
+            clearCooldown();
+            return;
+        }
+        const now = Date.now();
+        const timeLeft = COOLDOWN_TIME - (now - lastDraw);
+
+        if (timeLeft <= 0) {
+            clearCooldown();
+            return;
+        }
+
+        timerBox.innerHTML = `⏳ طاقة بطاقتك تتجلى الآن. يمكنك السحب مجدداً بعد: ${formatHMS(timeLeft)}`;
+    }
+
+    // تفعيل وضع الـ cooldown (تعطيل الزر وتشغيل المؤقت)
+    function startCooldown(lastDrawString) {
+        // تأكد من إيقاف أي مؤقت سابق
+        if (cooldownIntervalId !== null) {
+            clearInterval(cooldownIntervalId);
+            cooldownIntervalId = null;
+        }
+
+        drawBtn.disabled = true;
+        drawBtn.innerText = "تم سحب رسالتك اليومية";
+        cardEl.classList.add('flipped');
+
+        // تحديث فوري ثم تحديث دوري كل ثانية
+        updateTimerDisplay(lastDrawString);
+        cooldownIntervalId = setInterval(() => updateTimerDisplay(lastDrawString), 1000);
+    }
+
+    // إيقاف وضع الـ cooldown وإعادة الواجهة
+    function clearCooldown() {
+        if (cooldownIntervalId !== null) {
+            clearInterval(cooldownIntervalId);
+            cooldownIntervalId = null;
+        }
+        localStorage.removeItem(STORAGE_KEY);
+        drawBtn.disabled = false;
+        drawBtn.innerText = "كشف الرسالة الكونية";
+        timerBox.innerText = "";
+        resultBox.style.display = 'none';
+        cardEl.classList.remove('flipped');
+    }
+
+    // تحقق وبدأ الـ cooldown عند التحميل إن كانت هناك قيمة مخزنة
+    function checkCooldownOnLoad() {
+        const lastDraw = localStorage.getItem(STORAGE_KEY);
+        if (lastDraw) {
+            const lastDrawInt = parseInt(lastDraw, 10);
+            if (!Number.isNaN(lastDrawInt) && (Date.now() - lastDrawInt < COOLDOWN_TIME)) {
+                startCooldown(lastDraw);
+            } else {
+                // انتهى الوقت ولكن بقيت القيمة — ننظفها
+                localStorage.removeItem(STORAGE_KEY);
+            }
+        }
+    }
+
+    // السحب الفعلي للبطاقة
+    function drawCard() {
+        const lastDraw = localStorage.getItem(STORAGE_KEY);
+        const now = Date.now();
+        if (lastDraw) {
+            const lastDrawInt = parseInt(lastDraw, 10);
+            if (!Number.isNaN(lastDrawInt) && (now - lastDrawInt < COOLDOWN_TIME)) {
+                // إن حاول المستخدم السحب أثناء القفل: عرض رسالة مؤقتة (العداد موجود بالفعل)
+                updateTimerDisplay(lastDraw);
+                return;
+            }
+        }
+
+        // اختيار عشوائي وإظهار النتيجة مع حركية
+        const randomIndex = Math.floor(Math.random() * tarotResponses.length);
+        const selectedResponse = tarotResponses[randomIndex];
+
+        // منع تكرار النقرات أثناء الأنيميشن
+        drawBtn.disabled = true;
+        drawBtn.innerText = "...جاري الكشف";
+        cardEl.classList.add('flipped');
+
+        // مهلة صغيرة ليتحرك الانعكاس ثم نعرض النتيجة ونخزن الوقت
+        setTimeout(() => {
+            resultBox.innerHTML = selectedResponse;
+            resultBox.style.display = 'block';
+
+            // خزّن وقت السحب كباعث (عدد) بالسلسلة
+            localStorage.setItem(STORAGE_KEY, String(now));
+            // ابدأ وضع الـ cooldown
+            startCooldown(String(now));
+        }, 420);
+    }
+
+    // دعم التفاعل عبر النقر واللمس واللوحة
+    cardEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        drawCard();
+    });
+
+    cardEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            drawCard();
+        }
+    });
+
+    drawBtn.addEventListener('click', drawCard);
+
+    // تنظيف المؤقت عند إغلاق الصفحة
+    window.addEventListener('beforeunload', () => {
+        if (cooldownIntervalId !== null) clearInterval(cooldownIntervalId);
+    });
+
+    // بدء الفحص عند التحميل
+    window.addEventListener('load', checkCooldownOnLoad);
+</script>
+
+</body>
+</html>
