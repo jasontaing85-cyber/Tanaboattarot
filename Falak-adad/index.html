@@ -348,7 +348,7 @@
                 smallLuck: "محادثة قصيرة قد تفتح فرصة؛ اجعل رسالتك واضحة ومباشرة.",
                 bigLuck: "مسار العقل المدبر: التجارة، التعليم، والاتصالات تزدهر عندما تضع استراتيجيات بسيطة.",
                 luckyColors: ["رمادي فاتح","فيروزي","أبيض نظيف"],
-                dailyTips: ["رتّب أفكارك في قائمة قصيرة","شارك معلومة مفيدة مع شخص"، "اكتب رسالة قصيرة لشخص مهم"],
+                dailyTips: ["رتّب أفكارك في قائمة قصيرة","شارك معلومة مفيدة مع شخص","اكتب رسالة قصيرة لشخص مهم"],
                 affirmations: "أفكاري واضحة وسريعة، أستخدم لغة النجاح لصالح مساري.",
                 ritual: "اكتب هدف تعلمي لثلاثين يوماً وعلّقه أمامك؛ راجع التقدم أسبوعياً."
             },
@@ -392,7 +392,7 @@
                 smallLuck: "مبادرة جسورة اليوم تفتح باباً سريعاً — تحرك بذكاء لا بعنف.",
                 bigLuck: "مسار المحارب: إنجازات سريعة عندما تُوجَّه الطاقة بشكل عقلاني وتخطيط بسيط.",
                 luckyColors: ["أحمر","برتقالي ناري","أسود على شكل حافة"],
-                dailyTips: ["مارس نشاطاً بدنياً قصيراً","اتخذ خطوة صغيرة تحدّ من الخوف"],
+                dailyTips: ["مارس نشاطاً بدنياً قصيرًا","اتخذ خطوة صغيرة تحدّ من الخوف"],
                 affirmations: "أنا أتحرّك بقوة وهدف، أنجز باستمرارية ووعي.",
                 ritual: "تحريك الجسم لمدة 5 دقائق مع نية تحرير طاقة كاملة يساعد في توجيه الحماسة."
             }
@@ -528,10 +528,10 @@
                 document.getElementById('bigLuckDesc').innerHTML =
                     `رقم الحظ الأكبر ومسار قدرك الكوني الشامل هو <span class="highlight-gold">${bigLuckDigit}</span> الخاضع لسيطرة وتردد كوكب (<span class="highlight-gold">${bigLuckData.planet}</span>).`;
                 document.getElementById('bigFullDetail').innerHTML =
-                    `<strong>الدلالة القدرية العميقة:</strong> ${bigLuckData.bigLuck}` +
+                    `<strong>الدلالة القدرية العميقة:</strong> ${bigLuckData.bigLuck || bigLuckData.nameDesc || ''}` +
                     `<div style="margin-top:8px"><strong>مواصفات الحظ الكبير:</strong> ألوان - ${bigLuckData.luckyColors ? bigLuckData.luckyColors.join('، ') : '—'}</div>` +
-                    `<div style="margin-top:8px"><strong>استراتيجيات للمرحلة:</strong> ${bigLuckData.dailyTips.join('، ')}</div>` +
-                    `<div style="margin-top:10px"><strong>طقوس تحفيز:</strong> ${bigLuckData.ritual}</div>`;
+                    `<div style="margin-top:8px"><strong>استراتيجيات للمرحلة:</strong> ${bigLuckData.dailyTips ? bigLuckData.dailyTips.join('، ') : ''}</div>` +
+                    `<div style="margin-top:10px"><strong>طقوس تحفيز:</strong> ${bigLuckData.ritual || ''}</div>`;
 
                 // عرض النتيجة وتشغيل مؤثرات الإثارة
                 const box = document.getElementById('resultBox');
@@ -574,7 +574,7 @@
                 const planet = document.getElementById('namePlanetBadge').innerText;
                 const small = document.getElementById('smallLuckBadge').innerText;
                 const big = document.getElementById('bigLuckBadge').innerText;
-                const text = `خارطة الأعداد:\nالاسم => رقم ${nameNum} (${planet})\nالحظ الصغير => ${small}\nالحظ الكبير => ${big}\nاكتشف المزيد في تطبيق TanaboatTarot.`;
+                const text = `خارطة الأعداد:\nالاسم => رقم ${nameNum} (${planet})\nالحظ الصغير => ${small}\nالحظ الكبير => ${big}\nاكتشف المزيد في TanaboatTarot.`;
                 navigator.clipboard.writeText(text).then(()=> {
                     alert('تم نسخ الملخص إلى الحافظة — شاركه مع من تحب ✨');
                 }).catch(()=> alert('لم أتمكن من النسخ آلياً. يمكنك نسخه يدوياً.'));
