@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوصلة الفعل الطاقي اليومي - Actionable Tarot</title>
+    <!-- مكتبة Telegram Web App -->
+    <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+    <style>
+        :root {
+            --space-bg: linear-gradient(135deg, #060411 0%, #110924 50%, #060411 100%);
+            --gold: #d4af37;
+            --gold-glow: #ffeaa7;
+            --purple-glow: rgba(168, 85, 247, 0.6);
+            --card-back: linear-gradient(45deg, #1e1135, #2d124d);
+            --text-color: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--space-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 460px;
+            text-align: center;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin: 10px 0 5px 0;
+            color: #f3e8ff;
+            text-shadow: 0 0 15px var(--purple-glow);
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #c084fc;
+            margin-bottom: 20px;
+        }
+
+        /* حاوية الكرت ثلاثي الأبعاد */
+        .tarot-container {
+            width: 200px;
+            height: 310px;
+            perspective: 1000px;
+            margin: 20px auto;
+        }
+
+        .tarot-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .tarot-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+
+        /* ظهر الكرت */
+        .card-front {
+            background: var(--card-back);
+            background-image: radial-gradient(circle, rgba(212,175,55,0.15) 1px, transparent 1px);
+            background-size: 15px 15px;
+        }
+
+        .card-front::after {
+            content: "🔮";
+            font-size: 3.5rem;
+            filter: drop-shadow(0 0 15px var(--gold));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* وجه الكرت المكشوف */
+        .card-back {
+            background: #130a21;
+            transform: rotateY(180deg);
+            padding: 20px;
+            border-color: var(--gold);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            color: var(--gold-glow);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        /* صندوق استعراض التحدي السلوكي */
+        .challenge-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+            margin-top: 15px;
+        }
+
+        .challenge-text {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #e2d8ff;
+            margin: 0 0 15px 0;
+        }
+
+        .action-btn {
+            background: linear-gradient(90deg, #9333ea, #6b21a8);
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 14px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(147, 51, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:disabled {
+            background: #374151;
+            color: #9ca3af;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .success-btn {
+            background: linear-gradient(90deg, #d4af37, #aa8416);
+            color: #110824;
+        }
+
+        .timer-badge {
+            font-size: 0.85rem;
+            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 6px 12px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* كارت الدعم التسويقي */
+        .marketing-card {
+            background: rgba(20, 11, 38, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 25px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+
+        .marketing-card h3 {
+            color: var(--gold-glow);
+            margin: 0 0 8px 0;
+            font-size: 1.1rem;
+        }
+
+        .marketing-card p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #d1c4e9;
+            margin: 0 0 15px 0;
+        }
+
+        .btn-support {
+            background: transparent;
+            color: var(--gold-glow);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .btn-support:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- مؤثرات صوتية تفاعلية سريعة وموثوقة -->
+    <audio id="flipAudio" preload="auto" src="https://www.soundjay.com/buttons/sounds/button-19.mp3"></audio>
+    <audio id="rewardAudio" preload="auto" src="https://www.soundjay.com/buttons/sounds/button-09a.mp3"></audio>
+
+    <div class="container">
+        <h1>بوصلة الفعل السلوكي اليومي</h1>
+        <div class="subtitle">بدلاً من مجرد التوقعات.. غيّر طاقتك الآن بفعل ملموس كرمي طاهر نقي</div>
+
+        <!-- الكرت التفاعلي -->
+        <div class="tarot-container">
+            <div class="tarot-card" id="tarotCard" onclick="revealDailyCard()">
+                <div class="card-face card-front"></div>
+                <div class="card-face card-back">
+                    <div class="card-icon" id="cardIcon">🪙</div>
+                    <div class="card-title" id="cardTitle">كرت الوفرة والكرم</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- صندوق استعراض حالة التحدي -->
+        <div class="challenge-box" id="challengeBox">
+            <p class="challenge-text" id="challengeText">المس الكرت بالأعلى لتكشف عن تحديك السلوكي اليومي، وتفتح مسارات الطاقة المغلقة لديك فوراً...</p>
+            <button class="action-btn" id="actionBtn" onclick="revealDailyCard()">🔮 اكشف كرت التحدي السلوكي</button>
+            <div id="timerContainer"></div>
+        </div>
+
+        <!-- كارت التسويق وحجز الجلسات المخصصة -->
+        <div class="marketing-card">
+            <h3>🔮 هل تواجه عوائق طاقية كبرى؟</h3>
+            <p>التحديات اليومية تفتح مسارات طاقة طاهرة متجددة. لحل البلوكات العميقة، النحوسات، أو طلب كشف روحي وفلكي مخصص لاسمك، يمكنك التواصل وحجز جلستك الخاصة الآن.</p>
+            <button class="btn-support" onclick="openSupportChannel()">🔮 طلب كشف شامل وعلاج مخصص</button>
+        </div>
+    </div>
+
+    <script>
+        const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+        try { if (tg && typeof tg.expand === 'function') tg.expand(); } catch (e) {}
+
+        const flipAudio = document.getElementById('flipAudio');
+        const rewardAudio = document.getElementById('rewardAudio');
+
+        // قائمة بالتحديات السلوكية الإبداعية والآمنة والنباتية تماماً
+        const challenges = [
+            {
+                type: "abundance",
+                title: "🎯 تحدي الكرم والوفرة المالي",
+                icon: "💸",
+                text: "<b>تحديك اليوم لفتح مسارات المال:</b> قم بسقاية نبتة عطشى قريبة منك، أو ضع بضع حبوب نظيفة (قمح، أرز، أو عدس) على نافذتك بنية إطعام الطيور الحرة البرية وتوسيع الأرزاق المحجوبة، ثم عد للمساء لتستلم كرت المكافأة."
+            },
+            {
+                type: "emotional",
+                title: "🎯 التحدي العاطفي وتطهير العلاقات",
+                icon: "💖",
+                text: "<b>تحديك اليوم لتنظيف طاقة القلب:</b> أرسل رسالة حب وامتنان مفاجئة لشخص لم تتحدث معه منذ فترة طويلة دون انتظار مصلحة، أو ادعُ بظهر الغيب لثلاثة أشخاص يمرون بضائقة بنية فك عقدك العاطفية."
+            },
+            {
+                type: "purification",
+                title: "🎯 تحدي تطهير الهالة الأثيرية",
+                icon: "🌿",
+                text: "<b>تحديك اليوم لرفع الترددات السلبية:</b> انظر إلى نفسك في المرآة مباشرة داخل عينيك وكرر 10 مرات بيقين تام: 'أنا متصل بمصدر الوفرة والسلام، طاقتي طاهرة ومحصنة'. ثم تصدق بمبلغ بسيط جداً لأول عابر محتاج يمر في طريقك."
+            },
+            {
+                type: "luck",
+                title: "🎯 تحدي الحظوظ واليسر العام",
+                icon: "🌟",
+                text: "<b>تحديك اليوم لجلب الفرص والمسرات:</b> قم بإزالة أي كركبة أو فوضى تراها في مدخل منزلك أو غرفتك فوراً لأنها تحجب طاقة الحظ، وافتح النوافذ لتجديد الهواء بنية استقبال بشارة سارة تسعد قلبك."
+            }
+        ];
+
+        const rewardReplies = [
+            "✨ رائع جداً! تم تثبيت طاقة الفعل الطاهر في هالتك بنجاح. أفعالك الرحيمة ترفع ذبذبات جذبك الآن؛ مساراتك المالية تنفتح بيسر، وأبواب القبول والخير تتسع أمامك بالكامل.",
+            "✨ مبارك إتمام طقس التغيير السلوكي! لقد زرعت طاقة حب طاهرة في الكون، ووفقاً لقانون الكارما النوراني، ستعود إليك مضاعفة على شكل سلام باطني وتيسير مالي ومفاجأة مبهجة قريباً.",
+            "✨ تم استقبال طاقة امتنانك النقي. هالتك الآن محصنة بالكامل وممتلئة بأنوار الوفرة. طاقة العطاء الرحيم تفتح لك اليوم بلوكات عاطفية ومالية عجزت الحلول التقليدية عن فكها."
+        ];
+
+        function getAppState() {
+            const today = new Date().toDateString();
+            let state = JSON.parse(localStorage.getItem('tarotAppState')) || { date: "", hasPulled: false, isCompleted: false, currentChallenge: null };
+            
+            // إذا تغير اليوم، يتم تصفير الحالة تلقائياً للسماح بسحب جديد
+            if (state.date !== today) {
+                state = { date: today, hasPulled: false, isCompleted: false, currentChallenge: null };
+                localStorage.setItem('tarotAppState', JSON.stringify(state));
+            }
+            return state;
+        }
+
+        function updateUI() {
+            const state = getAppState();
+            const card = document.getElementById('tarotCard');
+
+            if (state.hasPulled) {
+                // الكرت مكشوف بالفعل
+                card.classList.add('flipped');
+                document.getElementById('cardTitle').innerText = state.currentChallenge.title;
+                document.getElementById('cardIcon').innerText = state.currentChallenge.icon;
+                
+                if (!state.isCompleted) {
+                    document.getElementById('challengeText').innerHTML = state.currentChallenge.text;
+                    document.getElementById('actionBtn').innerText = "✅ قمت بالتحدي السلوكي بنجاح (استلم مكافأتك)";
+                    document.getElementById('actionBtn').className = "action-btn success-btn";
+                    document.getElementById('actionBtn').onclick = claimReward;
+                } else {
+                    document.getElementById('challengeText').innerHTML = state.rewardText;
+                    document.getElementById('actionBtn').disabled = true;
+                    document.getElementById('actionBtn').className = "action-btn";
+                    document.getElementById('actionBtn').innerText = "🔒 تم إكمال طقوس اليوم بنجاح";
+                    showCountdown();
+                }
+            } else {
+                // الكرت غير مكشوف بعد
+                card.classList.remove('flipped');
+                document.getElementById('challengeText').innerHTML = "المس الكرت بالأعلى لتكشف عن تحديك السلوكي اليومي، وتفتح مسارات الطاقة المغلقة لديك فوراً...";
+                document.getElementById('actionBtn').innerText = "🔮 اكشف كرت التحدي السلوكي";
+                document.getElementById('actionBtn').className = "action-btn";
+                document.getElementById('actionBtn').disabled = false;
+                document.getElementById('actionBtn').onclick = revealDailyCard;
+                document.getElementById('timerContainer').innerHTML = "";
+            }
+        }
+
+        function revealDailyCard() {
+            const state = getAppState();
+            if (state.hasPulled) return;
+
+            // تشغيل صوت الحرق والتقليب، وإحداث اهتزاز للهاتف
+            try {
+                flipAudio.currentTime = 0;
+                flipAudio.play().catch(e => console.log(e));
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+            } catch(e){}
+
+            // سحب تحدي عشوائي
+            const randomIndex = Math.floor(Math.random() * challenges.length);
+            state.currentChallenge = challenges[randomIndex];
+            state.hasPulled = true;
+            state.date = new Date().toDateString();
+
+            localStorage.setItem('tarotAppState', JSON.stringify(state));
+            updateUI();
+        }
+
+        function claimReward() {
+            const state = getAppState();
+            if (!state.hasPulled || state.isCompleted) return;
+
+            try {
+                rewardAudio.currentTime = 0;
+                rewardAudio.play().catch(e => console.log(e));
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            } catch(e){}
+
+            const randomReward = rewardReplies[Math.floor(Math.random() * rewardReplies.length)];
+            state.isCompleted = true;
+            state.rewardText = `👑 <b>نتيجة طقس التطهير والمكافأة الطاقية:</b><br><br>${randomReward}`;
+
+            localStorage.setItem('tarotAppState', JSON.stringify(state));
+            updateUI();
+        }
+
+        function showCountdown() {
+            const container = document.getElementById('timerContainer');
+            
+            function updateTimer() {
+                const now = new Date();
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                tomorrow.setHours(0, 0, 0, 0); // منتصف الليل تماماً
+
+                const diff = tomorrow - now;
+                if (diff <= 0) {
+                    clearInterval(timerInterval);
+                    location.reload();
+                    return;
+                }
+
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                container.innerHTML = `
+                    <div class="timer-badge">
+                        ⏳ يتوفر كرت تحدي سلوكي جديد بعد: 
+                        <b>${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}</b>
+                    </div>
+                `;
+            }
+
+            updateTimer();
+            const timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function openSupportChannel() {
+            try {
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+                if (tg && typeof tg.openTelegramLink === 'function') {
+                    tg.openTelegramLink('https://t.me/AstroHeal1'); 
+                } else {
+                    window.open('https://t.me/AstroHeal1', '_blank');
+                }
+            } catch(e){}
+        }
+
+        // تشغيل وتهيئة الواجهة فور فتح التطبيق
+        updateUI();
+    </script>
+</body>
+</html>
