@@ -148,7 +148,7 @@
 
         /* أنيميشن الاحتراق الفعلي للمخاوف */
         .cauldron.burning {
-            animation: shake 0.1s infinite;
+            animation: shake 0.15s infinite;
             background: radial-gradient(circle at 35% 35%, #f97316 0%, #7f1d1d 60%, #0f051d 100%);
             box-shadow: 0 0 80px #ef4444, inset 0 0 30px #ffedd5;
         }
@@ -156,6 +156,34 @@
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             100% { transform: translate(-1px, -2px) rotate(1deg); }
+        }
+
+        /* شريط التقدم الروحي الجديد */
+        .progress-container {
+            display: none;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            height: 6px;
+            margin: 15px 0;
+            overflow: hidden;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444, #f59e0b);
+            box-shadow: 0 0 10px #ef4444;
+            transition: width 1s linear;
+        }
+
+        .timer-display {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fca5a5;
+            margin-top: 5px;
+            letter-spacing: 1px;
         }
 
         .burn-btn {
@@ -231,7 +259,7 @@
 </head>
 <body>
 
-    <!-- الترددات الصوتية المدمجة -->
+    <!-- الترددات الصوتية المدمجة المحسنة -->
     <audio id="fireAudio" loop preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav"></audio>
     <audio id="successAudio" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-84.wav"></audio>
 
@@ -268,10 +296,10 @@
         try { if (tg && typeof tg.expand === 'function') tg.expand(); } catch (e) {}
 
         const MAX_DAILY_USES = 3;
+        const TOTAL_BURN_TIME = 120; // الوقت بالثواني (دقيقتان كاملتان)
         const fireAudio = document.getElementById('fireAudio');
         const successAudio = document.getElementById('successAudio');
 
-        // مصفوفة الـ 7 ردود الشفائية الإيجابية العشوائية الشاملة
         const healingReplies = [
             "✨ طاقات الشفاء والوفرة تتدفق إلى هالتك الآن. امتدّت أنوار الطمأنينة لتملأ كل ثغرة استنزفها خوفك السابق، مساراتك المالية والعاطفية تتناغم الآن مع ترددات اليسر والبركة العظيمة.",
             "✨ مبارك تحررك النوراني. طاقتك الحيوية أصبحت الآن حرة، نقية، ومحصنة بالكامل. استشعر طاقة السلام والراحة وهي تعيد ترتيب خلاياك ومزاجك وتفتح لك أبواب الحظوظ السعيدة.",
@@ -282,7 +310,6 @@
             "✨ طهرت الأنوار الإلهية مسارك بالكامل ومحت أثر هذا القلق. هالتك نقية وجاذبة ومحصنة بمحبة سرمدية، أنت محمي وموفق، وطاقتك جاهزة لاستقبال المعجزات والبركات الشافية."
         ];
 
-        // نظام التحقق من الحد اليومي (3 مرات باليوم)
         function getDailyStatus() {
             const today = new Date().toDateString();
             let usageData = JSON.parse(localStorage.getItem('worryBurnerData')) || { date: today, count: 0 };
@@ -308,7 +335,6 @@
             }
         }
 
-        // بدء عملية الحرق والتطهير الموسعة
         function startBurningProcess() {
             const text = document.getElementById('worryText').value.trim();
             if (!text) {
@@ -319,11 +345,9 @@
             const status = getDailyStatus();
             if (status.count >= MAX_DAILY_USES) return;
 
-            // قفل العناصر أثناء الحرق
             document.getElementById('burnBtn').disabled = true;
             document.getElementById('worryText').disabled = true;
             
-            // تفعيل أنيميشن الاهتزاز والاحتراق للبلورة/المحرقة وتأثير الصوت
             const cauldron = document.getElementById('cauldronElement');
             cauldron.classList.add('burning');
             
@@ -332,20 +356,40 @@
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('heavy');
             } catch(e){}
 
-            // التوسع الشديد في جملة الاحتراق والتطهير الأثيري الفوري لدعم العقل الباطن
-            document.getElementById('boxTitle').innerHTML = "🔥 عملية الحرق والتطهير الأثيري تعمل الآن بكفاءة مطلقة...";
+            document.getElementById('boxTitle').innerHTML = "🔥 عملية الحرق والتطهير الأثيري العميقة تعمل الآن...";
             document.getElementById('boxContent').innerHTML = `
                 <div style="font-size:1.05rem; line-height:1.8; text-align:right; color:#fca5a5; padding:10px 0;">
-                    ⚠️ <b>تنبيه أثيري:</b> إن النيران المقدسة تلتهم الآن الروابط الضعيفة وذبذبات الخوف المستنزفة المكتوبة.<br>
-                    * يتم الآن تفكيك شفرات الحرمان، البلوكات الطاقية، والعوارض النفسية وتحويلها إلى رماد كوني تذروه الرياح.<br>
-                    * عقلك الباطن يتخلص حالاً وبشكل أبدي من هذا القيد. التطهير سارٍ في هالتك السبعة ومساراتك الروحية بالكامل لإعادة بناء جدار حصين مشع بالنور. تنفس بعمق الآن...
+                    ⚠️ <b>تنبيه أثيري ممتد:</b> إن النيران المقدسة تلتهم الآن الروابط الضعيفة وذبذبات الخوف على مدار دقيقتين كاملتين.<br>
+                    * خذ شهيقاً عميقاً واحتفظ به، ثم اطلق زفيراً محملاً بكل ما يتعبك.<br>
+                    * يتم الآن تفكيك شفرات الحرمان، البلوكات الطاقية، والعوارض وتحويلها لرماد.<br>
+                    * التطهير سارٍ في هالتك السبعة ومساراتك الروحية الآن لإعادة بناء جدار حصين مشع بالنور.<br>
+                    <div class="progress-container" id="pContainer" style="display:block;">
+                        <div class="progress-bar" id="pBar"></div>
+                    </div>
+                    <div class="timer-display" id="timerText">02:00</div>
                 </div>
             `;
 
-            // مدة الحرق الاحترافي (5 ثوانٍ) ثم الانتقال للشفاء
-            setTimeout(() => {
-                endBurningAndHeal(status);
-            }, 5000);
+            // إدارة المؤقت التنازلي وشريط التقدم لمدة دقيقتين
+            let timeLeft = TOTAL_BURN_TIME;
+            const interval = setInterval(() => {
+                timeLeft--;
+                
+                // تحديث الوقت المتبقي واجهة المستخدم
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timerText').innerText = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // تحديث شريط التقدم
+                const progressPercentage = ((TOTAL_BURN_TIME - timeLeft) / TOTAL_BURN_TIME) * 100;
+                document.getElementById('pBar').style.width = `${progressPercentage}%`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    endBurningAndHeal(status);
+                }
+            }, 1000);
         }
 
         function endBurningAndHeal(status) {
@@ -360,14 +404,11 @@
             cauldron.style.background = 'radial-gradient(circle at 35% 35%, #eab308 0%, #713f12 70%, #000000 100%)';
             cauldron.style.boxShadow = '0 0 60px #eab308';
 
-            // تسجيل العملية برمجياً
             status.count++;
             localStorage.setItem('worryBurnerData', JSON.stringify(status));
 
-            // اختيار أحد الـ 7 ردود العشوائية الإيجابية الشافية
             const randomReply = healingReplies[Math.floor(Math.random() * healingReplies.length)];
 
-            // عرض النتيجة النهائية للمستخدم بكلام موسع وجميل واحترافي
             document.getElementById('boxTitle').innerHTML = "👑 تم الشفاء والتحرير التام بنجاح واقتدار";
             document.getElementById('boxTitle').style.color = "var(--gold-glow)";
             
@@ -385,16 +426,14 @@
         function openSupportChannel() {
             try {
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-                // استبدل t.me/AstroHeal1 بمعرف حساب الدعم الخاص بقناتك
                 if (tg && typeof tg.openTelegramLink === 'function') {
-                    tg.openTelegramLink('https://t.me/YourSupportUsername'); 
+                    tg.openTelegramLink('https://t.me/AstroHeal1'); 
                 } else {
-                    window.open('https://t.me/YourSupportUsername', '_blank');
+                    window.open('https://t.me/AstroHeal1', '_blank');
                 }
             } catch(e){}
         }
 
-        // تشغيل التهيئة عند تحميل الصفحة لأول مرة
         updateUI();
     </script>
 </body>
