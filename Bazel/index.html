@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>أسرار البازل الروحانية - Tanrot</title>
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --bg-deep: #0a0705;
+            --surface-panel: #16100c;
+            --gold-glow: #e5b869;
+            --gold-dark: #b68b3e;
+            --text-pure: #faf6f0;
+            --text-dim: #9e9182;
+            --border-mystic: #36261b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-pure);
+            padding: 12px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .game-wrapper {
+            width: 100%;
+            max-width: 450px;
+            background: var(--surface-panel);
+            border: 1px solid var(--border-mystic);
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.4);
+            padding: 12px;
+            border-radius: 14px;
+            border: 1px solid var(--border-mystic);
+            margin-bottom: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-bottom: 2px;
+        }
+
+        .stat-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--gold-glow);
+        }
+
+        .puzzle-meta {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .puzzle-title {
+            color: var(--gold-glow);
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .puzzle-board {
+            width: 100%;
+            aspect-ratio: 4 / 8;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            gap: 2px;
+            background: #000;
+            border: 2px solid var(--border-mystic);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .puzzle-piece {
+            background-color: #221710;
+            background-size: 400% 800%;
+            border: 1px solid rgba(229, 184, 105, 0.15);
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .puzzle-piece.selected {
+            outline: 2px solid var(--gold-glow);
+            outline-offset: -2px;
+            transform: scale(0.95);
+            box-shadow: 0 0 8px var(--gold-glow);
+            z-index: 10;
+        }
+
+        .reward-section {
+            background: rgba(229, 184, 105, 0.04);
+            border: 1px dashed var(--gold-dark);
+            border-radius: 16px;
+            padding: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .reward-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #2b9348, #155d27);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            text-decoration: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(43, 147, 72, 0.3);
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--gold-glow), var(--gold-dark));
+            color: #120c06;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .action-btn:disabled {
+            background: #2b2116;
+            color: #5a4a37;
+            cursor: not-allowed;
+        }
+
+        .limit-hint {
+            font-size: 12px;
+            color: #ff6b6b;
+            text-align: center;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .quote-banner {
+            display: none;
+            background: #112211;
+            border: 1px solid #2b9348;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 14px;
+            color: #85e39d;
+            font-weight: bold;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-wrapper">
+    <!-- شريط المؤشرات العلوي -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <span class="stat-label">المستوى</span>
+            <span class="stat-value" id="levelVal">1 / 12</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">الوقت المتبقي</span>
+            <span class="stat-value" id="timerVal">15:00</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">عملات Tanrot</span>
+            <span class="stat-value" id="coinsVal">0 🪙</span>
+        </div>
+    </div>
+
+    <div class="puzzle-meta">
+        <div class="puzzle-title" id="puzzleTitle">البازل الروحاني #1</div>
+        <p style="font-size: 12px; color: var(--text-dim);">رتب الـ 32 قطعة بشكل صحيح لكشف رمز المعرفة الباطنية المحجوبة.</p>
+    </div>
+
+    <!-- مؤشر عدد المحاولات اليومية المتبقية للمستخدم -->
+    <div class="limit-hint" id="limitHint">المحاولات المتبقية لك اليوم لإعادة التوزيع: 10 محاولات</div>
+
+    <div class="quote-banner" id="quoteBanner"></div>
+
+    <div class="puzzle-board" id="board"></div>
+
+    <button class="action-btn" id="controlBtn" onclick="handleShuffleButtonClick()">بدء وتوزيع عشوائي متقدم</button>
+
+    <div class="reward-section">
+        <p id="rewardHint" style="font-size: 12px; color: var(--text-dim); margin-bottom: 8px;">انجز 10 بازلات واجمع 1000 عملة لفتح ميزة القراءة الشاملة والعلاج المناسب.</p>
+        <a href="https://t.me/AstroHeal1" target="_blank" class="reward-btn" id="claimBtn">
+            🔮 استلام المكافأة الروحانية (تواصل مع الدعم)
+        </a>
+    </div>
+</div>
+
+<script>
+    if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand();
+    }
+
+    const puzzleImages = [
+        "https://images.unsplash.com/photo-1515516969-d4008cc6241a?w=400&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=400&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1563089145-599997674d42?w=400&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=400&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=400&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=400&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=400&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=400&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1604871000636-074fa5117945?w=400&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1514894780887-121968d00567?w=400&auto=format&fit=crop&q=60",
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&auto=format&fit=crop&q=60"
+    ];
+
+    const spiritualMeanings = [
+        "رمز التوازن والاتصال بجوهرك الداخلي لتلقي السلام.",
+        "رمز الوفرة الكونية وتدفق طاقة المال الحلال والمستدام.",
+        "رمز الحماية الروحية الكبرى ودفع طاقات السحر والظلام السفلية.",
+        "رمز البصيرة الحاذقة وانفتاح الشاكرات العلوية للوعي الفلكي.",
+        "رمز الشفاء الذاتي المتكامل للجسد والروح من الترسبات الماضية.",
+        "رمز الارتباط العاطفي المقدس وتناغم الأرواح والقلوب.",
+        "رمز تيسير دروب السفر والترحال واكتشاف الأبعاد الجديدة.",
+        "رمز حماية الأولاد والنسل وزرع الحكمة والبركة في طريقهم.",
+        "رمز القوة النفسية والصلابة في مواجهة عواصف المادة.",
+        "رمز تفكيك العُقد وتطهير الهالة من العوائق الطاقية المانعة.",
+        "رمز نورانية الإلهام وجذب الفرص السعيدة لواقعك اليومي.",
+        "رمز الاكتمال الروحي وتجلي النوايا الطاهرة بنجاح مبهر."
+    ];
+
+    let currentLevel = 0;
+    let coins = 0;
+    let timerInterval = null;
+    let timeLeft = 900;
+    let piecesArray = [];
+    let selectedPieceIndex = null;
+    let isGameRunning = false;
+
+    // تهيئة والتحقق من حدود الضغط اليومي للمستخدم
+    function checkDailyLimit() {
+        const todayStr = new Date().toISOString().split('T')[0]; // الحصول على تاريخ اليوم الحالي فقط YYYY-MM-DD
+        const savedDate = localStorage.getItem('shuffle_date');
+        let currentCount = parseInt(localStorage.getItem('shuffle_count')) || 0;
+
+        // إذا تصفح المستخدم اللعبة في يوم جديد، نقوم بتصفير المحاولات تلقائياً
+        if (savedDate !== todayStr) {
+            localStorage.setItem('shuffle_date', todayStr);
+            localStorage.setItem('shuffle_count', '0');
+            currentCount = 0;
+        }
+
+        const remaining = 10 - currentCount;
+        const limitHint = document.getElementById('limitHint');
+        
+        if (remaining <= 0) {
+            limitHint.innerText = "🛑 لقد استنفدت محاولات إعادة التوزيع الـ 10 الخاصة بك لهذا اليوم. عد غداً لتكملة المغامرة الروحانية!";
+            document.getElementById('controlBtn').disabled = true;
+            return false;
+        } else {
+            limitHint.innerText = `المحاولات المتبقية لك اليوم لإعادة التوزيع: ${remaining} محاولات`;
+            return true;
+        }
+    }
+
+    // إدارة نقرة المستخدم على زر التوزيع العشوائي
+    function handleShuffleButtonClick() {
+        if (!checkDailyLimit()) return;
+
+        // زيادة عداد الاستخدام وحفظه محلياً في ذاكرة التصفح
+        let currentCount = parseInt(localStorage.getItem('shuffle_count')) || 0;
+        localStorage.setItem('shuffle_count', (currentCount + 1).toString());
+        
+        // تحديث النص والمؤشرات المتبقية فوراً
+        checkDailyLimit();
+
+        // بدء اللعبة وتوليد المصفوفة
+        initLevel();
+    }
+
+    function generateSuperRandomShuffle() {
+        let arr = [];
+        for (let i = 0; i < 32; i++) arr.push(i);
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function initLevel() {
+        clearInterval(timerInterval);
+        timeLeft = 900;
+        isGameRunning = true;
+        document.getElementById('quoteBanner').style.display = "none";
+        document.getElementById('controlBtn').innerText = "إعادة التوزيع العشوائي الفائق";
+
+        document.getElementById('levelVal').innerText = `${currentLevel + 1} / 12`;
+        document.getElementById('puzzleTitle').innerText = `البازل الروحاني #${currentLevel + 1}`;
+
+        piecesArray = generateSuperRandomShuffle();
+        renderBoard();
+        startTimer();
+    }
+
+    function renderBoard() {
+        const board = document.getElementById('board');
+        board.innerHTML = "";
+        const currentImgUrl = puzzleImages[currentLevel];
+
+        piecesArray.forEach((pieceValue, index) => {
+            const piece = document.createElement('div');
+            piece.classList.add('puzzle-piece');
+            
+            const col = pieceValue % 4;
+            const row = Math.floor(pieceValue / 4);
+            
+            const posX = (col / 3) * 100;
+            const posY = (row / 7) * 100;
+
+            piece.style.backgroundImage = `url('${currentImgUrl}')`;
+            piece.style.backgroundPosition = `${posX}% ${posY}%`;
+
+            if (pieceValue === index) {
+                piece.style.borderColor = "rgba(229, 184, 105, 0.6)";
+            }
+
+            piece.addEventListener('click', () => handlePieceClick(index));
+            board.appendChild(piece);
+        });
+    }
+
+    function handlePieceClick(index) {
+        if (!isGameRunning) return;
+
+        if (selectedPieceIndex === null) {
+            selectedPieceIndex = index;
+            document.querySelectorAll('.puzzle-piece')[index].classList.add('selected');
+        } else {
+            const firstIndex = selectedPieceIndex;
+            const secondIndex = index;
+
+            [piecesArray[firstIndex], piecesArray[secondIndex]] = [piecesArray[secondIndex], piecesArray[firstIndex]];
+            
+            selectedPieceIndex = null;
+            renderBoard();
+            checkWinCondition();
+        }
+    }
+
+    function checkWinCondition() {
+        let hasWon = true;
+        for (let i = 0; i < 32; i++) {
+            if (piecesArray[i] !== i) {
+                hasWon = false;
+                break;
+            }
+        }
+
+        if (hasWon) {
+            isGameRunning = false;
+            clearInterval(timerInterval);
+            
+            coins += 100;
+            document.getElementById('coinsVal').innerText = `${coins} 🪙`;
+
+            const banner = document.getElementById('quoteBanner');
+            banner.innerText = `🔓 تم اكتمال الرمز الروحي بنجاح! دلالته الإرشادية: \n"${spiritualMeanings[currentLevel]}"`;
+            banner.style.display = "block";
+
+            if (coins >= 1000) {
+                document.getElementById('claimBtn').style.display = "flex";
+                document.getElementById('rewardHint').innerHTML = "🎉 مبارك لك تحقيق 1000 عملة من <b>Tanrot</b>! اضغط على الزر أدناه فوراً للتواصل مع الدعم الفلكي لتلقي قراءتك الشاملة والعميقة وعلاجك الروحاني المخصص.";
+            }
+
+            if (currentLevel < 11) {
+                currentLevel++;
+                document.getElementById('controlBtn').innerText = `الانتقال للبازل التالي #${currentLevel + 1}`;
+            } else {
+                document.getElementById('controlBtn').innerText = "تهانينا! لقد كشفت جميع الأسرار الـ 12 الكبرى.";
+                document.getElementById('controlBtn').disabled = true;
+            }
+        }
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                isGameRunning = false;
+                document.getElementById('timerVal').innerText = "00:00";
+                alert("انتهت الـ 15 دقيقة المحددة للوعي! أعد توزيع القطع وخض التحدي مجدداً بتركيز أكبر.");
+            } else {
+                timeLeft--;
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                document.getElementById('timerVal').innerText = 
+                    `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }
+        }, 1000);
+    }
+
+    // استدعاء أولي لتفقد حالة العداد والحدود عند التشغيل الافتتاحي لأول مرة
+    checkDailyLimit();
+</script>
+
+</body>
+</html>
