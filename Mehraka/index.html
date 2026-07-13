@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محرقة المخاوف وتطهير الطاقة الأثيرية</title>
+    <!-- مكتبة Telegram Web App -->
+    <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0b071e 0%, #1c0e2d 50%, #0b071e 100%);
+            --fire-glow: rgba(239, 68, 68, 0.6);
+            --gold: #d4af37;
+            --gold-glow: #ffe891;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --text-color: #ffffff;
+            --border-color: rgba(168, 85, 247, 0.2);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 460px;
+            text-align: center;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin: 10px 0;
+            color: #f3e8ff;
+            text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+            font-weight: 700;
+        }
+
+        .limit-badge {
+            background: rgba(15, 7, 32, 0.8);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #fca5a5;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .ritual-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 22px;
+            width: 100%;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
+            transition: all 1s ease;
+        }
+
+        .instruction {
+            font-size: 1.1rem;
+            color: #c084fc;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            height: 110px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 14px;
+            color: #ffffff;
+            padding: 12px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: none;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            border-color: #ef4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+
+        /* تجسيد الشعلة الروحية ثلاثية الأبعاد */
+        .cauldron-container {
+            margin: 30px 0;
+            position: relative;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cauldron {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #2e1065 0%, #0f051d 70%, #000000 100%);
+            box-shadow: 0 0 40px rgba(147, 51, 234, 0.3), inset -10px -10px 30px rgba(0, 0, 0, 0.9);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        /* تأثير النار المتوهجة بالداخل */
+        .fire-essence {
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle, #ffedd5 0%, #f97316 40%, #ef4444 70%, transparent 100%);
+            border-radius: 50%;
+            filter: blur(2px);
+            animation: pulse-fire 2s infinite alternate;
+            opacity: 0.6;
+        }
+
+        @keyframes pulse-fire {
+            0% { transform: scale(0.9); opacity: 0.5; box-shadow: 0 0 30px #ef4444; }
+            100% { transform: scale(1.15); opacity: 0.9; box-shadow: 0 0 50px #f97316; }
+        }
+
+        /* أنيميشن الاحتراق الفعلي للمخاوف */
+        .cauldron.burning {
+            animation: shake 0.1s infinite;
+            background: radial-gradient(circle at 35% 35%, #f97316 0%, #7f1d1d 60%, #0f051d 100%);
+            box-shadow: 0 0 80px #ef4444, inset 0 0 30px #ffedd5;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            100% { transform: translate(-1px, -2px) rotate(1deg); }
+        }
+
+        .burn-btn {
+            background: linear-gradient(90deg, #ef4444, #b91c1c);
+            color: #ffffff;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(239, 68, 68, 0.4);
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .burn-btn:disabled {
+            background: #4b5563;
+            cursor: not-allowed;
+            box-shadow: none;
+            color: #9ca3af;
+        }
+
+        /* كارت العلاج الأعمق والتسويق */
+        .marketing-card {
+            display: none;
+            background: rgba(22, 14, 2, 0.75);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 24px;
+            padding: 22px;
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .marketing-card h3 {
+            color: var(--gold-glow);
+            margin: 0 0 10px 0;
+            font-size: 1.15rem;
+        }
+
+        .marketing-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #f3efff;
+            margin: 0 0 15px 0;
+        }
+
+        .btn-support {
+            background: transparent;
+            color: var(--gold-glow);
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            padding: 12px 25px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .btn-support:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الترددات الصوتية المدمجة -->
+    <audio id="fireAudio" loop preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav"></audio>
+    <audio id="successAudio" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-84.wav"></audio>
+
+    <div class="container">
+        <div class="limit-badge" id="limitBadge">✨ الجلسات المتاحة لك اليوم: <span id="usesLeft">3</span> من 3</div>
+
+        <h2>محرقة المخاوف الطاقية التفاعلية</h2>
+
+        <div class="ritual-box" id="ritualBox">
+            <p class="instruction" id="boxTitle">🔥 ألقِ قيودك في النار الأثيرية:</p>
+            <div id="boxContent">
+                <p style="font-size: 0.95rem; color: #d8b4fe; margin-top:0;">اكتب الآن في رسالة واحدة الشيء الذي يزعجك، يخيفك، أو يستنزف طاقتك (خوف من الفقر، علاقة مؤذية، قلق من المستقبل، ترددات سلبية)...</p>
+                <textarea id="worryText" placeholder="اكتب مشاعرك هنا بكل حرية، لن يتم حفظها أبداً..."></textarea>
+                <button class="burn-btn" id="burnBtn" onclick="startBurningProcess()" style="margin-top: 15px;">🔥 إشعال ومحو هذه الطاقة فوراً</button>
+            </div>
+        </div>
+
+        <div class="cauldron-container">
+            <div class="cauldron" id="cauldronElement">
+                <div class="fire-essence"></div>
+            </div>
+        </div>
+
+        <!-- كارت الدعم للتسويق واستدعاء الجلسة الأعمق -->
+        <div class="marketing-card" id="marketingCard">
+            <h3>🔮 هل تحتاج إلى كشف روحي شامل وتطهير أعمق؟</h3>
+            <p>جلسات الحرق اليومية ممتازة للتحرر السريع. ولكن إذا كنت تواجه عوارض طاقية متكررة، حسد قديم، أو بلوكات قوية في مسار المال والعاطفة، تواصل الآن مع الدعم الفني لحجز جلسة علاج مخصصة وعميقة لاسمك.</p>
+            <button class="btn-support" onclick="openSupportChannel()">🔮 طلب كشف شامل وعلاج مخصص</button>
+        </div>
+    </div>
+
+    <script>
+        const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+        try { if (tg && typeof tg.expand === 'function') tg.expand(); } catch (e) {}
+
+        const MAX_DAILY_USES = 3;
+        const fireAudio = document.getElementById('fireAudio');
+        const successAudio = document.getElementById('successAudio');
+
+        // مصفوفة الـ 7 ردود الشفائية الإيجابية العشوائية الشاملة
+        const healingReplies = [
+            "✨ طاقات الشفاء والوفرة تتدفق إلى هالتك الآن. امتدّت أنوار الطمأنينة لتملأ كل ثغرة استنزفها خوفك السابق، مساراتك المالية والعاطفية تتناغم الآن مع ترددات اليسر والبركة العظيمة.",
+            "✨ مبارك تحررك النوراني. طاقتك الحيوية أصبحت الآن حرة، نقية، ومحصنة بالكامل. استشعر طاقة السلام والراحة وهي تعيد ترتيب خلاياك ومزاجك وتفتح لك أبواب الحظوظ السعيدة.",
+            "✨ تم الشفاء والتحصين التام بفضل الوعي الأسمى. عقلك الباطن اقتلع هذا القيد من جذوره، هالتك الآن تشع بقوة جذب مرتفعة ومستعدة لاستقبال بركات ومفاجآت مبهجة خلال يومك.",
+            "✨ لقد ولدت هالتك من جديد الآن بنورٍ صافٍ لا ينطفئ. تلاشت القيود وتبخرت الترددات المنخفضة، أنت الآن في حصن روحي متين، ومغناطيس حقيقي للوفرة والسلام والبهجة والفرص.",
+            "✨ سُحبت الطاقة السلبية بالكامل وضُخت بدلاً منها أنوار التشفي والسكينة والتمكين. مساراتك الروحية والمالية سالكة ومباركة، استقبل يومك بيقين تام وتوقع الأفضل دائماً.",
+            "✨ أصبحت الآن متصلاً اتصالاً وثيقاً بمصدر الوفرة اللانهائية. تحررت هالتك من ثقل الماضي وعيون الحاسدين، وباتت مشحونة بطاقة نجاح وتأثير خارقين يجذبان لك كل خير مأمول.",
+            "✨ طهرت الأنوار الإلهية مسارك بالكامل ومحت أثر هذا القلق. هالتك نقية وجاذبة ومحصنة بمحبة سرمدية، أنت محمي وموفق، وطاقتك جاهزة لاستقبال المعجزات والبركات الشافية."
+        ];
+
+        // نظام التحقق من الحد اليومي (3 مرات باليوم)
+        function getDailyStatus() {
+            const today = new Date().toDateString();
+            let usageData = JSON.parse(localStorage.getItem('worryBurnerData')) || { date: today, count: 0 };
+            
+            if (usageData.date !== today) {
+                usageData = { date: today, count: 0 };
+                localStorage.setItem('worryBurnerData', JSON.stringify(usageData));
+            }
+            return usageData;
+        }
+
+        function updateUI() {
+            const status = getDailyStatus();
+            const left = MAX_DAILY_USES - status.count;
+            document.getElementById('usesLeft').innerText = left;
+
+            if (left <= 0) {
+                document.getElementById('burnBtn').disabled = true;
+                document.getElementById('burnBtn').innerText = "❌ استهلكت جلساتك المجانية لليوم";
+                document.getElementById('worryText').disabled = true;
+                document.getElementById('worryText').placeholder = "لقد أكملت تنظيفك الطاقي لليوم بنجاح، عد غداً أو تواصل مع الدعم الفني...";
+                document.getElementById('marketingCard').style.display = 'block';
+            }
+        }
+
+        // بدء عملية الحرق والتطهير الموسعة
+        function startBurningProcess() {
+            const text = document.getElementById('worryText').value.trim();
+            if (!text) {
+                alert("من فضلك اكتب مخاوفك أو ما يرهقك أولاً لتجسيد الطاقة وحرقها.");
+                return;
+            }
+
+            const status = getDailyStatus();
+            if (status.count >= MAX_DAILY_USES) return;
+
+            // قفل العناصر أثناء الحرق
+            document.getElementById('burnBtn').disabled = true;
+            document.getElementById('worryText').disabled = true;
+            
+            // تفعيل أنيميشن الاهتزاز والاحتراق للبلورة/المحرقة وتأثير الصوت
+            const cauldron = document.getElementById('cauldronElement');
+            cauldron.classList.add('burning');
+            
+            try {
+                fireAudio.play();
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('heavy');
+            } catch(e){}
+
+            // التوسع الشديد في جملة الاحتراق والتطهير الأثيري الفوري لدعم العقل الباطن
+            document.getElementById('boxTitle').innerHTML = "🔥 عملية الحرق والتطهير الأثيري تعمل الآن بكفاءة مطلقة...";
+            document.getElementById('boxContent').innerHTML = `
+                <div style="font-size:1.05rem; line-height:1.8; text-align:right; color:#fca5a5; padding:10px 0;">
+                    ⚠️ <b>تنبيه أثيري:</b> إن النيران المقدسة تلتهم الآن الروابط الضعيفة وذبذبات الخوف المستنزفة المكتوبة.<br>
+                    * يتم الآن تفكيك شفرات الحرمان، البلوكات الطاقية، والعوارض النفسية وتحويلها إلى رماد كوني تذروه الرياح.<br>
+                    * عقلك الباطن يتخلص حالاً وبشكل أبدي من هذا القيد. التطهير سارٍ في هالتك السبعة ومساراتك الروحية بالكامل لإعادة بناء جدار حصين مشع بالنور. تنفس بعمق الآن...
+                </div>
+            `;
+
+            // مدة الحرق الاحترافي (5 ثوانٍ) ثم الانتقال للشفاء
+            setTimeout(() => {
+                endBurningAndHeal(status);
+            }, 5000);
+        }
+
+        function endBurningAndHeal(status) {
+            try {
+                fireAudio.pause(); fireAudio.currentTime = 0;
+                successAudio.play();
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            } catch(e){}
+
+            const cauldron = document.getElementById('cauldronElement');
+            cauldron.classList.remove('burning');
+            cauldron.style.background = 'radial-gradient(circle at 35% 35%, #eab308 0%, #713f12 70%, #000000 100%)';
+            cauldron.style.boxShadow = '0 0 60px #eab308';
+
+            // تسجيل العملية برمجياً
+            status.count++;
+            localStorage.setItem('worryBurnerData', JSON.stringify(status));
+
+            // اختيار أحد الـ 7 ردود العشوائية الإيجابية الشافية
+            const randomReply = healingReplies[Math.floor(Math.random() * healingReplies.length)];
+
+            // عرض النتيجة النهائية للمستخدم بكلام موسع وجميل واحترافي
+            document.getElementById('boxTitle').innerHTML = "👑 تم الشفاء والتحرير التام بنجاح واقتدار";
+            document.getElementById('boxTitle').style.color = "var(--gold-glow)";
+            
+            document.getElementById('boxContent').innerHTML = `
+                <p style="font-size:1.1rem; line-height:1.8; color:#ffffff; font-weight:500; text-shadow:0 0 10px rgba(212,175,55,0.2);">
+                    ${randomReply}
+                </p>
+                <button class="burn-btn" onclick="location.reload()" style="background:linear-gradient(90deg, #d4af37, #b88d1b); color:#110b01; margin-top:15px;">🛡️ تم تثبيت التحصين والنقاء</button>
+            `;
+
+            document.getElementById('marketingCard').style.display = 'block';
+            updateUI();
+        }
+
+        function openSupportChannel() {
+            try {
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+                // استبدل t.me/AstroHeal1 بمعرف حساب الدعم الخاص بقناتك
+                if (tg && typeof tg.openTelegramLink === 'function') {
+                    tg.openTelegramLink('https://t.me/YourSupportUsername'); 
+                } else {
+                    window.open('https://t.me/YourSupportUsername', '_blank');
+                }
+            } catch(e){}
+        }
+
+        // تشغيل التهيئة عند تحميل الصفحة لأول مرة
+        updateUI();
+    </script>
+</body>
+</html>
