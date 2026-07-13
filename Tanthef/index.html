@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>بوابة الشفاء الكوني وتطهير الهالة</title>
+    <!-- مكتبة Telegram Web App -->
+    <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+    <style>
+        :root {
+            --bg-purple: linear-gradient(135deg, #04010a 0%, #0d041a 40%, #1a0b36 80%, #04010a 100%);
+            --bg-gold: linear-gradient(135deg, #0d0801 0%, #201403 40%, #4a320a 80%, #0d0801 100%);
+            --crystal-purple-3d: radial-gradient(circle at 35% 35%, #ffffff 0%, #e9d5ff 15%, #a855f7 45%, #6b21a8 75%, #2e0066 100%);
+            --crystal-gold-3d: radial-gradient(circle at 35% 35%, #ffffff 0%, #fef08a 15%, #eab308 45%, #a16207 75%, #451a03 100%);
+            --gold: #dfb15b;
+            --gold-glow: #f5cc7f;
+            --purple-glow: #c084fc;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-purple);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: background 3s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* تأثير سديم الفضاء والنجوم المتلألئة */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(white, rgba(255,255,255,.18) 1px, transparent 25px),
+                              radial-gradient(white, rgba(255,255,255,.12) 2px, transparent 35px);
+            background-size: 350px 350px, 450px 450px;
+            opacity: 0.25;
+            z-index: -1;
+            animation: backgroundShift 60s linear infinite;
+        }
+
+        @keyframes backgroundShift {
+            0% { background-position: 0px 0px; }
+            100% { background-position: 450px 450px; }
+        }
+
+        .container {
+            width: 92%;
+            max-width: 450px;
+            text-align: center;
+            padding: 15px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* لوحة قياس مؤشرات الطاقة الحية */
+        .energy-dashboard {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 15px;
+            background: rgba(13, 4, 26, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            padding: 10px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 2.5s ease;
+        }
+
+        .metric-card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .metric-title {
+            font-size: 10px;
+            color: #a89a87;
+            margin-bottom: 4px;
+        }
+
+        .metric-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .metric-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #a855f7, #c084fc);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .metric-value {
+            font-size: 11px;
+            margin-top: 4px;
+            font-weight: bold;
+            color: #e9d5ff;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin: 10px 0 5px 0;
+            color: #e9d5ff;
+            text-shadow: 0 0 25px rgba(168, 85, 247, 0.7);
+            transition: all 3s ease;
+            font-weight: 800;
+        }
+
+        .timer-badge {
+            background: rgba(13, 4, 26, 0.85);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #e9d5ff;
+            display: none;
+            backdrop-filter: blur(10px);
+            margin-bottom: 15px;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+            font-weight: bold;
+        }
+
+        .timer-badge.active {
+            display: inline-block;
+            animation: pulse-border 2s infinite ease-in-out;
+        }
+
+        .ritual-box {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 22px;
+            width: 100%;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(147, 51, 234, 0.15);
+            box-sizing: border-box;
+            margin-top: 5px;
+            transition: all 3s ease;
+        }
+
+        .instruction {
+            font-size: 1.1rem;
+            color: var(--purple-glow);
+            margin-top: 0;
+            margin-bottom: 14px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            transition: color 3s ease;
+        }
+
+        .incantation {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #f3efff;
+            margin: 0;
+            text-align: justify;
+        }
+
+        /* حاوية التموجات والبلورة الكريستالية 3D */
+        .crystal-ball-container {
+            margin: 30px 0;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 240px;
+        }
+
+        /* موجات هالة الطاقة المحيطة بالبلورة */
+        .aura-wave {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 3s ease;
+        }
+
+        .aura-wave.active {
+            animation: emitAura 3s infinite linear;
+        }
+
+        @keyframes emitAura {
+            0% { transform: scale(1); opacity: 0.8; border-color: rgba(168, 85, 247, 0.4); }
+            100% { transform: scale(1.4); opacity: 0; border-color: rgba(168, 85, 247, 0); }
+        }
+
+        .crystal-ball {
+            width: 190px;
+            height: 190px;
+            border-radius: 50%;
+            background: var(--crystal-purple-3d);
+            box-shadow: 0 0 65px rgba(147, 51, 234, 0.6), inset -15px -15px 40px rgba(0, 0, 0, 0.9), inset 15px 15px 35px rgba(255, 255, 255, 0.45);
+            cursor: pointer;
+            transition: background 3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 3s ease, transform 0.3s ease;
+            animation: float-glow-purple 4.5s ease-in-out infinite;
+            position: relative;
+            outline: none;
+            z-index: 2;
+        }
+
+        .crystal-ball::after {
+            content: '';
+            position: absolute;
+            top: 15%; left: 15%; width: 42px; height: 22px;
+            background: rgba(255, 255, 255, 0.55);
+            border-radius: 50%;
+            transform: rotate(-30deg);
+            filter: blur(1px);
+        }
+
+        .crystal-ball.gold {
+            background: var(--crystal-gold-3d);
+            animation: float-glow-gold 4.5s ease-in-out infinite;
+        }
+
+        @keyframes float-glow-purple {
+            0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 0 55px rgba(147, 51, 234, 0.55), inset -15px -15px 40px rgba(0, 0, 0, 0.9); }
+            50% { transform: translateY(-10px) scale(1.03); box-shadow: 0 0 85px rgba(192, 132, 252, 0.85), inset -15px -15px 40px rgba(0, 0, 0, 0.75); }
+        }
+
+        @keyframes float-glow-gold {
+            0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 0 65px rgba(234, 179, 8, 0.6), inset -15px -15px 40px rgba(0, 0, 0, 0.9); }
+            50% { transform: translateY(-10px) scale(1.03); box-shadow: 0 0 99px rgba(254, 240, 138, 0.95), inset -15px -15px 40px rgba(0, 0, 0, 0.75); }
+        }
+
+        /* كارت الدعم التسويقي المطور */
+        .marketing-card {
+            display: none;
+            background: rgba(22, 14, 2, 0.75);
+            border: 1px solid rgba(223, 177, 91, 0.35);
+            border-radius: 24px;
+            padding: 22px;
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7), inset 0 0 20px rgba(223, 177, 91, 0.12);
+            animation: slideUp 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .marketing-card h3 {
+            color: var(--gold-glow);
+            margin: 0 0 12px 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .marketing-card p {
+            font-size: 0.94rem;
+            color: #f7f4ef;
+            line-height: 1.7;
+            margin: 0 0 18px 0;
+            text-align: justify;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--gold-glow), var(--gold-dark));
+            background: linear-gradient(135deg, #f5cc7f 0%, #dfb15b 50%, #b88d3c 100%);
+            color: #120c06;
+            border: none;
+            padding: 15px 0;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 6px 22px rgba(223, 177, 91, 0.3);
+            width: 95%;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .action-btn:active {
+            transform: scale(0.96);
+        }
+
+        .support-btn {
+            background: transparent;
+            color: var(--gold-glow);
+            border: 1px solid rgba(223, 177, 91, 0.5);
+            box-shadow: none;
+        }
+
+        .support-btn:hover, .support-btn:active {
+            background: rgba(223, 177, 91, 0.12);
+        }
+
+        .sparkles-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            display: none;
+            z-index: 1;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 7px; height: 7px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #ffffff, 0 0 30px var(--gold-glow);
+            animation: flash 2s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 0; transform: scale(0.4) rotate(0deg); }
+            50% { opacity: 0.95; transform: scale(1.4) rotate(180deg); }
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { opacity: 0.85; box-shadow: 0 0 15px rgba(168, 85, 247, 0.2); }
+            50% { opacity: 1; border-color: rgba(168, 85, 247, 0.7); box-shadow: 0 0 25px rgba(168, 85, 247, 0.5); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الترددات الصوتية المعالجة -->
+    <audio id="purifyAudio" loop preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav"></audio>
+    <audio id="chargeAudio" loop preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-84.wav"></audio>
+
+    <div class="sparkles-container" id="sparklesBox" aria-hidden="true">
+        <div class="sparkle" style="top: 15%; left: 20%; animation-delay: 0s;"></div>
+        <div class="sparkle" style="top: 35%; left: 80%; animation-delay: 0.4s;"></div>
+        <div class="sparkle" style="top: 65%; left: 15%; animation-delay: 0.8s;"></div>
+        <div class="sparkle" style="top: 25%; left: 70%; animation-delay: 1.2s;"></div>
+        <div class="sparkle" style="top: 50%; left: 85%; animation-delay: 0.2s;"></div>
+        <div class="sparkle" style="top: 75%; left: 65%; animation-delay: 0.6s;"></div>
+    </div>
+
+    <div class="container">
+        
+        <!-- لوحة التحكم بالمؤشرات الطاقية التفاعلية -->
+        <div class="energy-dashboard" id="energyDashboard">
+            <div class="metric-card">
+                <span class="metric-title">موازنة الشاكرات</span>
+                <div class="metric-bar-bg"><div class="metric-bar-fill" id="bar1"></div></div>
+                <span class="metric-value" id="val1">12%</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-title">النقاء الطاقي</span>
+                <div class="metric-bar-bg"><div class="metric-bar-fill" id="bar2"></div></div>
+                <span class="metric-value" id="val2">24%</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-title">التحرر الأثيري</span>
+                <div class="metric-bar-bg"><div class="metric-bar-fill" id="bar3"></div></div>
+                <span class="metric-value" id="val3">8%</span>
+            </div>
+        </div>
+
+        <div class="timer-badge" id="timerBadge">⏱️ يتجلى طرد الطاقات السليية: <span id="countdown">03:00</span></div>
+
+        <h2 id="mainTitle">طقس استرجاع السلام وتطهير الهالة</h2>
+
+        <div class="ritual-box" id="ritualBox">
+            <p class="instruction" id="stepInstruction">🌿 مرحلة الانفصال والتطهير الفوري:</p>
+            <p class="incantation" id="textBody">
+                • خذ شهيقاً عميقاً ومريحاً وثبته لثوانٍ، ثم أخرجه ببطء شديد مع زفير محمل بكل التوترات العالقة.<br><br>
+                • عندما تشعر بالهدوء والجاهزية، <b>انقر وضع إصبعك فوق الكريستالة السحرية</b> بالأسفل لتبدأ الترددات الكونية في تنظيف هالتك فوراً.
+            </p>
+        </div>
+
+        <div class="crystal-ball-container">
+            <!-- موجات الهالة الاهتزازية المضافة خلف الكريستالة -->
+            <div class="aura-wave" id="auraWave"></div>
+            <div class="crystal-ball" id="crystal" role="button" tabindex="0" aria-label="اضغط لبدء الطقس الروحي"></div>
+        </div>
+
+        <!-- كارت الدعم التسويقي المطور للمستخدمين -->
+        <div class="marketing-card" id="marketingCard">
+            <h3>بنية هالتك الحالية: مصونة، متزنة ونورانية ✨</h3>
+            <p>لقد أكملت بنجاح طقساً متكاملاً للتنظيف المبدئي الشامل وطرد الشحنات السالبة. إذا كنت تعاني من ضغوطات مستمرة، أرق متكرر، أو تشعر بوجود عوائق غير مرئية في مسارات المال والعاطفة، فنحن هنا لمساعدتك. ننصحك بحجز جلسة كشف فلكي عميق وعلاج مخصص مبني على بياناتك الطاقية الخاصة لتسريع التجلي.</p>
+            
+            <div class="btn-group">
+                <button class="action-btn support-btn" onclick="openSupport()">🔮 طلب كشف شامل وعلاج مخصص عميق</button>
+                <button class="action-btn" id="exitBtn" onclick="closeApp()">🛡️ إغلاق الطقس وتحصين المسارات</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+        try { if (tg && typeof tg.expand === 'function') tg.expand(); } catch (e) { }
+
+        const ONE_RUN_SECONDS = 180; // 3 دقائق كاملة
+        let isStarted = false;
+        let timeLeft = ONE_RUN_SECONDS;
+        let countdownInterval = null;
+
+        const crystal = document.getElementById('crystal');
+        const auraWave = document.getElementById('auraWave');
+        const purifyAudio = document.getElementById('purifyAudio');
+        const chargeAudio = document.getElementById('chargeAudio');
+        const timerBadge = document.getElementById('timerBadge');
+        const countdownEl = document.getElementById('countdown');
+        const sparklesBox = document.getElementById('sparklesBox');
+        const marketingCard = document.getElementById('marketingCard');
+        const energyDashboard = document.getElementById('energyDashboard');
+
+        // تحديث أشرطة المؤشرات الطاقية ديناميكياً مع مرور ثواني العداد
+        function updateMetrics(progressFraction) {
+            // تصاعد المؤشرات من قيمها الابتدائية وصولاً إلى 100% عند النهاية
+            const m1 = Math.min(100, Math.floor(12 + (progressFraction * 88)));
+            const m2 = Math.min(100, Math.floor(24 + (progressFraction * 76)));
+            const m3 = Math.min(100, Math.floor(8 + (progressFraction * 92)));
+
+            document.getElementById('bar1').style.width = m1 + '%';
+            document.getElementById('bar2').style.width = m2 + '%';
+            document.getElementById('bar3').style.width = m3 + '%';
+
+            document.getElementById('val1').innerText = m1 + '%';
+            document.getElementById('val2').innerText = m2 + '%';
+            document.getElementById('val3').innerText = m3 + '%';
+        }
+
+        function safePlay(audioEl) {
+            if (!audioEl) return Promise.resolve();
+            return audioEl.play().catch(() => {
+                audioEl.muted = true;
+                return audioEl.play().then(() => { audioEl.muted = false; }).catch(() => {});
+            });
+        }
+
+        function doVibrate(kind) {
+            try {
+                if (tg && tg.HapticFeedback) {
+                    if (kind === 'start' && typeof tg.HapticFeedback.impactOccurred === 'function') tg.HapticFeedback.impactOccurred('medium');
+                    if (kind === 'success' && typeof tg.HapticFeedback.notificationOccurred === 'function') tg.HapticFeedback.notificationOccurred('success');
+                }
+            } catch (e) { }
+
+            if (navigator.vibrate) {
+                if (kind === 'start') navigator.vibrate(250);
+                else navigator.vibrate([120, 60, 120]);
+            }
+        }
+
+        function formatTime(s) {
+            const m = Math.floor(s / 60);
+            const sec = s % 60;
+            return (m < 10 ? '0' + m : m) + ':' + (sec < 10 ? '0' + sec : sec);
+        }
+
+        function startCountdown() {
+            timerBadge.classList.add('active');
+            countdownEl.innerText = formatTime(timeLeft);
+
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft < 0) timeLeft = 0;
+                countdownEl.innerText = formatTime(timeLeft);
+
+                // حساب النسبة المئوية للتقدم الفعلي لتحديث لوحة القيادة
+                const elapsed = ONE_RUN_SECONDS - timeLeft;
+                updateMetrics(elapsed / ONE_RUN_SECONDS);
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                    transitionToGold();
+                }
+            }, 1000);
+        }
+
+        function triggerStart(e) {
+            if (isStarted) return;
+            isStarted = true;
+
+            crystal.classList.add('active');
+            auraWave.classList.add('active');
+            safePlay(purifyAudio);
+            doVibrate('start');
+
+            document.getElementById('textBody').innerHTML = `
+                <span style="color:var(--purple-glow); font-weight:800; display:block; margin-bottom:12px; text-align:center; font-size:1.05rem;">ردد بوعي تام ويقين داخلي راسخ:</span>
+                <span style="font-size:1.05rem; color:#fff; line-height:1.9; display:block; text-align:justify; font-style:italic;">
+                "بالنور الإلهي العظيم المتدفق، وبنية التحرر الصادقة؛ أطرد من هالتي، جسدي، وعقلي كل عين حاسدة، طاقة سلبية ثقيلة، أو أثر متبقٍ من الماضي.<br>
+                إنني أقطع الآن وبشكل كامل كافة الروابط الأثيرية المستنزفة لقواي الحيوية.<br><br>
+                أنا الآن محاط ومحصن بنور الحماية والسلام المطلق، ومراكز طاقتي تستعيد توازنها الفطري المتكامل في هذه اللحظة." ✨
+                </span>
+            `;
+
+            timeLeft = ONE_RUN_SECONDS;
+            startCountdown();
+        }
+
+        function transitionToGold() {
+            try { purifyAudio.pause(); purifyAudio.currentTime = 0; } catch (e) {}
+            safePlay(chargeAudio);
+            doVibrate('success');
+
+            // تغيير السمات والمظهر إلى اللون الذهبي الملكي
+            document.body.style.background = 'var(--bg-gold)';
+            crystal.classList.add('gold');
+            auraWave.style.borderColor = "rgba(234, 179, 8, 0.4)";
+            sparklesBox.style.display = 'block';
+            marketingCard.style.display = 'block'; 
+
+            // تعديل مؤشرات لوحة القيادة للون الذهبي لتلائم طاقة الوفرة
+            energyDashboard.style.borderColor = "rgba(223, 177, 91, 0.4)";
+            energyDashboard.style.background = "rgba(22, 14, 2, 0.6)";
+            const fills = document.querySelectorAll('.metric-bar-fill');
+            fills.forEach(f => {
+                f.style.background = "linear-gradient(90deg, #eab308, #fef08a)";
+            });
+
+            document.getElementById('mainTitle').textContent = "اكتمل التطهير والتحصين بنجاح";
+            document.getElementById('mainTitle').style.color = "var(--gold-glow)";
+            document.getElementById('mainTitle').style.textShadow = "0 0 25px rgba(223, 177, 91, 0.8)";
+
+            document.getElementById('ritualBox').style.borderColor = "rgba(223, 177, 91, 0.4)";
+            document.getElementById('ritualBox').style.boxShadow = "0 15px 35px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(223, 177, 91, 0.15)";
+            
+            document.getElementById('stepInstruction').textContent = "☀️ مرحلة شحن الهالة والوفرة (528Hz):";
+            document.getElementById('stepInstruction').style.color = "var(--gold-glow)";
+
+            document.getElementById('textBody').innerHTML = `
+                <span style="font-size:1.05rem; line-height:1.8; display:block; font-weight: 500; text-align:justify;">
+                "أنا متصل الآن وبشكل مباشر بمصدر الشفاء والوفرة اللامتناهية في الكون. هيلتي وجسدي مشحونان تماماً بالنور الصافي النقي، ومساراتي أصبحت جاذبة ومستعدة لاستقبال البهجة، البركة المالية، والاستقرار العاطفي المستدام بسلام وأمان." 💛✨
+                </span>
+            `;
+            
+            timerBadge.classList.remove('active');
+            
+            // التمرير بسلاسة لكارت الدعم لضمان رؤيته
+            setTimeout(() => {
+                marketingCard.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+
+        function openSupport() {
+            try {
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+                if (tg && typeof tg.openTelegramLink === 'function') {
+                    tg.openTelegramLink('https://t.me/AstroHeal1'); 
+                } else {
+                    window.open('https://t.me/AstroHeal1', '_blank');
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
+
+        function closeApp() {
+            try { if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; } } catch(e){}
+            try { purifyAudio.pause(); chargeAudio.pause(); } catch (e) {}
+            try {
+                if (tg && typeof tg.close === 'function') tg.close();
+                else window.close();
+            } catch (e) {
+                console.log('closeApp fallback', e);
+            }
+        }
+
+        // تحسين دعم اللمس والهواتف لتفادي مشاكل التأخير في تليجرام
+        crystal.addEventListener('pointerdown', function (ev) {
+            ev.preventDefault();
+            triggerStart(ev);
+        }, { passive: false });
+
+        crystal.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Enter' || ev.key === ' ') {
+                ev.preventDefault();
+                triggerStart(ev);
+            }
+        });
+
+        window.addEventListener('beforeunload', function () {
+            try { purifyAudio.pause(); chargeAudio.pause(); } catch (e) {}
+        });
+
+        // تعبئة أولية خفيفة للمؤشرات لتبدو حية عند فتح اللعبة
+        document.getElementById('bar1').style.width = '12%';
+        document.getElementById('bar2').style.width = '24%';
+        document.getElementById('bar3').style.width = '8%';
+    </script>
+</body>
+</html>
