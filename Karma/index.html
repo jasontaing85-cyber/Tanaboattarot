@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تاروت الفعل الأثيري</title>
+    <!-- مكتبة Telegram Web App -->
+    <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+    <style>
+        :root {
+            --space-bg: linear-gradient(135deg, #05030f 0%, #12072b 50%, #05030f 100%);
+            --gold: #d4af37;
+            --gold-glow: #ffeaa7;
+            --purple-glow: rgba(168, 85, 247, 0.6);
+            --card-back: linear-gradient(45deg, #190b30, #2a0e4a);
+            --text-color: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--space-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 460px;
+            text-align: center;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 1.7rem;
+            margin: 15px 0 5px 0;
+            color: #f3e8ff;
+            text-shadow: 0 0 20px var(--purple-glow);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #c084fc;
+            margin-bottom: 15px;
+        }
+
+        /* نظام استعراض شجرة الوفرة الذهبية */
+        .tree-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 20px;
+            padding: 15px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .tree-graphic {
+            font-size: 3.5rem;
+            margin-bottom: 5px;
+            filter: drop-shadow(0 0 15px var(--gold));
+            transition: all 0.5s ease;
+        }
+
+        .tree-status {
+            font-size: 0.9rem;
+            color: var(--gold-glow);
+            font-weight: bold;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            height: 6px;
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), #f59e0b);
+            box-shadow: 0 0 8px var(--gold);
+            transition: width 0.5s ease;
+        }
+
+        /* حاوية الكرت ثلاثي الأبعاد */
+        .tarot-container {
+            width: 190px;
+            height: 290px;
+            perspective: 1000px;
+            margin: 10px auto 20px auto;
+        }
+
+        .tarot-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .tarot-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            border: 2px solid rgba(212, 175, 55, 0.25);
+        }
+
+        .card-front {
+            background: var(--card-back);
+            background-image: radial-gradient(circle, rgba(168, 85, 247, 0.2) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .card-front::after {
+            content: "🔮";
+            font-size: 3.2rem;
+            filter: drop-shadow(0 0 15px var(--purple-glow));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .card-back {
+            background: #0f081f;
+            transform: rotateY(180deg);
+            padding: 15px;
+            border-color: var(--gold);
+        }
+
+        .card-icon {
+            font-size: 2.8rem;
+            margin-bottom: 5px;
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            color: var(--gold-glow);
+            font-weight: bold;
+        }
+
+        /* صندوق التحديات والخيارات */
+        .challenge-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: 22px;
+            width: 100%;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .challenge-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #e2d8ff;
+            text-align: justify;
+            margin: 0 0 15px 0;
+        }
+
+        .action-btn {
+            background: linear-gradient(90deg, #8b5cf6, #6d28d9);
+            color: #ffffff;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            border-radius: 16px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:disabled {
+            background: #272138;
+            color: #7c7293;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* أزرار التحقق الحصرية */
+        .choice-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .btn-success {
+            background: linear-gradient(90deg, #d4af37, #b58918);
+            color: #070412;
+            border: none;
+            padding: 12px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .btn-fail {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            padding: 12px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .timer-lock-badge {
+            font-size: 0.9rem;
+            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            padding: 8px 15px;
+            border-radius: 14px;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* جائزة الشجرة الكبرى النهائية */
+        .grand-prize-box {
+            display: none;
+            background: radial-gradient(circle at center, #2e1e05 0%, #120a01 100%);
+            border: 2px solid var(--gold);
+            border-radius: 24px;
+            padding: 22px;
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+            animation: pulse-gold 2s infinite alternate;
+        }
+
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+            100% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.6); }
+        }
+
+        .grand-prize-box h2 {
+            color: var(--gold-glow);
+            font-size: 1.3rem;
+            margin: 0 0 10px 0;
+        }
+
+        .grand-prize-box p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #fff4d4;
+        }
+
+        .btn-claim {
+            background: linear-gradient(90deg, #f59e0b, var(--gold));
+            color: #110824;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            border-radius: 14px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- مصادر الصوت التفاعلية السريعة والموثوقة -->
+    <audio id="flipAudio" preload="auto" src="https://www.soundjay.com/buttons/sounds/button-19.mp3"></audio>
+    <audio id="successAudio" preload="auto" src="https://www.soundjay.com/buttons/sounds/button-09a.mp3"></audio>
+
+    <div class="container">
+        <h1>تاروت الفعل الأثيري</h1>
+        <div class="subtitle">توجيه السلوك لفتح قنوات الجذب الطاهر والشفاء الذاتي</div>
+
+        <!-- نظام استعراض شجرة الوفرة الرقمية النامية -->
+        <div class="tree-container">
+            <div class="tree-graphic" id="treeGraphic">🌱</div>
+            <div class="tree-status" id="treeStatus">مستوى نمو شجرة الوفرة: بذرة (0/12)</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+        </div>
+
+        <!-- الكرت التفاعلي المطور -->
+        <div class="tarot-container">
+            <div class="tarot-card" id="tarotCard" onclick="revealCardProcess()">
+                <div class="card-face card-front"></div>
+                <div class="card-face card-back">
+                    <div class="card-icon" id="cardIcon">✨</div>
+                    <div class="card-title" id="cardTitle">مسار التحرر الروحي</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- صندوق استعراض وتأكيد التحديات -->
+        <div class="challenge-box" id="challengeBox">
+            <p class="challenge-text" id="challengeText">
+                <b>مرحباً بك في طقس الفعل الأثيري:</b> عند الالتزام بتنفيذ الـ 12 كرت السلوكية المقترحة كاملة، ستصبح هالتك حرة وأكثر إيجابية لتتدفق الوفرة العارمة إلى واقعك، كما ستحصل فوراً على <b>جلسة قراءة مجانية مخصصة لجانب واحد من حياتك</b> (سواء مادياً، عاطفياً، السفر، التوافق، أو الصحة) مع تشخيص العلاج الطاقي المناسب لما هو معطل في مساراتك الكونية!<br><br>
+                المس الكرت بالأعلى لسحب تحديك السلوكي النقي الأول...
+            </p>
+            <div id="interfaceControl">
+                <button class="action-btn" onclick="revealCardProcess()">🔮 اكشف كرت التحدي السلوكي</button>
+            </div>
+        </div>
+
+        <!-- الصندوق الذهبي لاستلام الهدية الكبرى بعد اكتمال الـ 12 كرت -->
+        <div class="grand-prize-box" id="grandPrizeBox">
+            <h2>👑 تهانينا النورانية.. اكتملت شجرة الوفرة الذهبية!</h2>
+            <p>لقد أتممت بنجاح تنفيذ الـ 12 فعلاً رحيماً وطهرت هالتك ومساراتك بالكامل. تواصل الآن مع الدعم الفني وأرسل لقطة شاشة للتطبيق لإرسال سؤالك المجاني المخصص لجانب واحد من حياتك والحصول على علاجك الروحي المتكامل فوراً.</p>
+            <button class="btn-claim" onclick="contactSupport()">🔮 تواصل الآن لتلقي مكافأتك المجانية</button>
+        </div>
+    </div>
+
+    <script>
+        const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+        try { if (tg && typeof tg.expand === 'function') tg.expand(); } catch (e) {}
+
+        const flipAudio = document.getElementById('flipAudio');
+        const successAudio = document.getElementById('successAudio');
+
+        const treeStages = ["🌱", "🌿", "🍀", "🪴", "🎋", "🍃", "🌿", "🌴", "🌳", "🌲", "✨🌳", "👑🌳"];
+
+        // مصفوفة التحديات الـ 12 الكاملة والموسعة بدقة
+        const challengesList = [
+            {
+                title: "كرت سقاية الحياة", icon: "🌿",
+                text: "<b>تحدي سقاية الحياة 🌿:</b> ابحث عن كائن نباتي أخضر يحتاج إلى الدعم (سواء كان نباتاً منزلياً في شرفتك، أو شجرة في الشارع، أو نبتة منسية في مقر عملك). أحضر كوباً من الماء العذب النقي، وقبل سكبه، ركّز بنيتك على فكرة 'الإحياء والتدفق'. اسكب الماء ببطء حول الجذور، مستشعراً أن هذا الماء الذي يروي عروق النبات يفك بالتوازي جفاف وانسداد مساراتك المالية، لتدفق أموال اليسر والبركة في واقعك."
+            },
+            {
+                title: "كرت إطعام الأثير البري", icon: "🕊️",
+                text: "<b>تحدي إطعام الأثير البري 🕊️:</b> خذ حفنة صغيرة من الحبوب الطاهرة والنظيفة المتوفرة في مطبخك (مثل القمح، الأرز، العدس، أو السمسم). اذهب إلى نافذتك، شرفتك، أو أي مساحة مكشوفة ترتادها الطيور الحرة البرية. انثر الحبوب بلطف، وانوِ بهذا الفعل إطعام الأرواح الحرة البريئة كقربان كوني نقي دون التسبب بأي أذى أو استخدام لمنتجات حيوانية. استشعر أن كل طائر يلتقط حبة يرفع عن كاهلك شفرة ندرة أو ضيق، ويفتح لك باباً مغلقاً من أبواب الرزق."
+            },
+            {
+                title: "كرت تدوير العملة الطاهرة", icon: "🪙",
+                text: "<b>تحدي تدوير العملة الطاهرة 🪙:</b> افتح محفظتك وابحث عن مبلغ مالي بسيط جداً—حتى وإن كان عملة معدنية واحدة صغيرة. تعهد بأن تخرج هذه العملة اليوم وتمنحها لأول شخص محتاج أو عامل بسيط تلتقي به في طريقك. أثناء تقديمها، لا تنظر إليها كخسارة، بل كـ 'بذرة طاقية' تضعها في حقل الكون. استشعر طاقة العطاء اللامحدود، وأنت توقن أن المال طاقة متحركة، وما تطلقه اليوم بدافع الكرم النقي يعود إلى هالتك مضاعفاً بيسر."
+            },
+            {
+                title: "كرت رسالة الامتنان المباغتة", icon: "💬",
+                text: "<b>تحدي رسالة الامتنان المباغتة 💬:</b> افتح قائمة جهات الاتصال في هاتفك، وتصفح الأسماء بتمعن حتى يقف قلبك عند شخص لم تتحدث معه منذ فترة طويلة (صديق قديم، أو قريب غيبه ريتم الحياة). أرسل له رسالة شكر أو امتنان قصيرة وصادقة، تذكره فيها بموقف إيجابي سابق أو تعبر عن تقديرك لوجوده في مرحلة ما من حياتك، دون انتظار أي مصلحة أو مبرر. هذا الفعل يكسر الجمود الطاقي ويزيل الكبرياء، مما يعيد تنظيف هالتك العاطفية ويفك عقد العلاقات."
+            },
+            {
+                title: "كرت الدعاء الأثيري بظهر الغيب", icon: "🙏",
+                text: "<b>تحدي الدعاء الأثيري بظهر الغيب 🙏:</b> اجلس في لحظة هدوء واسترخاء، واستحضر في مخيلتك ثلاثة أشخاص من محيطك تعلم يقيناً أنهم يمرون بظروف صعبة أو ضوائق (سواء كانت مادية، صحية، أو عاطفية). أغمض عينيك وادعُ لهم من أعماق قلبك وبأعلى درجات الصدق بالفرج، والتيسير، والشفاء، وتدفق النور في حياتهم. ووفقاً لقانون الذبذبات المرتدة، فإن هذا الدعاء السري النقي يعمل كمعول يهدم البلوكات والعقبات الشخصية التي تعرقل مسارات حياتك أنت أولاً."
+            },
+            {
+                title: "كرت الكلمة الطيبة والابتسامة", icon: "😊",
+                text: "<b>تحدي الكلمة الطيبة والابتسامة 😊:</b> تعهد مع بداية يومك بأن تكون مصدراً لبهجة كائن بشري واحد على الأقل. قد يكون هذا الشخص عاملاً تقابله في الشارع، زميلاً مرهقاً، أو فرداً من عائلتك. وجه له مديحاً حقيقياً وصادقاً يخص مجهوده أو روحه، أو أهدِهِ ابتسامة دافئة ونابعة من القلب أثناء التعامل معه. الكلمات الطيبة هي ذبذبات نورانية خارقة تخترق الهالات المنخفضة، وعندما ترفع طاقة من حولك، تتسع هالتك تلقائياً لاستقبال القبول والحظ."
+            },
+            {
+                title: "كرت التوكيد المرآتي المشع", icon: "👁️",
+                text: "<b>تحدي التوكيد المرآتي المشع 👁️:</b> اذهب إلى مكان خاص يحتوي على مرآة حيث لا يقاطعك أحد. قف بثبات، ووجّه نظرك بتركيز شديد وعميق جداً داخل بؤبؤ عينيك مباشرة (فهي نافذة الروح وعقلك الباطن). تنفس بعمق، وكرر بنبرة صوت واثقة، هادئة، ومسموعة 10 مرات متتالية: <i>'أنا متصل بمصدر السلام والوفرة اللانهائية، وهالتي الآن نقية، طاهرة، ومحصنة بالكامل'</i>. استشعر الكلمات وهي تخترق جدار وعيك لتعيد برمجة تردداتك فوراً."
+            },
+            {
+                title: "كرت استراحة الـ 528 هرتز", icon: "🧘‍♂️",
+                text: "<b>تحدي استراحة الـ 528 هرتز 🧘‍♂️:</b> اعزل نفسك عن أي ضوضاء أو مشتتات رقمية لمدة 3 دقائق كاملة. اتخذ وضعية جلوس مريحة ومستقيمة (أو وضعية الاسترخاء التام). أغمض عينيك وابدأ بتطبيق تنفس طاقي دقيق: خذ شهيقاً بطيئاً من الأنف يملأ بطنك، واحتفظ به لثوانٍ، ثم أطلقه كزفير ممتد وناعم من الفم. تخيل مع كل زفير أنك تسحب وتطرد جميع الترددات المنخفضة، والأفكار السامة، والإرهاق، وتستبدلها بأنوار التشفي والسكينة العميقة."
+            },
+            {
+                title: "كرت التطهير بملح الأرض", icon: "🧂",
+                text: "<b>تحدي التطهير بملح الأرض 🧂:</b> في نهاية يومك، أحضر وعاءً به ماء دافئ واخلط معه حفنة من الملح البحري الطبيعي (ملح الأرض). قم بغسل يديك وقدميك بهذا الماء بتمهل، أو امسح به على مراكز الطاقة في جسدك. أثناء ذلك، استشعر بقوة أن بلورات الملح الطبيعية تعمل كمغناطيس أثيري يمتص ويسحب كل طاقات الحسد، العيون، القلق، والشوائب الطاقية المتراكمة على مدار اليوم، لتدع الماء يتدفق حاملاً معه كل التعطيلات إلى الخارج."
+            },
+            {
+                title: "كرت طرد فوضى المداخل", icon: "🚪",
+                text: "<b>تحدي طرد فوضى المداخل 🚪:</b> توجه فوراً إلى مدخل منزلك الرئيسي أو عتبة غرفتك الخاصة. تفحص المكان وأزل أي فوضى، أحذية مبعثرة، أو أغراض متراكمة لا داعي لها وقم بترتيبها بشكل مثالي ونظيف. في علم طاقة المكان، تعتبر المداخل هي 'أفواه' المسارات التي تدخل منها طاقات الفرص، والأرزاق، والحظوظ إلى واقعك؛ وتنظيفها وتطهيرها يزيل السدود الأثيرية أمام البشارات السارة لتصل إليك سريعاً."
+            },
+            {
+                title: "كرت تجديد الأثير والشمس", icon: "☀️",
+                text: "<b>تحدي تجديد الأثير والشمس ☀️:</b> اذهب إلى نوافذ بيتك أو غرفتك وقم بفتحها بالكامل على مصراعيها لمدة لا تقل عن 10 دقائق متواصلة، لتدع أشعة الشمس والنسمات المتجددة تتدفق بحرية. ركز نيتك أثناء فتحها على طرد الطاقات الراكدة والترسبات النفسية القديمة التي تسبب الكسل أو التعطيل، واستقبال هواء مشبع بالحيوية والنقاء والوفرة، لتشحن جدران مكانك بترددات إيجابية مبهجة."
+            },
+            {
+                title: "كرت التخلص من المكسور والقديم", icon: "🗑️",
+                text: "<b>تحدي التخلص من المكسور والقديم 🗑️:</b> قم بجولة سريعة ومحددة في محيطك القريب (مكتبك، خزانة أغراضك، أو غرفتك) وابحث عن شيء واحد فقط مكسور، تالف، أو غير قابل للاستخدام نهائياً—مثل كوب مشروخ، قلم جاف فارغ، ساعة متوقفة، أو ورقة قديمة ممزقة. التقط هذا الشيء وتخلص منه بإلقائه في سلة المهملات فوراً بنية 'إنهاء طاقة التعطيل والركود'. الأشياء التالفة تبث ترددات إعاقة، والتخلص منها يفسح مجالاً فورياً لولادة فرص ومسرات جديدة ونقية."
+            }
+        ];
+
+        function getAppState() {
+            let state = JSON.parse(localStorage.getItem('tarotSystemState_v3'));
+            if (!state) {
+                state = {
+                    treeLevel: 0,
+                    hasPulled: false,
+                    pullTime: null,
+                    currentChallengeIndex: null,
+                    votedThisTurn: false
+                };
+                localStorage.setItem('tarotSystemState_v3', JSON.stringify(state));
+            }
+            return state;
+        }
+
+        function saveAppState(state) {
+            localStorage.setItem('tarotSystemState_v3', JSON.stringify(state));
+        }
+
+        let countdownInterval = null;
+
+        function updateUI() {
+            const state = getAppState();
+            const card = document.getElementById('tarotCard');
+            const treeGraphic = document.getElementById('treeGraphic');
+            const treeStatus = document.getElementById('treeStatus');
+            const progressBarFill = document.getElementById('progressBarFill');
+            const challengeText = document.getElementById('challengeText');
+            const interfaceControl = document.getElementById('interfaceControl');
+            const grandPrizeBox = document.getElementById('grandPrizeBox');
+
+            // تحديث واجهة شجرة الوفرة الذهبية
+            const currentLevel = Math.min(state.treeLevel, 12);
+            treeGraphic.innerText = treeStages[Math.min(currentLevel, 11)];
+            if (currentLevel >= 12) {
+                treeStatus.innerText = "شجرة الوفرة ذهبية عملاقة بالكامل! 👑🌳 (12/12)";
+                grandPrizeBox.style.display = "block";
+            } else {
+                treeStatus.innerText = `مستوى نمو شجرة الوفرة: ${getLevelName(currentLevel)} (${currentLevel}/12)`;
+                grandPrizeBox.style.display = "none";
+            }
+            progressBarFill.style.width = `${(currentLevel / 12) * 100}%`;
+
+            if (state.hasPulled) {
+                // الكرت مكشوف ومسحوب
+                card.classList.add('flipped');
+                const challenge = challengesList[state.currentChallengeIndex];
+                document.getElementById('cardTitle').innerText = challenge.title;
+                document.getElementById('cardIcon').innerText = challenge.icon;
+                challengeText.innerHTML = challenge.text;
+
+                // فحص حالة مرور الـ 12 ساعة
+                const now = new Date().getTime();
+                const timePassed = now - state.pullTime;
+                const lockDuration = 12 * 60 * 60 * 1000; // 12 ساعة بالملي ثانية
+
+                if (timePassed < lockDuration && !state.votedThisTurn) {
+                    // الكرت مغلق حالياً بانتظار التنفيذ والـ 12 ساعة
+                    if (countdownInterval) clearInterval(countdownInterval);
+                    
+                    interfaceControl.innerHTML = `
+                        <div class="timer-lock-badge" id="timerBadge">⏳ يتم شحن النية.. متبقي: --:--:--</div>
+                        <p style="font-size:0.85rem; color:#a78bfa; margin-top:10px;">قم بالذهاب وتطبيق الفعل بتمهل ويقين. ستفتح لك خيارات التأكيد وتحديث نمو الشجرة فور انتهاء المؤقت التنازلي.</p>
+                    `;
+                    
+                    function startTimer() {
+                        const innerNow = new Date().getTime();
+                        const innerDiff = lockDuration - (innerNow - state.pullTime);
+                        if (innerDiff <= 0) {
+                            clearInterval(countdownInterval);
+                            updateUI();
+                            return;
+                        }
+                        const hours = Math.floor(innerDiff / (1000 * 60 * 60));
+                        const minutes = Math.floor((innerDiff % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((innerDiff % (1000 * 60)) / 1000);
+                        const badge = document.getElementById('timerBadge');
+                        if (badge) {
+                            badge.innerText = `⏳ يتم شحن النية.. متبقي: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                        }
+                    }
+                    startTimer();
+                    countdownInterval = setInterval(startTimer, 1000);
+
+                } else if (!state.votedThisTurn) {
+                    // انتهت الـ 12 ساعة ولم يصوت بعد
+                    if (countdownInterval) clearInterval(countdownInterval);
+                    interfaceControl.innerHTML = `
+                        <p style="font-size:1rem; color:#fef08a; font-weight:bold; margin-bottom:10px;">✨ مرت 12 ساعة، حان وقت تقييم الكارما الفعلية:</p>
+                        <div class="choice-container">
+                            <button class="btn-success" onclick="voteAction(true)">✅ تم الأمر بنية صادقة</button>
+                            <button class="btn-fail" onclick="voteAction(false)">❌ لم أنفذ الفعل</button>
+                        </div>
+                    `;
+                } else {
+                    // قام بالتصويت في هذا الدور، ينتظر اليوم التالي (24 ساعة من بداية السحب الأصلي ليتجدد)
+                    if (countdownInterval) clearInterval(countdownInterval);
+                    interfaceControl.innerHTML = `
+                        <button class="action-btn" disabled>🔒 تم تسجيل طاقة هذا الكرت بنجاح</button>
+                        <p style="font-size:0.85rem; color:#9ca3af; margin-top:8px;">انتظر تجدد المسارات الفلكية غداً لتتمكن من سحب الكرت السلوكي التالي وتنمية شجرتك.</p>
+                    `;
+                }
+
+            } else {
+                // الكرت مستعد للسحب الأول أو اليوم الجديد
+                if (countdownInterval) clearInterval(countdownInterval);
+                card.classList.remove('flipped');
+                document.getElementById('cardTitle').innerText = "مسار التحرر الروحي";
+                document.getElementById('cardIcon').innerText = "✨";
+                
+                interfaceControl.innerHTML = `
+                    <button class="action-btn" onclick="revealCardProcess()">🔮 اكشف كرت التحدي السلوكي</button>
+                `;
+            }
+        }
+
+        function getLevelName(lvl) {
+            if (lvl === 0) return "بذرة";
+            if (lvl <= 3) return "برعم نامٍ";
+            if (lvl <= 6) return "شجيرة بركة غضة";
+            if (lvl <= 9) return "شجرة قوية الأغصان";
+            if (lvl <= 11) return "شجرة أثيرية مشعة";
+            return "شجرة ذهبية كبرى";
+        }
+
+        function revealCardProcess() {
+            const state = getAppState();
+            if (state.hasPulled) return;
+
+            try {
+                flipAudio.currentTime = 0;
+                flipAudio.play().catch(e => console.log(e));
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+            } catch(e){}
+
+            // سحب كرت من الـ 12 كرت بشكل عشوائي أو تسلسلي، يفضل عشوائي لتشويق كامل
+            const nextIndex = Math.floor(Math.random() * challengesList.length);
+
+            state.hasPulled = true;
+            state.pullTime = new Date().getTime();
+            state.currentChallengeIndex = nextIndex;
+            state.votedThisTurn = false;
+
+            saveAppState(state);
+            updateUI();
+        }
+
+        function voteAction(isSuccess) {
+            const state = getAppState();
+            if (!state.hasPulled || state.votedThisTurn) return;
+
+            try {
+                successAudio.currentTime = 0;
+                successAudio.play().catch(e => console.log(e));
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            } catch(e){}
+
+            if (isSuccess) {
+                state.treeLevel = state.treeLevel + 1;
+                alert("تم تسجيل النية الصادقة بنجاح! طاقة الكارما ارتفعت ونمت شجرتك الذهبية خطوة للأعلى.");
+            } else {
+                alert("لا بأس، الصدق أول خطوات التشفي. توقف نمو شجرتك مؤقتاً، وننتظرك غداً للتطهير بوعي أكبر.");
+            }
+
+            state.votedThisTurn = true;
+            saveAppState(state);
+            updateUI();
+
+            // فحص روتيني لتصفير دورة السحب كل 24 ساعة ليعود للوضع الطبيعي تلقائياً
+            setTimeout(() => {
+                const innerState = getAppState();
+                innerState.hasPulled = false;
+                innerState.votedThisTurn = false;
+                saveAppState(innerState);
+                updateUI();
+            }, 60000); // تجريبياً هنا لدقيقة أو يمكن تركه ليتجدد مع التاريخ الفعلي لليوم التالي
+        }
+
+        // نظام ذكي إضافي لتصفير الحالة إذا دخل في يوم جديد تماماً ومكتمل التصويت
+        function checkDailyReset() {
+            const state = getAppState();
+            if (state.votedThisTurn && state.pullTime) {
+                const now = new Date().getTime();
+                const oneDay = 24 * 60 * 60 * 1000;
+                if (now - state.pullTime >= oneDay) {
+                    state.hasPulled = false;
+                    state.votedThisTurn = false;
+                    state.currentChallengeIndex = null;
+                    saveAppState(state);
+                }
+            }
+        }
+
+        function contactSupport() {
+            try {
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+                if (tg && typeof tg.openTelegramLink === 'function') {
+                    tg.openTelegramLink('https://t.me/AstroHeal1'); 
+                } else {
+                    window.open('https://t.me/AstroHeal1', '_blank');
+                }
+            } catch(e){}
+        }
+
+        // بدء التشغيل
+        checkDailyReset();
+        updateUI();
+    </script>
+</body>
+</html>
