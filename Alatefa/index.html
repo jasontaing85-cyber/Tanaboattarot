@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ميزان التوافق الطاقي والميتافيزيقي</title>
+    <style>
+        :root {
+            --bg-color: linear-gradient(135deg, #05020f 0%, #0d0624 50%, #05020f 100%);
+            --gold: #f3c63f;
+            --gold-glow: #ffe891;
+            --mystic-purple: #421d72;
+            --crystal-glow: rgba(0, 221, 255, 0.6);
+            --text-color: #f0e8ff;
+            --card-bg: linear-gradient(145deg, #180c30, #0a0316);
+        }
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 20px 10px;
+            text-align: center;
+            overflow-x: hidden;
+            min-height: 100vh;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* تأثير سديم الفضاء والنجوم المتلألئة في الخلفية */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                              radial-gradient(white, rgba(255,255,255,.08) 2px, transparent 40px);
+            background-size: 300px 300px, 450px 450px;
+            opacity: 0.3;
+            z-index: -1;
+            animation: spaceFloat 90s linear infinite;
+        }
+        @keyframes spaceFloat {
+            0% { background-position: 0px 0px; }
+            100% { background-position: 450px 450px; }
+        }
+
+        h1 {
+            color: var(--gold);
+            font-size: 1.8rem;
+            text-shadow: 0 0 20px rgba(243, 198, 63, 0.5);
+            margin: 15px 0 5px 0;
+            font-weight: 800;
+        }
+        .subtitle {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            margin-bottom: 30px;
+            color: #d1c4e9;
+        }
+
+        /* البلورة السحرية ثلاثية الأبعاد المتوهجة */
+        .crystal-ball-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 25px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .crystal-ball {
+            width: 115px;
+            height: 115px;
+            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #e0b0ff 20%, #7b1fa2 50%, #1a0033 90%);
+            border-radius: 50%;
+            box-shadow: 0 0 40px var(--crystal-glow), inset -15px -15px 30px rgba(0,0,0,0.9), inset 15px 15px 25px rgba(255,255,255,0.4);
+            position: relative;
+            z-index: 2;
+            animation: pulseGlow 4s infinite ease-in-out;
+            transition: transform 0.3s ease;
+        }
+        .crystal-ball:active {
+            transform: scale(0.96);
+        }
+        .ball-stand {
+            width: 80px;
+            height: 28px;
+            background: linear-gradient(90deg, #18092b, var(--gold), #18092b);
+            margin: -12px auto 0;
+            border-radius: 6px 6px 18px 18px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.7);
+            z-index: 1;
+            position: relative;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 30px rgba(123, 31, 162, 0.6), inset -15px -15px 30px rgba(0,0,0,0.9); filter: brightness(1); }
+            50% { box-shadow: 0 0 55px rgba(0, 221, 255, 0.85), inset -15px -15px 25px rgba(0,0,0,0.75); filter: brightness(1.15); }
+        }
+
+        /* مكدس أوراق التاروت */
+        .deck-container {
+            position: relative;
+            width: 140px;
+            height: 210px;
+            margin: 35px auto;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+        .stacked-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a0b36, #3b176d);
+            border: 2px solid var(--gold);
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stacked-card::after {
+            content: '🔮';
+            font-size: 2.2rem;
+            opacity: 0.25;
+            filter: drop-shadow(0 0 10px var(--gold));
+        }
+        .deck-container .stacked-card:nth-child(1) { transform: rotate(-5deg); }
+        .deck-container .stacked-card:nth-child(2) { transform: rotate(-2.5deg) translate(2px, 2px); }
+        .deck-container .stacked-card:nth-child(3) { transform: rotate(0deg) translate(-1px, 1px); }
+        .deck-container .stacked-card:nth-child(4) { transform: rotate(2.5deg) translate(3px, -2px); }
+        .deck-container .stacked-card:nth-child(5) { transform: rotate(5deg) translate(-2px, 3px); }
+
+        .deck-container:hover .stacked-card {
+            transform: translateY(-8px) scale(1.04);
+            box-shadow: 0 12px 25px rgba(123, 31, 162, 0.4);
+        }
+
+        /* كرت التاروت المنبثق والظاهر ثلاثي الأبعاد */
+        .revealed-card-anim {
+            width: 160px;
+            height: 240px;
+            background: linear-gradient(135deg, #241242, #0b0314);
+            border: 3px solid var(--gold);
+            border-radius: 16px;
+            margin: 25px auto;
+            box-shadow: 0 0 35px rgba(243, 198, 63, 0.6);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+        @keyframes flipIn3D {
+            0% { transform: scale(0.3) rotateY(-180deg) translateY(150px); opacity: 0; }
+            100% { transform: scale(1) rotateY(0deg) translateY(0); opacity: 1; }
+        }
+        .revealed-card-number {
+            font-size: 3.5rem;
+            color: var(--gold);
+            font-weight: 900;
+            text-shadow: 0 0 15px rgba(243, 198, 63, 0.7);
+            margin: 5px 0;
+        }
+
+        /* شاشة عرض لوحة مؤشر النسبة المئوية المضيئة */
+        .compatibility-gauge-box {
+            display: none;
+            width: 90%;
+            max-width: 550px;
+            background: rgba(24, 12, 48, 0.5);
+            border: 1px solid rgba(243, 198, 63, 0.3);
+            border-radius: 16px;
+            padding: 15px;
+            margin: 20px auto 0;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease;
+        }
+        .gauge-title {
+            font-size: 0.95rem;
+            color: #d1c4e9;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .gauge-bar-bg {
+            width: 100%;
+            height: 16px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+        .gauge-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #7b1fa2, var(--gold), #ffeb3b);
+            border-radius: 30px;
+            box-shadow: 0 0 15px var(--gold);
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .gauge-percent-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--gold-glow);
+            margin-top: 6px;
+            display: block;
+            text-shadow: 0 0 10px rgba(243, 198, 63, 0.5);
+        }
+
+        /* نافذة القراءة الكونية الموسعة */
+        .reading-box {
+            display: none;
+            background: linear-gradient(180deg, #160d2b 0%, #090414 100%);
+            border: 2px solid var(--gold);
+            border-radius: 24px;
+            padding: 25px 20px;
+            max-width: 580px;
+            margin: 25px auto;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.8);
+            animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+        .reading-box h2 {
+            color: var(--gold);
+            font-size: 1.45rem;
+            margin-top: 0;
+            border-bottom: 2px solid rgba(243, 198, 63, 0.25);
+            padding-bottom: 14px;
+            font-weight: 800;
+            line-height: 1.4;
+        }
+        .facet-section {
+            text-align: right;
+            margin-bottom: 20px;
+            background: rgba(255,255,255, 0.02);
+            padding: 18px;
+            border-radius: 16px;
+            border-right: 5px solid var(--gold);
+            box-shadow: inset 0 0 15px rgba(123, 31, 162, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .facet-section:hover {
+            transform: translateX(-3px);
+            background: rgba(255,255,255, 0.03);
+        }
+        .facet-section h3 {
+            color: var(--gold-glow);
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+        .facet-section p {
+            font-size: 0.98rem;
+            line-height: 1.8;
+            margin: 0;
+            text-align: justify;
+            color: #ede7f6;
+        }
+
+        /* تنبيه حالة القيود الزمنية للإستخدام */
+        .status-alert {
+            color: #ff5252;
+            font-weight: bold;
+            margin: 15px auto;
+            max-width: 420px;
+            display: none;
+            background: rgba(255, 72, 72, 0.08);
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 72, 72, 0.25);
+            font-size: 0.92rem;
+            line-height: 1.5;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: fadeIn 0.4s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>ميزان التوافق الطاقي والميتافيزيقي</h1>
+    <div class="subtitle">المس الكريستالة المشعة أو مكدس الأوراق لتكشف أسرار كيمياء علاقتك من التاروت الكونى 🌌</div>
+
+    <!-- مجسم الكريستالة الهولوجرامية -->
+    <div class="crystal-ball-container" id="crystalBtn" role="button" tabindex="0" aria-label="اسحب بطاقة التوافق" aria-haspopup="dialog">
+        <div class="crystal-ball"></div>
+        <div class="ball-stand"></div>
+    </div>
+
+    <div id="statusAlert" class="status-alert" role="status" aria-live="polite"></div>
+
+    <!-- مكدس الأوراق الغجرية الساحرة -->
+    <div class="deck-container" id="deck" role="button" tabindex="0" aria-label="اسحب بطاقة من المكدس">
+        <div class="stacked-card" aria-hidden="true"></div>
+        <div class="stacked-card" aria-hidden="true"></div>
+        <div class="stacked-card" aria-hidden="true"></div>
+        <div class="stacked-card" aria-hidden="true"></div>
+        <div class="stacked-card" aria-hidden="true"></div>
+    </div>
+
+    <!-- كرت التاروت المنبثق -->
+    <div class="revealed-card-anim" id="revealedCard" aria-hidden="true">
+        <div style="font-size: 0.85rem; color: #d1c4e9; letter-spacing: 2px; text-transform: uppercase;">البطاقة المسحوبة</div>
+        <div class="revealed-card-number" id="cardNumber">I</div>
+        <div style="font-size: 1.15rem; color: var(--gold); font-weight: bold; padding: 0 5px;" id="cardSubLabel"></div>
+    </div>
+
+    <!-- لوحة مؤشر نسبة التوافق الديناميكية -->
+    <div class="compatibility-gauge-box" id="gaugeBox">
+        <div class="gauge-title">✨ مقياس الاندماج والانسجام النجمي المشترك:</div>
+        <div class="gauge-bar-bg"><div class="gauge-bar-fill" id="gaugeFill"></div></div>
+        <span class="gauge-percent-text" id="gaugePercent">0%</span>
+    </div>
+
+    <!-- نافذة تفصيل طاقة الاحتمالات والانسجام الميتافيزيقي المستخرجة -->
+    <div class="reading-box" id="readingBox" role="region" aria-labelledby="probabilityTitle">
+        <h2 id="probabilityTitle">عنوان الاحتمال الطاقي</h2>
+        
+        <div class="facet-section">
+            <h3>☯️ التوافق من حيث الطاقة والانسجام</h3>
+            <p id="energyText"></p>
+        </div>
+        <div class="facet-section">
+            <h3>🧠 التوافق من حيث المشاعر والأفكار والاهتمامات</h3>
+            <p id="mindText"></p>
+        </div>
+        <div class="facet-section">
+            <h3>⚡ تحديات العلاقة والعقبات الكرمية</h3>
+            <p id="challengeText"></p>
+        </div>
+        <div class="facet-section">
+            <h3>🌱 إرشاد غجري: كيف نحسن ونرتقي بالعلاقة</h3>
+            <p id="improveText"></p>
+        </div>
+    </div>
+
+    <script>
+        // قفل العداد أسبوعياً
+        const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+        // قاعدة البيانات الـ 12 المحدثة بأسماء بطاقات التاروت الصريحة
+        const compatibilityData = [
+            {
+                num: "VI", label: "بطاقة العشاق (The Lovers)", percent: 98,
+                title: "البطاقة السادسة: بطاقة العشاق (The Lovers) - الاندماج الكامل وتوأم الشعلة 🔥",
+                energy: "هذا الارتباط من أندر وأقوى الأنماط الطاقية على الإطلاق! هالتكما لا تتشابهان فحسب، بل تندمجان كأنهما قطعة واحدة انقسمت قديماً والتحمت الآن تحت طاقة بطاقة العشاق الكونية. التواجد في نفس المكان يمنحكما شعوراً فورياً بالأمان وكأنكما في المنزل. طاقتي الذبذبية العالية هنا تعمل كجهاز شحن طبيعي؛ تداوي جروح الهالة المنهكة، وتبث الحيوية والنشاط في جسديكما بمجرد تبادل النظرات، مما يجعلكما محصنين ضد أي ضغوطات خارجية.",
+                mind: "المشاعر هنا عميقة جداً وصادقة لدرجة مذهلة، بعيدة تماماً عن التصنع أو التردد. هناك حالة تخاطر روحي مستمرة وعجيبة؛ تشعر بضيق الطرف الآخر أو فرحه حتى لو كانت تفصل بينكما قارات! الأفكار تتوحد بشكل مدهش، وكثيراً ما تجدان نفسكما تنطقان الكلمة نفسها في ذات اللحظة. يجمعكما شغف هائل وغير مألوف بالعلوم الروحية، تطوير الذات، وبناء نمط حياة راقٍ وناجح مالياً وعاطفياً.",
+                challenge: "التحدي الأكبر هنا هو 'تأثير المرآة الكاشفة'. لأن شريكك يعكس حقيقتك تماماً، فإنه وبدون قصد سيكشف لك عيوبك ومخاوفك القديمة التي تحاول إخفاءها عن نفسك. هذه الكثافة العاطفية الجارفة قد تولد أحياناً خوفاً مفاجئاً وغير مبرر من الفقدان، أو حساسية مفرطة تجعلك تفسر فترات صمت الشريك على أنها تراجع في الحب.",
+                improve: "السر في الحفاظ على هذا الرابط المقدس هو إعطاء كل طرف مساحة كافية ليتنفس بمفرده وينفرد بهالته الخاصة بسلام. لا تخنقا الرابط بالتعلق الزائد. مارسا التأمل، وتبادلا كلمات الامتنان البسيطة يومياً. من المهم جداً إحاطة هذه العلاقة بالسرية والكتمان التام لحمايتها من أعين الفضوليين وطاقات الحسد السلبية التي قد تنجذب لنوركما المتوهج."
+            },
+            {
+                num: "X", label: "عجلة الحظ (Wheel of Fortune)", percent: 65,
+                title: "البطاقة العاشرة: بطاقة عجلة الحظ (Wheel of Fortune) - الرابطة الكرمية وتطهير الروح 🌀",
+                energy: "الطاقة بينكما تشبه المغناطيس القوي؛ هناك جاذبية متبادلة وسحر فوري لا يقاوم منذ اللقاء الأول نابع من حركة عجلة الحظ الكرمية الكبرى، لكنها طاقة متقلبة ولا تسير على وتيرة واحدة. الانسجام هنا يمر بموجات صعود وهبوط حادة؛ فتارة تعيشان في قمة السعادة والانسجام، وتارة أخرى تشعران بثقل طاقي مفاجئ. هذا التذبذب يحدث لأن العلاقة تهدف أساساً إلى تنظيف وتطهير مركز الضفيرة الشمسية المسؤولة عن القوة والسيطرة لترسيخ الهدوء النفسي.",
+                mind: "المشاعر متأرجحة وساخنة جداً، حيث تتردد باستمرار بين الرغبة في الاقتراب الشديد والتعلق، وبين الحاجة والاضطرار للابتعاد المؤقت لإعادة ترتيب الأفكار. العقل يعمل هنا بكامل طاقته لحل ألغاز تصرفات الطرف الآخر وفهم غموضه. الاهتمامات قد تبدو مختلفة في الظاهر، لكن هناك رابط خفي يدفعكما دائماً للجلوس معاً والتعلم من تجارب الحياة المشتركة.",
+                challenge: "العقبة الأساسية هي تكرار نفس الأخطاء والجدالات القديمة التي تظهر فجأة بدون أسباب واضحة. يواجه الرابط صراعاً خفياً حول من يفرض رأيه، وتظهر على السطح مخاوف قديمة تتعلق بالهجر أو عدم التقدير، وهي رواسب نفسية من الماضي تحتاج للتطهير والتشافي والتعديل.",
+                improve: "لكي تعبرا بالعلاقة لبر الأمان، عليكما النظر للأمور بوعي ونضج. عندما يحدث خلاف، اسألا أنفسكما بصدق: ما النضج الذي يحاول هذا الموقف تعليمه لروحي؟ تحل الروابط الكرمية بالتسامح المطلق، وترك اللوم والعتاب المستمر، والتعامل بمرونة تامة لخلق هالة نقية بعيدة عن العناد والأنا."
+            },
+            {
+                num: "IV", label: "بطاقة الإمبراطور (The Emperor)", percent: 85,
+                title: "البطاقة الرابعة: بطاقة الإمبراطور (The Emperor) - التوازن الفكري والأمان الأرضي 📐",
+                energy: "طاقة هذه البطاقة دافئة، ثابتة، وتتسم بالأمان الأرضي والمادي الملموس بفضل قوة وجاذبية الإمبراطور الحازمة. لا توجد مفاجآت صادمة أو تقلبات مزعجة؛ بل ينمو الانسجام والتوافق بينكما خطوة بخطوة بهدوء واتزان كبناء القلاع القوية. تمنح هالتكما لبعضهما طاقة تأريض وتوازن رائعة، مما يساعد على إزالة مشاعر القلق، الخوف من المستقبل، والتوتر اليومي بمجرد التحدث معاً.",
+                mind: "تطابق ممتاز وعقلاني في طريقة التفكير والتحليل المنطقي للأمور اليومية والمالية. المشاعر هنا تنمو برزانة، نضج، ووعي هادئ بعيد تماماً عن الاندفاع العاطفي الأعمى. اهتماماتكما مشتركة بقوة في حب التنظيم، التخطيط الذكي للمستقبل، بناء الاستقرار المالي، وإدارة شؤون الحياة بطريقة تضمن لكما العيش برفاهية وراحة بال.",
+                challenge: "التحدي الحقيقي الذي يهدد هذا الاستقرار الرائع هو الوقوع في فخ البرود العاطفي، والروتين اليومي الممل. قد يطغى الجانب العملي وحسابات المصلحة والمسؤوليات على الشغف والرومانسية، مما يحول العلاقة بمرور الوقت إلى ما يشبه الشراكة الرسمية الجافة.",
+                improve: "اكسرا جدار الروتين فوراً بإدخال عنصر المفاجأة والأفكار المبهجة غير المخطط لها في جدولكما الأسبوعي! قوما برحلة عفوية، وتبادلا هدايا بدون مناسبة، واحرصا على التعبير عن عواطفكما الدفينة بجرأة وحرية، دون إخضاع كل المشاعر والكلمات لحسابات المنطق والعقل الجافة."
+            },
+            {
+                num: "XVIII", label: "بطاقة القمر (The Moon)", percent: 92,
+                title: "البطاقة الثامنة عشرة: بطاقة القمر (The Moon) - الفيضان العاطفي والاندماج المائي 🌊",
+                energy: "هذه الهالة ناعمة جداً، رحبة، ومفعمة بطاقة الحنان تحت ظلال القمر الغامض. الانسجام بينكما مبني على ترددات شاكرا القلب النابضة بالحب الخالص والحدس الفطري. هي طاقة شفائية بامتياز، لديها قدرة مذهلة على امتصاص صدمات الحياة الخارجية وهموم العمل؛ فبمجرد الجلوس معاً، تشعران بسلام داخلي يغسل كل الأوجاع والتوتر النفسي.",
+                mind: "العاطفة والمشاعر الجياشة هما القائد والمحرك الأساسي لكل شيء في هذه العلاقة. هناك حب دافئ، حنان متدفق، ورغبة صادقة من كل طرف في التضحية وإسعاد الآخر بشتى الطرق. الأفكار مليئة بالرومانسية والخيال الخصب، والاهتمامات المشتركة تدور حول الفنون، الموسيقى، الاستمتاع بجمال تفاصيل المنزل، وجلسات التحدث الطويلة.",
+                challenge: "التحدي يكمن في غياب الحدود الطاقية الفاصلة بينكما، مما يؤدي إلى 'الامتصاص الطاقي السلبي'. إذا حزن شريكك أو مر بضيق، تجد نفسك تغرق تلقائياً في نفس دوامة الاكتئاب والإحباط دون أن تشعر! كما أن الحساسية الزائدة من الطرفين قد تحول أي عتاب بسيط أو كلمة عابرة إلى جرح عميق.",
+                improve: "من الضروري جداً التدرب على فصل الطاقات وحماية الهالة الشخصية؛ تذكر أنك تدعم شريكك ولكنك لست مسؤولاً عن عواطفه بشكل كامل. تعلما قول 'لا' بلطف عند الحاجة دون الشعور بالذنب الكرمي، ووازنا هذه العواطف بجرعات من التفكير الواقعي والعملي لتجنب الصدمات الطاقية الناتجة عن المبالغة في التوقعات."
+            },
+            {
+                num: "I", label: "بطاقة الساحر (The Magician)", percent: 88,
+                title: "البطاقة الأولى: بطاقة الساحر (The Magician) - الاتحاد التخاطري والانسجام الأثيري 🌌",
+                energy: "الارتباط والاتصال بينكما ساحر وقوي، يقع في مستويات الأثير العليا النورانية (شاكرا العين الثالثة والتاج) مدعوماً بقدرات الساحر على التجلي. التوافق بينكما روحي وغامض بامتياز؛ حيث شعرتما بانسجام غريب ومألوف منذ النظرة الأولى، كأن روحيكما قد التقتا مسبقاً في عوالم أو أزمنة أخرى قبل هذا اللقاء الأرضي، مما يعطي الرابط طابعاً مقدساً.",
+                mind: "التخاطر العقلي والروحي بينكما في أعلى مستوياته الممكنة؛ تفهمان أفكار ونوايا بعضكما البعض بمجرد النظر للعينين ودون الحاجة لنطق كلمة واحدة. الاهتمامات مشتركة وتتمحور بقوة حول علوم الوعي، الروحانيات، أسرار الكون، وتطوير البصيرة الفطرية. المشاعر هنا راقية جداً وتترفع عن صغائر الأمور والمشاكل اليومية التافهة.",
+                challenge: "العقبة الأساسية هنا هي صعوبة إنزال هذه الطاقة الروحية السامية وتطبيقها على أرض الواقع المادي الجاف. قد تواجه العلاقة مشاكل واضحة وتشتتاً عند التعامل مع المسؤوليات الأرضية المملة، مثل إدارة الأمور المالية، المعاملات الورقية، والالتزامات الحياتية الروتينية.",
+                improve: "قوما بممارسة أنشطة أرضية (تأريضية) معاً بانتظام لإعادة التوازن; مثل الطبخ المشترك، الاهتمام بالنباتات والزراعة، أو التخطيط لمشاريع مالية وتجارية ملموسة. هذا المزيج يضمن بقاء العلاقة قوية ومتزنة بين طاقة الروح والسماء، وطاقة المادة والأرض الفعالة للتجلي والثراء."
+            },
+            {
+                num: "VII", label: "بطاقة العربة (The Chariot)", percent: 78,
+                title: "البطاقة السابعة: بطاقة العربة (The Chariot) - بركان الشغف والاندفاع الناري ⚡",
+                energy: "طاقة هذه البطاقة متفجرة، حيوية، ومليئة باندفاع وعزيمة عربة الحروب والانتصارات! التوافق الطاقي هنا يغذي ويحرك شاكرا الجذر والضفيرة الشمسية بقوة هائلة وكاريزما مذهلة. حضوركما معاً كشريكين في أي تجمّع يلفت الأنظار فوراً، ويشيع في الأجواء طاقة كاريزمية وحضوراً قوياً وجذاباً لا يمكن لأحد تجاهله.",
+                mind: "المشاعر حارة، عاصفة، ومليئة بالغيرة الشغوفة والاهتمام البالغ وتفقد أدق التفاصيل. الأفكار تركز دوماً على تحقيق النجاحات السريعة، السعي نحو التميز، وإنجاز الطموحات والخطط الكبرى في الحياة. الاهتمامات متطابقة في حب السفر، خوض المغامرات الجديدة، الرياضة، والتنافس الإيجابي الممتع والمحفز للذات.",
+                challenge: "نظراً لأنها طاقة نارية ومندفعة، فإن العيب الأساسي هنا هو 'سرعة الاشتعال والصدام الأعمى'. الخلافات بينكما قد تتحول فجأة إلى معارك كلامية حادة وجدالات قاسية بسبب كبرياء الطرفين، وإصرار كل شخص على أنه يمتلك الحق المطلق، مما قد يؤذي حبال التوافق الطاقي اللطيف بغمضة عين.",
+                improve: "السر الذهبي لنجاح هذا الرابط هو تعلم الصمت والانسحاب الذكي لتبريد الطاقة قبل إصدار أي أحكام أو ردود فعل متسرعة. صبّا هذه الطاقة النارية الكثيفة والهائلة في مشاريع تجارية مشتركة أو أنشطة بدنية تفرغ الشحنات الزائدة، وتعلما مرونة التنازل لضمان استمرار هذه الكيمياء الرائعة."
+            },
+            {
+                num: "IX", label: "بطاقة الناسك (The Hermit)", percent: 45,
+                title: "البطاقة التاسعة: بطاقة الناسك (The Hermit) - الركود الطاقي ومرحلة المراجعة والصبر ⏳",
+                energy: "الطاقة الحالية بينكما هادئة جداً وتميل إلى الانعزال والبرود والتباعد المؤقت تحت تأثير طاقة الناسك الحكيم المنعزل. الانسجام في هذه الفترة يحتاج إلى جهد واعٍ وبذل نية صادقة لإعادة إحيائه؛ حيث يشعر كل طرف حالياً بأن هالة الشريك أصبحت مغلفة بجدار حماية سميك يحجب تبادل المشاعر العفوية السلسة، مما يولد شعوراً بالوحدة.",
+                mind: "المشاعر حذرة، مكتومة، ومخبأة وراء جدار الصمت خوفاً من التعرض لعدم الفهم أو الجرح العاطفي. التفكير منصب ومستغرق في تقييم جدوى العلاقة ومراجعة المواقف السابقة. الاهتمامات تبدو متباعدة مؤقتاً، حيث يركز كل طرف بالكامل على شؤونه الفردية، عمله الخاص، وأهدافه الشخصية بمعزل عن الآخر.",
+                challenge: "التحدي الأكبر والخطير هنا هو فخ 'العلاج بالصمت' والتراكمات الصامتة الناتجة عن انعدام التواصل الواضح. الكلمات المحبوسة غير المنطوقة تخلق فجوة طاقية تتسع بمرور الأيام، مما قد يسمح للطاقات والتدخلات الخارجية بالتأثير سلباً على قوة الرابط بينكما.",
+                improve: "اكسرا جدار الصمت والتباعد فوراً! خططا لجلسة مصارحة شجاعة، دافئة، وهادئة لتبديد كل الظلال الخفية وسوء الفهم. أظهرا مواطن الضعف لبعضكما بكل بساطة؛ فالاعتراف الصادق بالخوف أو بالحاجة للاهتمام والحب هو أقصر وأسرع طريق لهدم الجدران الطاقية المصطنعة وإعادة بناء المسارات."
+            },
+            {
+                num: "XIX", label: "بطاقة الشمس (The Sun)", percent: 90,
+                title: "البطاقة التاسعة عشرة: بطاقة الشمس (The Sun) - طاقة الوفرة والمكانة والنجاح المشترك 💰",
+                energy: "هذا توافق ذهبي ملكي، يركز كامل طاقته وتردداته من نور شمس التاروت الساطعة في شاكرا الضفيرة الشمسية ومسارات التجلي المادي الملموس. هالتكما معاً عند الاتحاد تتحول إلى مغناطيس حقيقي قوي لجذب الفرص الاستثمارية، الصفقات الناجحة، والوفرة المالية. هي طاقة عملية تمنحكما ثقة هائلة بالذات وترفع تقديركما الشخصي.",
+                mind: "التفكير بينكما متطابق ومبني بالكامل على عقلية الوفرة والذكاء المهني والريادي المتقدم. المشاعر تتسم بالاحترام العميق، التقدير البالغ للمكانة، والاعتزاز بجهود الطرف الآخر. الاهتمامات مشتركة جداً في حب الرفاهية، اقتناء الأشياء الثمينة، مناقشة أفكار الأسواق والاستثمارات، وتبادل الخطط لتطوير الأصول.",
+                challenge: "العقبة هنا هي أن العلاقة قد تتحول بمرور الوقت إلى ما يشبه 'المؤسسة التجارية' أو الشراكة العملية الجافة؛ حيث يطغى الحديث المستمر عن الأرقام، العمل، والمسؤوليات المادية على حساب اللمسات العاطفية الدافئة، اللحظات الرومانسية العفوية، والمشاعر الروحية البسيطة.",
+                improve: "احرصا على تخصيص أوقات مقدسة ومجدولة يُمنع فيها الحديث عن العمل، المسؤوليات، أو الأموال نهائياً! قوما برحلات استجمام واسترخاء وسط الطبيعة بعيداً عن صخب الأعمال، وتبادلا كلمات الحب العفوية الدافئة لإعادة إحياء براءة المشاعر واللحظات العاطفية الخالصة التي تقوي الروابط."
+            },
+            {
+                num: "XVII", label: "بطاقة النجمة (The Star)", percent: 95,
+                title: "البطاقة السابعة عشرة: بطاقة النجمة (The Star) - الهالة الشافية والأمل والتشافي التبادلي 🌿",
+                energy: "طاقة هذه البطاقة نقية جداً، مشعة بالأمل والسلام النابع من بريق النجمة الشافية مباشرة في أعماق شاكرا القلب. التواجد معاً في مكان واحد يعمل كبلسم روحي وجسدي فعال؛ هذه العلاقة لديها قدرة استثنائية على شفاء صدمات العلاقات السابقة، ومداواة جروح الطفولة، ليدخل الطرفان معاً في مرحلة سلام وتصالح ذاتي عميق.",
+                mind: "المشاعر هنا شديدة النقاء، خالية تماماً من الأنانية، حب الامتلاك، أو التلاعب؛ بل تعتمد كلياً على التفهم المطلق، الاحتواء، والإنصات العميق لهموم الطرف الآخر. الأفكار تدور دائماً حول كيفية حماية سلام الشريك وإسعاده. الاهتمامات متطابقة في حب الطبيعة، عيش حياة صحية ومتوازنة، والأنشطة الإنسانية والخيّرة.",
+                challenge: "التحدي يكمن في إمكانية إفراط أحد الطرفين في لعب دور 'المعالج الروحي' أو المنقذ المسؤول عن حل مشاكل الطرف الآخر وتحمل شقائه، مما يخلق خللاً واضحاً في ميزان القوى الطاقي المتساوي، ويحمل هالة أحدكما عبئاً طاقياً ونفسياً ثقيلاً ومستنزفاً لحيويته.",
+                improve: "تذكرا دائماً وبوعي تام أنكما شريكان متساويان في رحلة الحياة، ولستما طبيباً ومريضاً! دع الطرف الآخر يتحمل مسؤولية تشافيه ونموه الشخصي بصورة مستقلة وناضجة، واكتفِ أنت بتقديم الحب، الدعم، والاحتواء المتوازن دون إفراط قد يستنزف هالتك الشخصية النقية الثمينة."
+            },
+            {
+                num: "V", label: "بطاقة الكاهن الأكبر (The Hierophant)", percent: 96,
+                title: "البطاقة الخامسة: بطاقة الكاهن الأكبر (The Hierophant) - توازن الطاقة والروابط الروحية العميقة ☯️",
+                energy: "هذا هو التوازن الكوني الأسمى والأعلى المستمد من طاقة الكاهن الأكبر وميزان الين واليانغ. الاختلاف بينكما ليس تصادماً وعناداً أبداً، بل هو تكامل هندسي عتيق ودقيق ومذهل؛ حيث يسد كل طرف ثغرات وعي ونواقص الآخر تماماً وبسلاسة فائقة ودون أي مجهود مصطنع منكما.",
+                mind: "مشاعر عميقة، متزنة، وناضجة تجمع بين تحكيم العقل وحرارة العاطفة بحرفية شديدة واتزان ممتاز. الأفكار متكاملة وملهمة بشكل مدهش؛ أحدهما يبرع في وضع الرؤية والخطوط العريضة والأفكار الكبرى، والآخر يبدع في تنفيذ التفاصيل بدقة وإتقان. الاهتمامات متنوعة، مثرية، وتفتح لكلاكما آفاقاً جديدة وشيقة لمعرفة الحياة.",
+                challenge: "التحدي الوحيد يظهر حين يحاول أحدكما الخروج عن فطرته الطاقية النقية أو التمرد غير الواعي؛ كأن تفرط الطاقة الأنثوية في السيطرة والحزم المبالغ فيه، أو تقع الطاقة الذكورية في فخ التردد، الكسل، والتراجع عن القيادة، مما يسبب خللاً مباشراً في ميزان الانسجام الكوني المتكامل بينكما.",
+                improve: "حافظا بوعي كامل على فطرتكما الطاقية النقية وتكامل الأدوار الطبيعي السلس بينكما. احترما مواطن القوة والتميز الفريدة التي يمتلكها كل طرف، وعبرّا دوماً عن امتنانكما الصادق لوجود هذا التنوع الطاقي الرائع والمثري الذي يجعل علاقتكما متكاملة ومقاومة لتقلبات الزمن."
+            },
+            {
+                num: "XVI", label: "بطاقة البرج (The Tower)", percent: 50,
+                title: "البطاقة السادسة عشرة: بطاقة البرج (The Tower) - العاصفة الطاقية وهدم الأوهام والتحول الكبير ⚡",
+                energy: "الطاقة هنا حادة، قوية، وثائرة جداً، تحمل طابع الهدم الإيجابي وإعادة البناء تماماً كطاقة بطاقة البرج الثائرة والمقدسة في التاروت. الانسجام بينكما يمر بهزات عنيفة ومفاجئة، لكنها في الحقيقة هزات ضرورية ومقدسة لخلخلة الركود، وتدمير الأوهام، وتطهير المعتقدات الزائفة القديمة التي تعيق وعيكما وتمنعكما من التطور.",
+                mind: "المشاعر هنا متطرفة وساخنة؛ حب جارف وشديد يتبعه فجأة نفور غريب أو رغبة في الابتعاد، ثم عودة قوية وأكثر شغفاً! الأفكار في حالة غليان مستمر وتحليل دائم ومكثف لكل كلمة وموقف وتصرف. الاهتمامات تتغير وتتطور بسرعة مذهلة، وتبحث دائماً عن كسر القيود، التجديد الشامل، والتحرر التام للذات.",
+                challenge: "التحدي الكبير والخطير هنا هو الانجرار خلف الرغبة العنيفة في تدمير الجسور والاندفاع لإنهاء الرابط فجأة عند أول صدام طاقي وثوران للبرج. الأنا (Ego) وكبرياء الطرفين يكون في أعلى مستويات شراسته ودفاعه، مما يجعل النقاشات العادية تتحول بسهولة إلى مواجهات طاقية مشتعلة.",
+                improve: "انظرا إلى العواصف والأزمات بينكما كفرصة ذهبية لتطهير الهالات من الشوائب المتراكمة وليس لتدمير العلاقة. تعلما مهارة 'الانسحاب الذكي والتوقف الفوري' عن الكلام عند اشتعال الشرارة الأولى، ومارسا تمارين الصمت والتهدئة، وانتظرا دائماً حتى تهبط العاصفة لتتحدثا بوعي، حب، وحكمة."
+            },
+            {
+                num: "XXI", label: "بطاقة العالم (The World)", percent: 99,
+                title: "البطاقة الحادية والعشرون: بطاقة العالم (The World) - الانسجام النجمي والارتباط الروحي الخالد 🌌",
+                energy: "هذا هو أرقى وأعلى احتمالات التوافق الروحي والميتافيزيقي في الوجود، والمتمثل في بطاقة العالم التي ترمز للاكتمال الكوني المطلق! تتكامل هالتكما في تناغم أزلي يبدو كأنه محمي ومبارك بقوى سماوية عليا ونوايا طاهرة. تشعان معاً طاقة سلام، هدوء، ونور صافٍ يفيض ليغمر ويشفي المحيطين بكما بمجرد تواجدكما معاً كشريكين في أي مكان.",
+                mind: "المشاعر هنا تتجاوز حدود التعلق الأرضي أو الشغف المؤقت لتصل إلى مرحلة 'الحب غير المشروط السامي والأزلي'. الأفكار ناضجة, حكيمة, ومليئة بالثقة المطلقة واليقين التام بالطرف الآخر دون ذرة شك واحدة. الاهتمامات مشتركة بقوة في نشر الخير، الإبداع الفكري والروحي الرفيع، وممارسة طقوس الارتقاء الفكري الحكيم.",
+                challenge: "العقبة الوحيدة التي قد تواجه هذا الرابط النادر هي طاقة الحسد والعيون الخارجية التي تتطلع لجمال وكمال هذا الانسجام الفريد، بالإضافة لخطورة الانفصال الفكري عن الواقع المعاش، والهروب للعيش في برج عاجي خيالي بعيداً عن هموم الأرض ومسؤولياتها المادية الحقيقية.",
+                improve: "احرصا تماماً على حماية خصوصية تفاصيل حياتكما وأسراركما عن أعين الناس (واستعينوا على قضاء حوائجكم بالكتمان). مارسا طقوس التحصين الطاقي اليومية، وعيشا الواقع الأرضي والمسؤوليات المالية واليومية بنضج واتزان مادي ممتاز لضمان بقاء هذا الرابط الخالد مستقراً ومزهراً."
+            }
+        ];
+
+        // دالة سحب كرت التوافق والتحقق من شرط الأسبوع
+        function drawCompatibilityCard() {
+            const statusAlert = document.getElementById('statusAlert');
+            const readingBox = document.getElementById('readingBox');
+            const revealedCard = document.getElementById('revealedCard');
+            const gaugeBox = document.getElementById('gaugeBox');
+            const gaugeFill = document.getElementById('gaugeFill');
+            const gaugePercent = document.getElementById('gaugePercent');
+
+            const now = Date.now();
+            const lastDrawTimeRaw = localStorage.getItem('lastCompDrawTime');
+
+            if (lastDrawTimeRaw) {
+                const lastDrawTime = parseInt(lastDrawTimeRaw, 10);
+                if (!Number.isNaN(lastDrawTime) && (now - lastDrawTime < ONE_WEEK_MS)) {
+                    const timeLeft = ONE_WEEK_MS - (now - lastDrawTime);
+                    const daysLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    const hoursLeft = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+                    statusAlert.innerHTML = `⚠️ لقد استخرجت نمط وميزان التوافق الخاص بك لهذا الأسبوع بالفعل!<br>يرجى الانتظار متبقي: <b>${daysLeft} يوم و ${hoursLeft} ساعة</b> لتستشير البلورة والأوراق مجدداً وتكشف المسارات الجديدة الحكيمة.`;
+                    statusAlert.style.display = 'block';
+                    statusAlert.style.color = "#ff5252";
+                    statusAlert.style.background = "rgba(255, 72, 72, 0.08)";
+                    statusAlert.style.border = "1px solid rgba(255, 72, 72, 0.25)";
+                    return;
+                }
+            }
+
+            // اختيار كرت عشوائي من الـ 12 المتاحة
+            const randomIndex = Math.floor(Math.random() * compatibilityData.length);
+            const selected = compatibilityData[randomIndex];
+
+            // ملء بيانات الكرت الظاهري
+            document.getElementById('cardNumber').innerText = selected.num;
+            document.getElementById('cardSubLabel').innerText = selected.label;
+
+            // إظهار كرت التاروت مع تشغيل أنيميشن الـ 3D المطور بشكل موثوق
+            revealedCard.style.display = 'flex';
+            revealedCard.setAttribute('aria-hidden', 'false');
+            revealedCard.style.animation = 'none';
+            // force reflow
+            // eslint-disable-next-line no-unused-expressions
+            revealedCard.offsetWidth;
+            revealedCard.style.animation = 'flipIn3D 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+
+            // تشغيل وإظهار شريط نسبة التوافق المضيء ديناميكياً
+            gaugeBox.style.display = 'block';
+            gaugeFill.style.width = '0%';
+            gaugePercent.innerText = '0%';
+            
+            setTimeout(() => {
+                gaugeFill.style.width = selected.percent + '%';
+                // عداد رقمي متصاعد للنسبة المئوية لجذب الانتباه والمحاكاة
+                let count = 0;
+                const counterInterval = setInterval(() => {
+                    if (count >= selected.percent) {
+                        clearInterval(counterInterval);
+                    } else {
+                        count++;
+                        gaugePercent.innerText = count + '%';
+                    }
+                }, 15);
+            }, 100);
+
+            // ملء بيانات ومحتوى القراءة الموسعة والشاملة والمبسطة جداً
+            document.getElementById('probabilityTitle').innerText = selected.title;
+            document.getElementById('energyText').innerText = selected.energy;
+            document.getElementById('mindText').innerText = selected.mind;
+            document.getElementById('challengeText').innerText = selected.challenge;
+            document.getElementById('improveText').innerText = selected.improve;
+
+            // إظهار صندوق القراءة والنزول له بسلاسة فائقة وجذابة
+            readingBox.style.display = 'block';
+            setTimeout(() => {
+                readingBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 400);
+
+            // حفظ وقت السحب الحالي لقفل الميزة أسبوعاً كاملاً بالمحلي
+            localStorage.setItem('lastCompDrawTime', String(now));
+            statusAlert.style.display = 'none';
+        }
+
+        // تفقد حالة القفل فور فتح التطبيق المصغر لراحة المستخدم
+        window.addEventListener('load', function() {
+            const statusAlert = document.getElementById('statusAlert');
+            const lastDrawTimeRaw = localStorage.getItem('lastCompDrawTime');
+
+            if (lastDrawTimeRaw) {
+                const lastDrawTime = parseInt(lastDrawTimeRaw, 10);
+                const now = Date.now();
+                if (!Number.isNaN(lastDrawTime) && (now - lastDrawTime < ONE_WEEK_MS)) {
+                    statusAlert.innerHTML = "🔮 ميزان التوافق الطاقي مستقر حالياً على قراءتك الأخيرة الحكيمة والمصونة. عد بعد انقضاء الأسبوع لتقييم وفحص المسارات والترددات الجديدة!";
+                    statusAlert.style.color = "var(--gold-glow)";
+                    statusAlert.style.background = "rgba(243, 198, 63, 0.05)";
+                    statusAlert.style.border = "1px solid rgba(243, 198, 63, 0.25)";
+                    statusAlert.style.display = 'block';
+                }
+            }
+        });
+
+        // إضافة دعم لوحة المفاتيح (Enter/Space) وأجهزة اللمس والهواتف لتجنب التأخير
+        function addKeyboardClickSupport(el, handler) {
+            el.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handler();
+                }
+            });
+            el.addEventListener('click', handler);
+        }
+
+        addKeyboardClickSupport(document.getElementById('crystalBtn'), drawCompatibilityCard);
+        addKeyboardClickSupport(document.getElementById('deck'), drawCompatibilityCard);
+    </script>
+</body>
+</html>
