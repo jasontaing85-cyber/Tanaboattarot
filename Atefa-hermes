@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>معبد هرمس العاطفي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-stone: #0d0a07;
+      --temple-wall: #1a1410;
+      --copper: #b87333;
+      --gold-dark: #8c6d23;
+      --text-amber: #e5c185;
+      --text-muted: #a49382;
+    }
+    
+    * { box-sizing: border-box; }
+    
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: var(--bg-stone);
+      background-image: radial-gradient(circle at center, #1f1610 0%, #0d0a07 100%);
+      color: var(--text-amber);
+      margin: 0;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .temple-container {
+      width: 100%;
+      max-width: 600px;
+      background: var(--temple-wall);
+      border: 2px solid var(--gold-dark);
+      border-radius: 4px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(140, 109, 35, 0.15);
+      padding: 24px;
+      text-align: center;
+      position: relative;
+    }
+
+    .temple-header h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin: 0;
+      color: var(--text-amber);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+      letter-spacing: 1px;
+    }
+
+    .temple-header p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 8px 0 24px 0;
+    }
+
+    /* الحجر الهرمي التفاعلي */
+    .pyramid-trigger-zone {
+      margin: 40px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 400px;
+    }
+
+    .pyramid-stone {
+      width: 0;
+      height: 0;
+      border-left: 50px solid transparent;
+      border-right: 50px solid transparent;
+      border-bottom: 86.6px solid var(--copper);
+      position: relative;
+      cursor: pointer;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.7));
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .pyramid-stone::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -50px;
+      width: 0;
+      height: 0;
+      border-left: 50px solid transparent;
+      border-right: 0px solid transparent;
+      border-bottom: 86.6px solid rgba(255,255,255,0.1);
+      transform-origin: top right;
+    }
+
+    .pyramid-stone:hover {
+      transform: scale(1.05) rotateY(10deg);
+      filter: drop-shadow(0 15px 25px rgba(184, 115, 51, 0.4));
+    }
+
+    .pyramid-stone:active {
+      transform: scale(0.95);
+    }
+
+    .pyramid-label {
+      font-size: 0.85rem;
+      color: var(--copper);
+      margin-top: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* نافذة الكشف الرخامية */
+    .sanctuary-reading {
+      display: none;
+      background: #130e0a;
+      border: 1px solid var(--gold-dark);
+      padding: 20px;
+      margin-top: 24px;
+      text-align: right;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+      animation: stoneReveal 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes stoneReveal {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .sanctuary-reading h2 {
+      color: var(--text-amber);
+      font-size: 1.3rem;
+      margin-top: 0;
+      border-bottom: 1px dashed var(--gold-dark);
+      padding-bottom: 8px;
+      text-align: center;
+    }
+
+    .meta-info {
+      font-size: 0.85rem;
+      color: var(--copper);
+      margin-bottom: 16px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .stone-quote {
+      font-style: italic;
+      background: rgba(184, 115, 51, 0.07);
+      border-right: 3px solid var(--copper);
+      padding: 12px;
+      margin: 16px 0;
+      color: #fff;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .section-title {
+      font-weight: 700;
+      color: var(--text-amber);
+      margin-top: 14px;
+      font-size: 1rem;
+    }
+
+    .section-content {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin: 4px 0 14px 0;
+      line-height: 1.6;
+      text-align: justify;
+    }
+
+    .cooldown-msg {
+      color: #c94c4c;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-top: 15px;
+      display: none;
+    }
+  </style>
+  <!-- سكربت مكتبة تيليجرام الرسمية -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- سكربت مكتبة Adsgram الإعلانية الرسمية -->
+  <script src="https://sad.adsgram.ai/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+  <div class="temple-container">
+    <div class="temple-header">
+      <h1>تاروت هرمس العاطفي</h1>
+      <p>المعبد الروحي القديم — انقر على الحجر الهرمي لاستدعاء رسالتك اليومية</p>
+    </div>
+
+    <div class="pyramid-trigger-zone" id="triggerZone">
+      <div>
+        <div class="pyramid-stone" id="pyramidBtn" role="button" aria-label="سحب بطاقة"></div>
+        <div class="pyramid-label">المذبح الهرمي</div>
+      </div>
+    </div>
+
+    <div id="cooldownBlock" class="cooldown-msg">لقد زرت المعبد اليوم. يمكنك استشارة الحجر مرة واحدة كل 24 ساعة لحماية طاقة النية.</div>
+
+    <div id="sanctuaryReading" class="sanctuary-reading">
+      <h2 id="cardLabel">اسم الورقة</h2>
+      <div class="meta-info">المرجع الهرمسي: <span id="cardRef"></span></div>
+      
+      <div class="stone-quote" id="cardQuote">الرسالة الروحية لليوم</div>
+      
+      <div class="section-title">🔮 الشرح الموسع والمفصل للورقة:</div>
+      <div class="section-content" id="cardMeaning"></div>
+      
+      <div class="section-title">⚠️ تفاصيل هامة للانتباه:</div>
+      <div class="section-content" id="cardChallenge"></div>
+    </div>
+  </div>
+
+  <script>
+    // تهيئة تطبيق تيليجرام
+    const tg = window.Telegram.WebApp;
+    tg.expand(); // تمديد التطبيق ليملأ الشاشة
+
+    // تهيئة كتلة إعلانات Adsgram مع تلافي الأخطاء في حال عدم التحميل
+    let AdController = null;
+    try {
+      if (window.Adsgram) {
+        AdController = window.Adsgram.init({ blockId: "38352" });
+      }
+    } catch (e) {
+      console.error("Adsgram init error:", e);
+    }
+
+    // بيانات الأوراق الـ 12 بالتفصيل الموسع
+    const tarotData = [
+      {
+        label: "المرآة المضيئة — لقاء الروح",
+        ref: "بطاقة العشاق (The Lovers)",
+        quote: "«أنا أحب بصدق، لأنني أرى في شريك حياتي أجزاءً من نور روحي ونضوجي.»",
+        meaning: "هذه البطاقة لا تتحدث عن مجرد إعجاب عابر، بل عن 'اتصال المرآة'. تعني أن الشخص الآخر في حياتك الآن (أو القادم إليك) يعكس جوانب عميقة جداً من روحك—حتى تلك الجوانب التي تخاف مواجهتها. هناك تناغم فطري وتفاهم يحدث بلا مجهود، وكأنكما تتحدثان لغة مشتركة لا يفهمها غيركما. تظهر هذه الورقة لتؤكد أن الانجذاب الحالي يحمل أبعاداً تتجاوز العاطفة السطحية إلى رغبة الروح في التطور من خلال هذه العلاقة.",
+        challenge: "الخطر الوحيد هنا هو 'الاعتمادية العاطفية الزائدة' أو أن تذوب هويتك في هوية الطرف الآخر. تذكر أن المرآة تحتاج مساحة من الضوء لتعكس الصورة بوضوح؛ حافظ على خصوصيتك وأهدافك الشخصية لتظل العلاقة صحية ومتوازنة دون أن يفقد أحدكما ذاته."
+      },
+      {
+        label: "دوامة الشوق — الجذب الكارمي",
+        ref: "بطاقة القمر (The Moon)",
+        quote: "«أتحرر من أوهام الخوف، وأثق في نور بصيرتي لتوجيه خطوات قلبي.»",
+        meaning: "طاقة هذه الورقة مغناطيسية وغامضة. أنت تمر بحالة شوق جارف، لكن يرافقها شعور بعدم اليقين أو الخوف من المجهول. إنها تمثل الروابط التي تأتي لتعلمنا درساً روحياً عميقاً. المشاعر هنا ليست هادئة، بل هي أشبه بأمواج البحر—تارة ترفعك لأعلى وتارة تشعرك بالضياع أو الشك في نوايا الطرف الآخر. الورقة تخبرك أن هناك مشاعر مخفية لم تظهر للسطح بعد.",
+        challenge: "لا تتخذ قرارات مصيرية بناءً على العاطفة المشتعلة أو المخاوف اللحظية الآن. البطاقة تحذرك من الأوهام أو تفسير الصمت من الطرف الآخر بشكل سلبي ومبالغ فيه. ثق بحدسك الداخلي وليس بمخاوفك وعقلك التحليلي الذي يضخم الأمور."
+      },
+      {
+        label: "سفينة الأمان — توازن وهدوء",
+        ref: "بطاقة العالم (The World)",
+        quote: "«أنا متصل، مكتمل، وممتن لكل خطوة في رحلة حبي واستقراري.»",
+        meaning: "تجسد هذه البطاقة طاقة الوصول والاستقرار بعد عواصف وطرق عاطفية طويلة وشاقة. إذا كنت في علاقة، فهي تدل على انتقالكما الفعلي إلى مرحلة من النضج التام والأمان المتبادل حيث يمكنكم بناء مستقبل حقيقي قائم على أسس راسخة. وإذا كنت عازباً، فهي تبشرك باكتفاء ذاتي روحي ونفسي يجعلك مستعداً تماماً لاستقبال حب حقيقي وناضج لا يقوم على سد الاحتياج بل على المشاركة الواعية.",
+        challenge: "الأمان العاطفي ممتاز، لكن احذر من أن يتحول هذا الاستقرار إلى روتين يومي ممل يطفئ شعلة الشغف والابتكار بينكما. فاجئ شريكك أو اكسر نمط أيامك بلفتة غير متوقعة لتبقي السفينة متجددة ومتحمسة للإبحار دائماً."
+      },
+      {
+        label: "اللهيب المشتعل — شغف وحركة",
+        ref: "فارس العصي (Knight of Wands)",
+        quote: "«أوجه شغفي نحو البناء، وأمنح حبي دفئاً واحتواءً لا حريقاً.»",
+        meaning: "طاقة نارية بامتياز! هناك اندفاع عاطفي، جاذبية جسدية وفكرية قوية جداً بينك وبين الطرف الآخر في الوقت الحالي. المشاعر تتحرك بسرعة الصاروخ، وهناك رغبة عارمة في التعبير والتقارب العاجل. هذه الورقة تخبرك أن زمن الركود والانتظار قد انتهى تماماً، وأن الحماس يعود ليدق باب قلبك بقوة ليعيد له الحيوية.",
+        challenge: "النار تدفئ وتمنح الحياة لكنها قد تحرق بعنف إذا خرجت عن السيطرة. انتبه جيداً من الغيرة المفاجئة، أو التسرع في إطلاق الأحكام والكلمات الحادة أثناء لحظات الانفعال. وجه هذه الطاقة الهائلة نحو بناء ذكريات وأنشطة مشتركة جميلة بدلاف من الدخول في صراعات فرض السيطرة."
+      },
+      {
+        label: "همس القلب — تواصل حنون",
+        ref: "اثنان من الكؤوس (Two of Cups)",
+        quote: "«قلبي وقلب شريكي يغنيان في تناغم كوني واحد، مستمد من نبع المودة الجارية.»",
+        meaning: "هذه هي بطاقة التناغم التام والانسجام الروحي النقي. تعبر عن لحظة فريدة يتدفق فيها الحب بنقاء وسلاسة، حيث تفهمان بعضكما بمجرد لغة العيون واللمسات البسيطة دون حاجة لكثرة الكلام أو التبرير. العطاء في هذه الحالة يكون متبادلاً ومتوازناً تماماً—لا يوجد طرف يمنح أكثر ويستنزف، بل هناك تدفق دائم ومستمر للمودة الدائمة والتعاطف المشترك.",
+        challenge: "حتى الهمس الدقيق والناعم يحتاج إلى إنصات وتركيز كامل. لا تدع مشاغل الحياة اليومية أو ضغوط العمل المستمرة تجعلك تهمل هذه اللحظات الدافئة الفريدة. خصص وقتاً نوعياً مقدساً يومياً للتعبير عن الامتنان لوجود هذا الحب النقي في حياتك."
+      },
+      {
+        label: "الاحتواء الشافي — التعافي معاً",
+        ref: "بطاقة الاعتدال (Temperance)",
+        quote: "«أوازن بين عقلي وقلبي، وأمنح نفسي والآخر فرصة كاملة للتعافي والنمو.»",
+        meaning: "تأتي هذه الورقة لتبلسم الجراح النفسية. إذا كانت علاقتك قد مرت بخلافات حادة مؤخراً، أو إذا كنت تحمل في قلبك ندوباً وخيبات من علاقات ماضية تؤثر على حاضرك، فالوقت الحالي هو وقت 'الشفاء العاطفي'. المشاعر هنا تميل إلى الصبر، التسامح، والقدرة على إعادة بناء ما تهدم برفق، ولين، ونضج حقيقي.",
+        challenge: "الشفاء يتطلب وقتاً وتوازناً دقيقاً. احذر من السقوط في فخ لعب دور 'المُعالج الدائم' أو المنقذ الذي يضحي بطاقته وصحته النفسية من أجل إصلاح مشاكل وعيوب الآخرين. امنح شريكك المساحة ليشفي نفسه، وركز بالتوازي على سلامك الداخلي واستقرارك."
+      },
+      {
+        label: "الانعكاس الصامت — المساحة والاختبار",
+        ref: "بطاقة الناسك (The Hermit)",
+        quote: "«في صمتي أجد إجاباتي الحقيقية، وفي عزلتي المؤقتة أستعيد قوتي العاطفية.»",
+        meaning: "تظهر هذه البطاقة عندما يكون هناك حاجة ملحة وعميقة للصمت أو الابتعاد المؤقت لإعادة التقييم. ليس بالضرورة أن يكون الصمت أو التراجع مؤشراً على نهاية العلاقة، بل هو اختبار حقيقي لنضج المشاعر ومدى عمقها. تحتاج الآن (أو يحتاج شريكك) إلى مساحة خاصة للتفكير والبحث في أعماق الذات لمعرفة المتطلبات الحقيقية والأهداف طويلة الأمد من هذا الارتباط.",
+        challenge: "تجنب تماماً مطاردة الطرف الآخر أو إمطاره بالأسئلة اللائمة والافتراضات السلبية والشكوك أثناء فترة صمته وعزلته؛ فالمطاردة ستزيد حتماً من رغبته في الهروب والابتعاد الفعلي. احترم هذه المساحة بحكمة واستثمرها في مراجعة مشاعرك أنت وتحديد نواياك."
+      },
+      {
+        label: "بوابة الفرص — قرار وتنفيذ",
+        ref: "بطاقة الساحر (The Magician)",
+        quote: "«أنا خالق واقعي العاطفي، وأملك القوة لتحويل حبي إلى تجربة واعية واستثنائية.»",
+        meaning: "أنت في موقف قوة وتحكم عاطفي كبير الآن. هذه البطاقة الهرمسية العظيمة تخبرك بأنك تملك جميع الأدوات الروحية، والنفسية، وقوة البيان لتوجيه حياتك العاطفية نحو المسار الذي ترغب به بدقة. سواء كان ذلك عبر اتخاذ خطوة شجاعة للاعتراف بمشاعرك لشخص ما، أو حسم قرار ارتباط رسمي، أو حتى إنهاء علاقة مستنزفة لطاقتك—الإرادة الحرة والوعي الحاضر هما دليلك المطلق اليوم.",
+        challenge: "القوة الكبيرة تأتي معها مسؤولية كارمية وأخلاقية عظيمة. لا تستخدم قدرتك العالية على التأثير الجذاب والإقناع للتلاعب بمشاعر الطرف الآخر أو توجيهه لمصلحتك الشخصية الأنانية فقط. اجعل قراراتك تنبع دائماً من مكان نقي يبني السعادة الحقيقية ولا يهدمها."
+      },
+      {
+        label: "نبع الحنان — رعاية وتكريس",
+        ref: "بطاقة الإمبراطورة (The Empress)",
+        quote: "«أمنح الحب والاهتمام بسخاء، وأستقبل الرعاية والتقدير من الكون بكل امتنان.»",
+        meaning: "طاقة هذه الورقة تفيض بالوفرة العاطفية المطلقة، العطاء الغزير، والاهتمام البالغ بأدق التفاصيل الحياتية. تعبر عن رغبة قوية وتلقائية في حماية الشريك، وتوفير بيئة دافئة وآمنة ومريحة له، والاعتناء الكامل بمتطلباته النفسية والجسدية. إنها طاقة الحب الرحوم التي تغذي الروح وتجعلها تزدهر وتثمر، وغالباً ما تشير في القراءات إلى رغبة جادة في تأسيس عائلة أو الدخول في التزام شرعي طويل الأمد.",
+        challenge: "العطاء غير المشروط جميل ونبيل، لكن استنزاف الذات وتهميش احتياجاتك الخاصة يمثل خطراً حقيقياً. تأكد من أنك لا تهمل طاقة الرعاية لنفسك أولاً؛ فالحوض الفارغ تماماً لا يمكنه سقاية الآخرين. أحب نفسك وقدّرها لتستطيع الاستمرار في منح الحب النقي لمن حولك."
+      },
+      {
+        label: "النقاء والانسجام — اكتفاء روحي",
+        ref: "عشرة من الكؤوس (Ten of Cups)",
+        quote: "«أعيش في سلام كافٍ مع قلبي، وممتن للانسجام والنقاء الذي يغمر حياتي العاطفية.»",
+        meaning: "هذه هي قمة الاكتمال والرضا العاطفي والروحي في علم التاروت. تعبر عن حالة نادرة من السلام المطلق والانسجام التام والعميق مع الشريك أو المحيط العائلي. المشاعر هنا صافية ونقية جداً كبلور ناصع، خالية تماماً من الضغائن، الأحقاد، أو الألعاب الذهنية والالتواءات. تشعر بأنك أخيراً وصلت إلى بر الأمان العاطفي المستقر، حيث يسود الفرح الحقيقي والقبول المتبادل غير المشروط.",
+        challenge: "عندما نصل إلى قمة السعادة والاستقرار، قد نقع بسهولة في فخ 'التراخي' واعتبار وجود الآخر واهتمامه في حياتنا أمراً مضموناً ومسلماً به للأبد فلا نبذل مجهوداً. استمر في التعبير الفعلي عن امتنك وخلق لحظات فرح صغيرة متجددة للحفاظ على هذا النقاء حياً."
+      },
+      {
+        label: "عاصفة التحوّل — بداية جديدة قاسية",
+        ref: "بطاقة البرج (The Tower)",
+        quote: "«أتقبل التغيير والتحول بمرونة وشجاعة، وأثق تماماً أن ما يرحل يفسح المجال للأجمل والأصدق.»",
+        meaning: "قد تبدو هذه الورقة مخيفة للوهلة الأولى، لكن جوهرها الروحي نبيل وتطهيري جداً. هي ترمز إلى حدوث هزات مفاجئة، صدمات غير متوقعة، أو كشف حقائق وأسرار في حياتك العاطفية تأتي لتهدم الأوهام والأبنية النفسية الهشة التي تظاهرت لفترة طويلة بأنها متينة وقوية. العاصفة لا تأتي لتدميرك، بل لتزيل من طريقك بقوة العلاقات الزائفة أو الأنماط السلوكية البالية التي لم تعد تخدم تطورك الروحي ونضجك الشخصي.",
+        challenge: "لا تحاول مطلقاً التشبث بالجدران الآيلة للسقوط أو مقاومة التغيير الجذري الجاري؛ فالمقاومة تزيد الألم والمعاناة بلا طائل. تذكر جيداً أن الهدم هنا يحدث فقط ليفسح المجال كاملاً لبناء أساسات جديدة، حقيقية، وأكثر صلابة على أرض صلبة ونقية من الصدق المطلق."
+      },
+      {
+        label: "الارتقاء النجمي — حب سامي",
+        ref: "بطاقة النجم (The Star)",
+        quote: "«أنا منارة تشع بالحب والنقاء، ونوري الداخلي يجذب إليّ كل ما يناسب طهارة روحي.»",
+        meaning: "هذه الورقة هي ومضة الأمل الساطعة، الشفاء التام، والارتقاء الروحي الخالص بعد الأوقات العصيبة والأيام المظلمة. تخبرك أن قلبك يمر حالياً بمرحلة تجدد، غسيل طاقي، وصفاء نقي، وهناك طاقة إلهام تتدفق إليك مباشرة من الكون لتنير عتمة الأيام الماضية. إذا كنت تبحث عن حب، فهذه إشارة واضحة بأنك تجذب طاقة تناسب وعيك المرتفع ونقائك الداخلي الحالي، حب يقوم على التقدير السامي، الاحترام والرحمة.",
+        challenge: "لا تستعجل قطف الثمار العاطفية أو دفع الأمور بقوة وإلحاح؛ دع طاقة النجم الشافية تنساب بهدوء وسلاسة طبيعية في حياتك. حافظ على أفكارك إيجابية وتفاؤلك عالياً جداً، فالكون مستعد ويستجيب الآن لترددات الأمل والصفاء النابعة من عمق قلبك."
+      }
+    ];
+
+    const STORAGE_KEY = 'hermetic_tarot_cooldown';
+
+    function canDraw() {
+      const lastDraw = localStorage.getItem(STORAGE_KEY);
+      if (!lastDraw) return true;
+      const hoursPassed = (Date.now() - Number(lastDraw)) / (1000 * 60 * 60);
+      return hoursPassed >= 24;
+    }
+
+    document.getElementById('pyramidBtn').addEventListener('click', () => {
+      // 1. التحقق أولاً من الـ 24 ساعة
+      if (!canDraw()) {
+        document.getElementById('cooldownBlock').style.display = 'block';
+        return;
+      }
+
+      // 2. محاولة جلب الإعلان؛ وإذا تعطل أو لم يتطابق الرابط يتم السحب فوراً لضمان تجربة المستخدم
+      if (AdController) {
+        AdController.show().then((result) => {
+          // نجاح المشاهدة
+          executeTarotDraw();
+        }).catch((result) => {
+          // في حال حدوث خطأ أو عدم مطابقة في النطاق، نقوم بالسحب المباشر
+          console.log("Adsgram safety fallback activated:", result);
+          executeTarotDraw();
+        });
+      } else {
+        // إذا فشل تحميل السكربت الإعلاني من الأساس
+        executeTarotDraw();
+      }
+    });
+
+    // دالة السحب الأساسية
+    function executeTarotDraw() {
+      const randomIndex = Math.floor(Math.random() * tarotData.length);
+      const card = tarotData[randomIndex];
+
+      document.getElementById('cardLabel').innerText = card.label;
+      document.getElementById('cardRef').innerText = card.ref;
+      document.getElementById('cardQuote').innerText = card.quote;
+      document.getElementById('cardMeaning').innerText = card.meaning;
+      document.getElementById('cardChallenge').innerText = card.challenge;
+
+      document.getElementById('sanctuaryReading').style.display = 'block';
+      document.getElementById('cooldownBlock').style.display = 'none';
+      
+      localStorage.setItem(STORAGE_KEY, Date.now());
+    }
+
+    window.addEventListener('load', () => {
+      if (!canDraw()) {
+        document.getElementById('cooldownBlock').style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
