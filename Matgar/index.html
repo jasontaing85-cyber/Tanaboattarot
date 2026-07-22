@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>متجر الأدوات الطاقية والتشافي</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #080612;
+            --bg-card: rgba(20, 16, 38, 0.85);
+            --gold-light: #fbe3b5;
+            --gold-main: #d4af37;
+            --purple-accent: #7c3aed;
+            --purple-light: #c084fc;
+            --text-light: #f1f5f9;
+            --text-dim: #94a3b8;
+            --border-glow: rgba(212, 175, 55, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Amiri', serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 15px 12px 30px;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(124, 58, 237, 0.18) 0%, transparent 70%),
+                radial-gradient(circle at 50% 100%, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            background-attachment: fixed;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Reem Kufi', sans-serif;
+            font-size: 1.6rem;
+            color: var(--gold-main);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            margin-bottom: 4px;
+        }
+
+        p.subtitle {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        /* Categories Bar */
+        .categories-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            scrollbar-width: none;
+        }
+
+        .categories-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cat-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glow);
+            color: var(--text-light);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cat-btn.active {
+            background: linear-gradient(135deg, var(--gold-main), #aa7c11);
+            color: #000;
+            font-weight: bold;
+            border-color: var(--gold-light);
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .product-card:active {
+            transform: scale(0.98);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .product-info {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-title {
+            font-family: 'Reem Kufi', sans-serif;
+            font-size: 0.95rem;
+            color: var(--gold-light);
+            margin-bottom: 4px;
+        }
+
+        .product-price {
+            font-size: 0.9rem;
+            color: var(--purple-light);
+            font-weight: bold;
+            margin-top: auto;
+            padding-top: 6px;
+        }
+
+        /* Detail Modal Popup */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            border: 1px solid var(--gold-main);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 20px;
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-light);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .modal-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-glow);
+        }
+
+        .modal-title {
+            font-family: 'Reem Kufi', sans-serif;
+            color: var(--gold-main);
+            font-size: 1.3rem;
+            margin-bottom: 6px;
+        }
+
+        .modal-price {
+            font-size: 1.1rem;
+            color: var(--purple-light);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .modal-desc {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .buy-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--gold-main), #aa7c11);
+            color: #000;
+            border: none;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: 'Reem Kufi', sans-serif;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>✦ متجر الأثير والتشافي الباطني ✦</h1>
+        <p class="subtitle">أدوات موازنة الطاقة والتطهير الروحي</p>
+    </header>
+
+    <!-- شريط الفئات -->
+    <div class="categories-container">
+        <button class="cat-btn active" onclick="filterCategory('all', this)">الكل</button>
+        <button class="cat-btn" onclick="filterCategory('crystals', this)">الكريستال والأحجار</button>
+        <button class="cat-btn" onclick="filterCategory('dowsing', this)">أدوات الدوزينج والتاروت</button>
+        <button class="cat-btn" onclick="filterCategory('cleansing', this)">التطهير والبخور</button>
+    </div>
+
+    <!-- شبكة المنتجات -->
+    <div class="products-grid" id="productsGrid"></div>
+
+    <!-- نافذة تفاصيل المنتج -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">✕</button>
+            <img src="" id="modalImg" class="modal-img" alt="صورة المنتج">
+            <div id="modalTitle" class="modal-title"></div>
+            <div id="modalPrice" class="modal-price"></div>
+            <div id="modalDesc" class="modal-desc"></div>
+            <a href="#" id="modalBuyLink" target="_blank" class="buy-btn">🔮 طلب الأداة عبر الدعم المباشر</a>
+        </div>
+    </div>
+
+    <script>
+        // اسم حساب الدعم الخاص بك على تليغرام (استبدله بحسابك الحقيقي)
+        const SUPPORT_USERNAME = "YourSupportUsername"; 
+
+        // قائمة المنتجات مع الصور والوصف الباطني
+        const products = [
+            {
+                id: 1,
+                category: "dowsing",
+                title: "بندول النحاس الخالص",
+                price: "$35",
+                image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=500&auto=format&fit=crop",
+                description: "بندول مصنوع من النحاس الخالص الموصل العالي للطاقات. يُستخدم للكشف الباطني، الإجابة عن التساؤلات الدقيقة، وموازنة الشاكرات وتنظيف الهالة الشخصية من الطاقات الثقيلة."
+            },
+            {
+                id: 2,
+                category: "crystals",
+                title: "حجر الأميثيست (الجمشت)",
+                price: "$28",
+                image: "https://images.unsplash.com/photo-1567225557594-88d73e55f2cb?w=500&auto=format&fit=crop",
+                description: "حجر عين البصيرة والهدوء النفسي. يعمل على تفعيل شاكرا العين الثالثة، تهدئة الأفكار المشتتة أثناء التأمل، وحماية المكان من الانبعاثات الطاقية السلبية."
+            },
+            {
+                id: 3,
+                category: "dowsing",
+                title: "أسياخ النحاس للدوزينج",
+                price: "$45",
+                image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=500&auto=format&fit=crop",
+                description: "مزدوج أسياخ نحاسية عالية الحساسية لالتقاط حقول الطاقة، كشف مسارات الفونغ شوي، وتحديد مراكز القوة والطاقات الحيوية في المساحات والمنازل."
+            },
+            {
+                id: 4,
+                category: "cleansing",
+                title: "مجموعة حزمة الميرمية البيضاء",
+                price: "$20",
+                image: "https://images.unsplash.com/photo-1602928321679-560bb453f190?w=500&auto=format&fit=crop",
+                description: "ميرمية بيضاء طبيعية مستوردة للتطهير الأثيري العميق. تعمل دخان الميرمية على تنظيف الهالة، طرد الطاقات الركودة في البيوت، وتحضير الأجواء للطقوس والتأمل."
+            },
+            {
+                id: 5,
+                category: "crystals",
+                title: "حجر السيترين الذهبي",
+                price: "$30",
+                image: "https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=500&auto=format&fit=crop",
+                description: "حجر الوفرة والتجلي المادي. يرتبط بشاكرا الضفيرة الشمسية، ويعزز طاقات الجذب، الثقة بالنفس، وتدفق النعم والفرص في حياة حامله."
+            }
+        ];
+
+        // تهيئة SDK تلغرام
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+        }
+
+        // عرض المنتجات في الشبكة
+        function renderProducts(items) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+
+            items.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.onclick = () => openModal(product);
+
+                card.innerHTML = `
+                    <img src="${product.image}" class="product-img" alt="${product.title}">
+                    <div class="product-info">
+                        <div class="product-title">${product.title}</div>
+                        <div class="product-price">${product.price}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // تصفية حسب الفئة
+        function filterCategory(cat, btnElement) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            if (cat === 'all') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === cat);
+                renderProducts(filtered);
+            }
+        }
+
+        // فتح نافذة التفاصيل
+        function openModal(product) {
+            document.getElementById('modalImg').src = product.image;
+            document.getElementById('modalTitle').innerText = product.title;
+            document.getElementById('modalPrice').innerText = `السعر: ${product.price}`;
+            document.getElementById('modalDesc').innerText = product.description;
+
+            // إعداد رابط الواتساب/تليغرام المحمل بالرسالة
+            const message = encodeURIComponent(`مرحباً، أرغب في الاستفسار وشراء أداة: (${product.title}) بسعر ${product.price}`);
+            document.getElementById('modalBuyLink').href = `https://t.me/${SUPPORT_USERNAME}?text=${message}`;
+
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        // إغلاق النافذة
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+
+        // تحميل المنتجات عند البدء
+        window.onload = () => {
+            renderProducts(products);
+        };
+    </script>
+</body>
+</html>
