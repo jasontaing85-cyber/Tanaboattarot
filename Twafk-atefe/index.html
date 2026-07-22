@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>حاسبة التوافق الروحي الكوني</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #050511;
+            --bg-card: rgba(18, 15, 38, 0.75);
+            --gold-light: #fbe3b5;
+            --gold-main: #d4af37;
+            --purple-accent: #7c3aed;
+            --purple-light: #c084fc;
+            --cyan-accent: #38bdf8;
+            --text-light: #f1f5f9;
+            --text-dim: #94a3b8;
+            --border-glow: rgba(212, 175, 55, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Amiri', serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(124, 58, 237, 0.2) 0%, transparent 70%),
+                radial-gradient(circle at 50% 100%, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
+            background-attachment: fixed;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-family: 'Reem Kufi', sans-serif;
+            font-size: 1.8rem;
+            color: var(--gold-main);
+            text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+            margin-bottom: 6px;
+        }
+
+        p.subtitle {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        /* Form Container */
+        .form-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            margin-bottom: 20px;
+        }
+
+        .partner-box {
+            margin-bottom: 18px;
+            padding: 12px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .partner-title {
+            font-family: 'Reem Kufi', sans-serif;
+            color: var(--gold-light);
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        input[type="text"], input[type="date"] {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(10, 8, 22, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="date"]:focus {
+            border-color: var(--gold-main);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+        }
+
+        .calc-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--gold-main), #aa7c11);
+            color: #000;
+            border: none;
+            padding: 13px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            font-family: 'Reem Kufi', sans-serif;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        .calc-btn:active {
+            transform: scale(0.97);
+        }
+
+        .calc-btn:disabled {
+            background: #332d42;
+            color: #777;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* Result Display Box */
+        .result-container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: 18px;
+            padding: 22px;
+            display: none;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            margin-bottom: 30px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Score Meter */
+        .score-header {
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.3), transparent);
+            border: 2px solid var(--gold-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 12px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .score-number {
+            font-family: 'Reem Kufi', sans-serif;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--gold-light);
+        }
+
+        .partners-summary {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+            margin-top: 15px;
+            background: rgba(10, 8, 22, 0.5);
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .partner-summary-item {
+            text-align: center;
+        }
+
+        .p-name {
+            font-family: 'Reem Kufi', sans-serif;
+            color: var(--cyan-accent);
+            font-size: 1rem;
+        }
+
+        .p-detail {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 4px;
+        }
+
+        /* Reading Sections */
+        .section-box {
+            margin-bottom: 18px;
+            background: rgba(10, 8, 19, 0.5);
+            padding: 16px;
+            border-radius: 12px;
+            border-right: 3px solid var(--gold-main);
+        }
+
+        .section-box.advice {
+            border-right-color: var(--purple-light);
+            background: rgba(124, 58, 237, 0.08);
+        }
+
+        .section-title {
+            font-family: 'Reem Kufi', sans-serif;
+            color: var(--gold-main);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title.advice-title {
+            color: var(--purple-light);
+        }
+
+        .section-content {
+            font-size: 0.98rem;
+            line-height: 1.85;
+            color: var(--text-light);
+            text-align: justify;
+        }
+
+        .timer-msg {
+            text-align: center;
+            color: var(--gold-light);
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>✦ كاشف التوافق الكوني ✦</h1>
+        <p class="subtitle">استبصار مسارات الحياة والتطابق الباطني بين الشريكين</p>
+    </header>
+
+    <div class="form-container" id="formContainer">
+        <!-- الطرف الأول -->
+        <div class="partner-box">
+            <div class="partner-title"><span>👤</span> بيانات الطرف الأول</div>
+            <div class="input-group">
+                <label>الاسم:</label>
+                <input type="text" id="p1Name" placeholder="أدخل اسم الشخص الأول">
+            </div>
+            <div class="input-group">
+                <label>تاريخ الميلاد:</label>
+                <input type="date" id="p1Dob">
+            </div>
+        </div>
+
+        <!-- الطرف الثاني -->
+        <div class="partner-box">
+            <div class="partner-title"><span>👤</span> بيانات الطرف الثاني</div>
+            <div class="input-group">
+                <label>الاسم:</label>
+                <input type="text" id="p2Name" placeholder="أدخل اسم الشخص الثاني">
+            </div>
+            <div class="input-group">
+                <label>تاريخ الميلاد:</label>
+                <input type="date" id="p2Dob">
+            </div>
+        </div>
+
+        <button class="calc-btn" id="calcBtn" onclick="processCompatibility()">كشف التوافق الكوني</button>
+        <div class="timer-msg" id="timerMsg"></div>
+    </div>
+
+    <!-- حاوية عرض النتيجة -->
+    <div class="result-container" id="resultContainer">
+        <div class="score-header">
+            <div class="score-circle">
+                <span class="score-number" id="compatibilityScore">0%</span>
+            </div>
+            <h2 style="font-family: 'Reem Kufi', sans-serif; color: var(--gold-light); font-size: 1.3rem;" id="compatibilityTitle">--</h2>
+            
+            <div class="partners-summary">
+                <div class="partner-summary-item">
+                    <div class="p-name" id="sumP1Name">--</div>
+                    <div class="p-detail" id="sumP1Detail">--</div>
+                </div>
+                <div style="color: var(--gold-main); align-self: center; font-size: 1.2rem;">✦</div>
+                <div class="partner-summary-item">
+                    <div class="p-name" id="sumP2Name">--</div>
+                    <div class="p-detail" id="sumP2Detail">--</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- التناغم الباطني والروحي -->
+        <div class="section-box">
+            <div class="section-title"><span>✨</span> التناغم الباطني والروحي</div>
+            <div class="section-content" id="spiritualReading"></div>
+        </div>
+
+        <!-- نقاط القوة في الرابطة -->
+        <div class="section-box">
+            <div class="section-title"><span>🛡</span> نقاط القوة والالتقاء</div>
+            <div class="section-content" id="strengthsReading"></div>
+        </div>
+
+        <!-- التحديات والنقاط الحساسة -->
+        <div class="section-box">
+            <div class="section-title"><span>⚡</span> التحديات والدروس الكارمية</div>
+            <div class="section-content" id="challengesReading"></div>
+        </div>
+
+        <!-- الإرشاد والتوجيه الكوني -->
+        <div class="section-box advice">
+            <div class="section-title advice-title"><span>📜</span> الإرشاد والتوجيه لحماية العلاقة</div>
+            <div class="section-content" id="guidanceReading"></div>
+        </div>
+    </div>
+
+    <footer>
+        جميع الحقوق محفوظة © حاسبة التوافق الروحي الكوني
+    </footer>
+
+    <script>
+        // تهيئة Telegram WebApp SDK
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+        }
+
+        // حساب رقم مسار الحياة
+        function calculateLifePath(dobString) {
+            const digits = dobString.replace(/-/g, '');
+            let sum = 0;
+            for (let char of digits) {
+                sum += parseInt(char);
+            }
+            while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
+                let temp = 0;
+                sum.toString().split('').forEach(d => temp += parseInt(d));
+                sum = temp;
+            }
+            return sum;
+        }
+
+        // تحديد البرج والعنصر
+        function getZodiacAndElement(dobString) {
+            const date = new Date(dobString);
+            const month = date.getMonth() + 1;
+            const day = date.getDate() + 1; // تعديل الفارق الزمني
+
+            let zodiac = "";
+            let element = "";
+
+            if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) { zodiac = "الحمل"; element = "ناري"; }
+            else if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) { zodiac = "الثور"; element = "ترابي"; }
+            else if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) { zodiac = "الجوزاء"; element = "هوائي"; }
+            else if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) { zodiac = "السرطان"; element = "مائي"; }
+            else if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) { zodiac = "الأسد"; element = "ناري"; }
+            else if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) { zodiac = "العذراء"; element = "ترابي"; }
+            else if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) { zodiac = "الميزان"; element = "هوائي"; }
+            else if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) { zodiac = "العقرب"; element = "مائي"; }
+            else if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) { zodiac = "القوس"; element = "ناري"; }
+            else if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) { zodiac = "الجدي"; element = "ترابي"; }
+            else if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) { zodiac = "الدلو"; element = "هوائي"; }
+            else { zodiac = "الحوت"; element = "مائي"; }
+
+            return { zodiac, element };
+        }
+
+        // التحقق من الحد اليومي (24 ساعة)
+        function checkDailyLimit() {
+            const lastCalc = localStorage.getItem('last_compatibility_calc');
+            const calcBtn = document.getElementById('calcBtn');
+            const timerMsg = document.getElementById('timerMsg');
+
+            if (lastCalc) {
+                const now = new Date().getTime();
+                const timePassed = now - parseInt(lastCalc);
+                const twentyFourHours = 24 * 60 * 60 * 1000;
+
+                if (timePassed < twentyFourHours) {
+                    const remainingTime = twentyFourHours - timePassed;
+                    const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+                    const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    calcBtn.disabled = true;
+                    calcBtn.innerText = "تم إجراء الفحص اليومي";
+                    timerMsg.style.display = "block";
+                    timerMsg.innerText = `يمكنك إجلاء كشف توافق جديد بعد ${hours} ساعة و ${minutes} دقيقة.`;
+
+                    const savedResult = localStorage.getItem('current_compatibility_result');
+                    if (savedResult) {
+                        displayResult(JSON.parse(savedResult));
+                    }
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // معالجة القراءة والتوافق
+        function processCompatibility() {
+            if (!checkDailyLimit()) return;
+
+            const name1 = document.getElementById('p1Name').value.trim();
+            const dob1 = document.getElementById('p1Dob').value;
+            const name2 = document.getElementById('p2Name').value.trim();
+            const dob2 = document.getElementById('p2Dob').value;
+
+            if (!name1 || !dob1 || !name2 || !dob2) {
+                alert("يرجى إدخال جميع الأسماء وتواريخ الميلاد كاملة.");
+                return;
+            }
+
+            const lp1 = calculateLifePath(dob1);
+            const z1 = getZodiacAndElement(dob1);
+
+            const lp2 = calculateLifePath(dob2);
+            const z2 = getZodiacAndElement(dob2);
+
+            // حساب نسبة التوافق الديناميكية
+            let score = 70 + ((lp1 + lp2) % 25);
+            if (z1.element === z2.element) score += 8;
+            if (score > 98) score = 96;
+
+            // نصوص القراءة المدمجة
+            const resultData = {
+                score: score + "%",
+                title: score > 85 ? "تناغم روحي استثنائي" : "تكامل كارمي متوازن",
+                p1Name: name1,
+                p1Detail: `مسار الحياة: ${lp1} | برج ${z1.zodiac} (${z1.element})`,
+                p2Name: name2,
+                p2Detail: `مسار الحياة: ${lp2} | برج ${z2.zodiac} (${z2.element})`,
+                spiritual: `يجمَعُ هذا اللقاء بين طاقة مسار الحياة (${lp1}) لـ ${name1} وطاقة مسار الحياة (${lp2}) لـ ${name2}. على المستوى الباطني، هذه الرابطة تمثل التقاءً مقدراً لتبادل الدروس والخبرات؛ حيث تميل طاقات هذين الرقمين إلى خلق توازن بين الرغبة في التجسيد والإنجاز وبين العمق النفسي والعاطفي. الالتقاء بين عنصر (${z1.element}) وعنصر (${z2.element}) يولد طاقة أثيرية تمنح الشراكة القدرة على التفاهم السريع والالتحام الروحي، مما يسهل على الطرفين قراءة مشاعر بعضهما البعض وتكوين مساحة آمنة تحتضن الاختلافات.`,
+                strengths: `• قدرة عالية على الدعم المتبادل؛ حيث يوفر أحدهما الاستقرار والتوجيه، بينما يمنح الآخر العاطفة والعمق.\n• وجود تخاطر روحي وتفهم غير مشروط يقلل من حاجتكما للشرح والتبرير المستمر.\n• السعي المشترك نحو بناء بيئة آمنة تتسم بالولاء والصدق والابتعاد عن العلاقات السطحية.`,
+                challenges: `• الحساسية الزائدة تجاه تقلبات المزيج الطاقي؛ مما قد يؤدي لكتمان المشاعر بدلاً من التعبير الصريح.\n• اختطاف الحذر والتردد لبعض القرارات المصيرية بسبب الخوف الزائد على استقرار الرابطة.`,
+                guidance: `• احرصا على التواصل اللفظي المباشر والصريح وتجنبا الاعتماد الكلي على التخمين والتخاطر.\n• منح كل طرف مساحته الخاصة للعزلة وإعادة شحن الهالة الشخصية دون تفسير ذلك كابتعاد عاطفي.\n• التركيز على تغذية النقاط المشتركة والاحتفاء بالإنجازات الصغيرة لحماية الرابطة من الركود.`
+            };
+
+            // حفظ النتيجة في LocalStorage
+            localStorage.setItem('last_compatibility_calc', new Date().getTime().toString());
+            localStorage.setItem('current_compatibility_result', JSON.stringify(resultData));
+
+            displayResult(resultData);
+            checkDailyLimit();
+        }
+
+        // عرض النتيجة
+        function displayResult(data) {
+            document.getElementById('compatibilityScore').innerText = data.score;
+            document.getElementById('compatibilityTitle').innerText = data.title;
+            document.getElementById('sumP1Name').innerText = data.p1Name;
+            document.getElementById('sumP1Detail').innerText = data.p1Detail;
+            document.getElementById('sumP2Name').innerText = data.p2Name;
+            document.getElementById('sumP2Detail').innerText = data.p2Detail;
+
+            document.getElementById('spiritualReading').innerText = data.spiritual;
+            document.getElementById('strengthsReading').innerText = data.strengths;
+            document.getElementById('challengesReading').innerText = data.challenges;
+            document.getElementById('guidanceReading').innerText = data.guidance;
+
+            const resContainer = document.getElementById('resultContainer');
+            resContainer.style.display = "block";
+            resContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // عند فتح التطبيق
+        window.onload = function() {
+            checkDailyLimit();
+        };
+    </script>
+</body>
+</html>
