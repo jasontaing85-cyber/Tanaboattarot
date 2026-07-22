@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تاروت المنفصلين - Mini App</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0813;
+            --bg-card: #151128;
+            --gold-light: #fbe3b5;
+            --gold-main: #d4af37;
+            --gold-dark: #aa7c11;
+            --purple-accent: #6b21a8;
+            --purple-light: #a855f7;
+            --text-light: #e2e8f0;
+            --text-dim: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Amiri', serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(107, 33, 168, 0.25) 0%, transparent 70%),
+                radial-gradient(circle at 50% 100%, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            background-attachment: fixed;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-family: 'Reem Kufi', sans-serif;
+            font-size: 1.8rem;
+            color: var(--gold-main);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+        }
+
+        /* Card Deck Area */
+        .deck-container {
+            position: relative;
+            width: 100%;
+            max-width: 340px;
+            height: 270px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .tarot-card {
+            width: 160px;
+            height: 250px;
+            background: linear-gradient(145deg, #1e1838, #110d24);
+            border: 2px solid var(--gold-main);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.7), 0 0 15px rgba(212, 175, 55, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+            user-select: none;
+        }
+
+        .tarot-card::before {
+            content: '';
+            position: absolute;
+            top: 6px; left: 6px; right: 6px; bottom: 6px;
+            border: 1px dashed rgba(212, 175, 55, 0.4);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .card-back-pattern {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--gold-main);
+            transform: rotate(45deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-back-pattern::after {
+            content: '✦';
+            color: var(--gold-light);
+            font-size: 1.5rem;
+            transform: rotate(-45deg);
+        }
+
+        .draw-btn {
+            background: linear-gradient(135deg, var(--gold-main), var(--gold-dark));
+            color: #000;
+            border: none;
+            padding: 12px 35px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            font-family: 'Reem Kufi', sans-serif;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 20px;
+        }
+
+        .draw-btn:active {
+            transform: scale(0.96);
+        }
+
+        .draw-btn:disabled {
+            background: #4a4a4a;
+            color: #888;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        /* Reading Display Container */
+        .reading-container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--bg-card);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 16px;
+            padding: 22px;
+            display: none;
+            animation: fadeIn 0.8s ease-in-out forwards;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-header {
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-family: 'Reem Kufi', sans-serif;
+            font-size: 1.7rem;
+            color: var(--gold-light);
+        }
+
+        .card-symbolism {
+            font-size: 0.95rem;
+            color: var(--gold-main);
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        .section-box {
+            margin-bottom: 20px;
+            background: rgba(10, 8, 19, 0.6);
+            padding: 16px;
+            border-radius: 10px;
+            border-right: 3px solid var(--gold-main);
+        }
+
+        .section-box.healing {
+            border-right-color: var(--purple-light);
+            background: rgba(107, 33, 168, 0.12);
+        }
+
+        .section-title {
+            font-family: 'Reem Kufi', sans-serif;
+            color: var(--gold-main);
+            font-size: 1.15rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title.healing-title {
+            color: var(--purple-light);
+        }
+
+        .section-content {
+            font-size: 1rem;
+            line-height: 1.85;
+            color: var(--text-light);
+            text-align: justify;
+        }
+
+        .timer-msg {
+            text-align: center;
+            color: var(--gold-light);
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: none;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>✦ تاروت المنفصلين ✦</h1>
+        <p class="subtitle">استبصار روحي وإرشاد لتشافي العلاقات والتأمل الباطني</p>
+    </header>
+
+    <div class="deck-container">
+        <div class="tarot-card" id="mainCard">
+            <div class="card-back-pattern"></div>
+        </div>
+    </div>
+
+    <button class="draw-btn" id="drawBtn" onclick="drawCard()">اسحب بطاقتك اليومية</button>
+    <div class="timer-msg" id="timerMsg"></div>
+
+    <div class="reading-container" id="readingContainer">
+        <div class="card-header">
+            <h2 class="card-title" id="cardName">--</h2>
+            <div class="card-symbolism" id="cardSymbolism">--</div>
+        </div>
+
+        <!-- القراءة الشاملة المدمجة -->
+        <div class="section-box">
+            <div class="section-title"><span>✦</span> القراءة الشاملة للانفصال</div>
+            <div class="section-content" id="unifiedReading"></div>
+        </div>
+
+        <!-- الإرشاد والتوجيه -->
+        <div class="section-box">
+            <div class="section-title"><span>📜</span> الإرشاد والتوجيه الكوني</div>
+            <div class="section-content" id="guidanceReading"></div>
+        </div>
+
+        <!-- بروتوكول التشافي والقطع الطاقي -->
+        <div class="section-box healing">
+            <div class="section-title healing-title"><span>🔮</span> بروتوكول التشافي والقطع الطاقي</div>
+            <div class="section-content" id="healingReading"></div>
+        </div>
+    </div>
+
+    <footer>
+        جميع الحقوق محفوظة © تاروت المنفصلين الروحي
+    </footer>
+
+    <script>
+        // تهيئة Telegram WebApp
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+        }
+
+        // قاعدة بيانات الـ 12 بطاقة للمنفصلين وفق الصياغة المدمجة والمحدثة
+        const cardsData = [
+            {
+                id: 1,
+                name: "ثلاثية السيوف (Three of Swords)",
+                symbolism: "الرمزية: قلب مثقوب بثلاثة سيوف تحت غيوم رمادية. السيوف لا تقتل القلب بل تفتح فيه ممرّاً لتدفق النور والبصيرة.",
+                unified: "تجسد هذه البطاقة حزناً عميقاً وصدمة عاطفية ناتجة عن الانفصال، حيث تشعر بضيق في الصدر وخيبة أمل لم تكن تتوقعها. لكن على البعد الروحي الأكثر عمقاً، هذا الانفصال ليس عقاباً أو نهاية مطاف، بل هو بتر طاقي اضطراري لحمايتك من استنزاف ممتد. الألم الذي تخوضه الآن هو احتكاك الغلاف الخارجي للأنا وهو يتفكك ليتيح لروحك التحرر. السيوف الثلاثة أُغمدت في هذا الرابط لتطهير شاكرا القلب من التمسك بالوهم والتعلق المرضي بشريك لم يعد يخدم نموك الروحي.",
+                guidance: "• توقف تماماً عن محاولات التواصل أو ملاحقة أخباره؛ المحاولات ستعيد فتح الجرح الطاقي.\n• تقبل الحزن دون الحكم على نفسك؛ البكاء هنا هو غسيل هالي لتطهير هالتك.\n• اقطع التوقعات ولا تنتظر اعتذاراً؛ شفاء روحك يبدأ عندما تتوقف عن انتظار إجابات من الشخص الذي تسبب في الألم.",
+                healing: "تمرين قطع الروابط الأثيرية: اجلس في مكان هادئ، واغمض عينيك. تخيل حبلاً أثيرياً يربط بين شاكرا قلبك وشاكرا قلب الشريك. تخيل سيفاً من النور البنفسجي يقطع هذا الحبل تماماً وشاهد الحبل يذوب في الضوء. استحم بماء ودش الملح البحري لمدة 15 دقيقة لطرد الطاقات المترسبة، واستمع لتردد 528Hz لإعادة بناء هالتك."
+            },
+            {
+                id: 2,
+                name: "الناسك (The Hermit)",
+                symbolism: "الرمزية: حكيم يتكئ على عصاه ويحمل مصباحاً تضيء فيه نجمة سداسية وسط ظلام الجبال.",
+                unified: "تخبرك هذه البطاقة أن الفراق الحالي لم يكن مجرد حدث عشوائي، بل هو انسحاب مقدر وفرصة فريدة للعودة إلى ذاتك بعيداً عن ضجيج العلاقة. على المستوى اليومي، تشعر برغبة عارمة في العزلة والابتعاد عن الجميع، وهو شعور طبيعي يفرضه احتياجك لفهم ما حدث. خلف هذه العزلة يكمن بعد روحي عميق؛ فالكون يدعوك لإيقاف الاتكال العاطفي على الآخرين والبدء في إضاءة شعلتك الخاصة. لقد كنت تعتمد على ضوء الشريك لترى قيمتك، بينما تتطلب هذه المرحلة أن تدرك أن النور والحكمة ينبعان من داخلك فقط.",
+                guidance: "• احترم حاجتك للعزلة ولا تجبر نفسك على التواجد في تجمعات لتغطية فراغ غياب الشريك.\n• قطع تتبع أخبار الشريك تماماً كي لا تشتت شعلة مصباحك الداخلي.\n• بدلاً من التفكير في 'لماذا تركني؟'، اسأل نفسك: 'ما الذي جاء هذا الفراق ليعلمني إياه عن استقلالي وقيمتي؟'.",
+                healing: "طقس الصمت واسترداد الطاقة: خصص 20 دقيقة يومياً قبل غروب الشمس في مكان هادئ. أشعل شمعة بيضاء وركز في شعلتها. أغمض عينيك وتخيل أن هناك خيوطاً ضوئية تمتد منك نحو الشريك، ثم كرر بثبات: 'أسترد كل جزيء من طاقتي وثقتي ورغبتي في الحياة التي وضعتها في هذه العلاقة، وأعيد لك طاقتك بالمحبة والسلام'. استمع لتردد 432Hz قبل النوم."
+            },
+            {
+                id: 3,
+                name: "البرج (The Tower)",
+                symbolism: "الرمزية: برج شامخ تضربه صاعقة من السماء فتتهاوى قمتها وسقوط الأشكال الزائفة.",
+                unified: "حدث الانفصال بشكل مفاجئ وصادم أدى لاهتزاز استقرارك وانهيار كل الخطط التي بنيتها. إلا أن هذا الانهيار العنيف هو في الحقيقة تدخل كوني قسري لتفكيك حقيقة بنيت على أوهام أو خوف من الوحدة. البرج الذي تهدم كان سجناً لطاقتك يمنعك من التطور. الصاعقة لم تأتِ لتدميرك بل لكسر الأغلال القوية التي ربطتك بوضع سام. انهيار الصورة الذهنية للعلاقة هو البداية الحقيقية لولادة صحوة روحية تتيح لك إعادة بناء حياتك على أرضية حقيقية وصلبة.",
+                guidance: "• لا تحاول ترميم ما تدمر أو إرجاع الأمور لسابق عهدها؛ الانهيار حدث لحمايتك.\n• دع الغبار ينقضي ولا تتخذ أي قرارات متسرعة تحت تأثير الصدمة.\n• اعلم أن الحرية الحقيقية تبدأ عندما تسقط الهياكل المزيفة في حياتك.",
+                healing: "تفريغ شحنات الخوف: اكتب كافة مشاعر الغضب والخوف والصدمة على ورقة بيضاء بالتفصيل، ثم قم بحرقها بأمان مع إطلاق نية التحرر الكامل. مارِس تمارين التنفس البطني العميق (4 ثوانٍ شهيق، 7 ثوانٍ حبس، 8 ثوانٍ زفير) لتفريغ طاقات الخوف من الجسد المشاعري."
+            },
+            {
+                id: 4,
+                name: "العشاق بالمقلوب (The Lovers Reversed)",
+                symbolism: "الرمزية: ملاك يظلل شخصين ينظر كل منهما في اتجاه مختلف، مما يرمز للشروخ والتضارب.",
+                unified: "تعكس هذه البطاقة وجود اختلال عميق في التوازن ونفور متزايد أدى للابتعاد والانفصال. تشعر بوجود شرخ واضح بين قيمك وقيم الشريك. على الجانب الروحي، هذه العلاقة كانت بمثابة مرآة كشفت لك الأجزاء الجريحة في داخلك والتي تتطلب حباً ذاتياً بدلاً من البحث عنه عند الآخرين. الانفصال ينبهك إلى أنك كنت تضحي بهويتك وبسلامك الداخلي للإبقاء على الرابط. التضارب الحالي جاء ليخبرك أن الحب الحقيقي لا يتطلب منك أبداً خسارة نفسك.",
+                guidance: "• أعد تقييم حدودك الشخصية وقيمك التي تنازلت عنها أثناء وجودك في العلاقة.\n• توقف عن إلقاء اللوم على نفسك أو البحث عن رضا الشريك على حساب كرامتك.\n• استرجع بوصلتك الذاتية واجعل الأولوية لسلامك النفسي.",
+                healing: "جلسة مرآة الحب الذاتي: قف أمام المرآة وانظر في عينيك بتركيز لمدة 5 دقائق يومياً، وكرر بصوت مشبع باليقين: 'أنا أستحق حباً متوازناً، وأنا كافٍ ومكتمل بذاتي'. قم بتنظيف شاكرا الضفيرة الشمسية عبر التعرض لأشعة الشمس الصباحية لمدة 10 دقائق."
+            },
+            {
+                id: 5,
+                name: "ثمانية كؤوس (Eight of Cups)",
+                symbolism: "الرمزية: شخص يدير ظهره لشمال الكؤوس المرتتبة ويمشي ليلاً باتجاه الجبال العالية.",
+                unified: "تعبر هذه البطاقة عن قرار المغادرة والرحيل الإرادي بعد إدراك أن العلاقة لم تعد تغذي روحك أو تمنحك الأمان المشاعري. بالرغم من استثمارك العاطفي السابق، إلا أن المشي بعيداً كان الخيار الوحيد المتبقي. روحياً، هذا الابتعاد ليس استسلاماً بل هو انتصار للوعي؛ لقد أكملت الدروس الكارمية لهذه المرحلة والبقاء كان سيعني الفناء البطيء لطاقتك. رحيلك نحو الجبال المرتفعة يرمز لرحلة البحث عن المعنى الأعمق واستعادة تقديرك لذاتك.",
+                guidance: "• احترم شجاعتك في الابتعاد ولا تسمح للحنين اللحظي بأن يعيدك لبيئة استنزفتك.\n• تذكر أن الحنين هو مجرد ذكريات للماضي وليس دليلاً على إمكانية صلاح المستقبل مع الشريك.\n• استمر في السير للأمام حتى لو كان الطريق المجهول يبدو موحشاً في البداية.",
+                healing: "تأمل المشي الطبيعي (Grounding): امشي حافي القدمين على التراب أو العشب لمدة 15 دقيقة لإفراغ الطاقة العاطفية الثقيلة من جسمك إلى الأرض. أطلق نية واضحة بترك الكؤوس الفارغة خلفك واستقبال فرص روحية وعاطفية جديدة متناغمة مع وعيك الحالي."
+            },
+            {
+                id: 6,
+                name: "خماسية الكؤوس (Five of Cups)",
+                symbolism: "الرمزية: شخص يرتدي رداءً أسود ينظر بحزن إلى ثلاثة كؤوس مسكوبة، بينما تجلس كأسان سليمتان خلفه.",
+                unified: "تسلط هذه البطاقة الضوء على حالة الانغماس في الحزن والندم والتأسف على ما خسرته بعد الانفصال. تركيزك الكامل منصب على الوعود التي انكسرت والآمال التي تحطمت. ومع ذلك، ينطوي المشهد على جانب روحي ملهم؛ فبينما تبكي على الكؤوس المسكوبة، هناك كأسان سليمتان خلفك يمثلان الطاقة المتبقية لنفسك ولمستقبلك. الحزن الشديد يعميك حالياً عن رؤية الجسر الممتد جوارك والذي يعبر بك نحو أفق جديد وأكثر اتساعاً.",
+                guidance: "• استدر بجسدك وفكرك ولا تطل النظر في أنقاض الماضي.\n• غير زاوية رؤيتك للأحداث؛ الفراق خسارة لشخص لم يقدّرك لكنه ليس خسارة لحياتك.\n• اسمح لدموعك بالهطول دون أن تجعل الحزن هويتك الدائمة.",
+                healing: "تمارين الامتنان والتجدد: اكتب يومياً 3 أشياء إيجابية تمتلكها الآن في حياتك بعيداً عن هذه العلاقة. كرر التوكيد الروحي: 'أنا أحرر خيبات الماضي وأفتح قلبي للوفرة والحب النقي القادم'. استمع لتردد 639Hz لإصلاح العلاقات والانسجام الداخلي."
+            },
+            {
+                id: 7,
+                name: "المشنوق (The Hanged Man)",
+                symbolism: "الرمزية: رجل معلق من قدمه على شجرة حية، وتحيط برأسه هالة من النور الذهبي المشرق.",
+                unified: "تشير البطاقة إلى حالة من التوقف والتعليق التام؛ لا يوجد تقدم ولا تراجع في مسألة الفراق، مما يولد لديك شعوراً بالعجز والانتظار. بَيْدَ أن هذا التعليق الظاهري يحمل سريرة باطنية عظيمة؛ فهو استراحة إجبارية يفرضها الكون عليك لمراجعة منظومتك الفكرية. التعليق رأسًا على عقب يمنحك رؤية جديدة ومختلفة تماماً للأمور. المطلوب منك الآن ليس الفعل أو المقاومة، بل التضحية برغبتك في السيطرة والقبول التام باللحظة الحالية.",
+                guidance: "• توقف عن محاولة تحريك المياه الراكدة أو فرض حلول بالقوة.\n• استغل حالة التوقف لمراقبة مشاعرك وأفكارك من مكان المحايد.\n• اعلم أن الاستسلام للواقع الحالي هو المفتاح الوحيد لتفكيك التعليق الطاقي.",
+                healing: "تأمل التحرر والتسليم: استلقِ على ظهرك واجعل جسدك في حالة استرخاء كاملة. أغمض عينيك وقل بصوت خافت: 'أنا أسلم هذه العلاقة ونتائجها للعدالة الإلهية، وأرفع يدي تماماً عن السيطرة'. ركز على تدفق أنفاسك لتهدئة الجهاز العصبي."
+            },
+            {
+                id: 8,
+                name: "الشيطان (The Devil)",
+                symbolism: "الرمزية: شخصان مقيدان بسلاسل فضفاضة حول أعناقهما أمام كائن يرمز للتعلق والسيطرة.",
+                unified: "تظهر هذه البطاقة عندما تكون العلاقة قائمة على الهوس، التحكم، والتعلق السام الذي يمتد أثره حتى بعد وقوع الانفصال. تشعر بأنك سجين للتفكير بالشريك ورغبة قسرية في العودة رغم معرفتك الكاملة بأذيته. البعد الروحي للبطاقة يكشف أن السلاسل الملتفة حول العنق واسعة للغاية ويمكن خلعها بسهولة؛ مما يعني أن السجن إيهامي ومصنوع من خوفك من الفراغ. العلاقة استغلت جروحك القديمة الخفية، والانفصال فرصة لقطع هذا الإدمان المشاعري واسترداد حريتك.",
+                guidance: "• اعترف أمام نفسك بأن ما تشعر به حالياً ليس حباً نقياً بل هو احتياج وإدمان طاقي.\n• اقطع كافة سبل المراقبة والتعقب الذاتي عبر منصات التواصل الاجتماعي فوراً.\n• استرد سلطتك الشخصية وتذكر أن قوتك تكمن في قدرتك على الاختيار.",
+                healing: "عملية مواجهة الظل (Shadow Work): اكتب على ورقة: 'ما الذي كنت أبحث عنه في الشريك وأستطيع منحه لنفسي اليوم؟'. قم بتحرير شاكرا الجذر عبر المشي وإنجاز أعمال بدنية، واستمع لتردد 396Hz لتطهير الذنب والمشاعر السامة المترسبة."
+            },
+            {
+                id: 9,
+                name: "الموت (Death)",
+                symbolism: "الرمزية: فارس يرتدي درعاً أسود يحمل راية فيها زهرة بيضاء، والشمس تشرق بين أفق أثيري بعيد.",
+                unified: "تجسد هذه البطاقة تحولاً جذرياً وإغلاقاً تاماً لصفحة العلاقة. الانفصال هنا نهائي لا رجعة فيه لما كان عليه الوضع سابقاً. على النحو الروحي العميق، الموت في التاروت هو رمز للولادة الجديدة والتسامي؛ إنه يرمز لموت الهوية القديمة التي كانت تعتمد على وجود الشريك لتعريف ذاتها. لكي تتشكل الأنا الجديدة الأقوى والأكثر حكمة، كان لا بد لهذا الرابط المنهك أن ينتهي تماماً. انقضاء القشرة القديمة هو الممر الوحيد لتدفق دماء طاقية جديدة في حياتك.",
+                guidance: "• لا تحاول إنعاش هذا الرابط المنتهي أو التشبث بذكرياته.\n• تقبل مرحلة الحداد والعاديين كجزء طبيعي من دورة التجدد الإلهية.\n• افتح يديك واستعد لما هو أعظم وأجمل يخبئه لك المستقبل.",
+                healing: "طقس الدفن والتحول: خذ غصناً يابساً أو غرضاً صغيراً يرمز للعلاقة وقم بدفنه في التراب، وأعد زراعة نبات جديد فوقه كرمز لتجدد طاقتك. استمع لتردد 417Hz لتسهيل التغيير وتفكيك المواقف الضاغطة."
+            },
+            {
+                id: 10,
+                name: "عشرة السيوف (Ten of Swords)",
+                symbolism: "الرمزية: جسد مستلقٍ بثبات مطعون بعشرة سيوف، بينما يظهر الشروق الذهبي في نهاية الأفق.",
+                unified: "تعكس البطاقة وصولك إلى القاع العاطفي والنهاية القصوى من ألم الغدر أو خيبة الأمل. تشعر بأنك استُنزفت بالكامل ولم يعد لديك طاقة للمقاومة. إلا أن الحقيقة الباطنية الملهمة تكمن في أن السيوف العشرة قد اكتملت؛ مما يعني أن الألم قد وصل لحده الأقصى ولن يكون الوضع أسوأ مما هو عليه. الشروق الذهبي الظاهر في الأفق يعلن أن أظلم لحظات الليل هي التي تسبق الفجر مباشرة، وأن مرحلة العذاب قد انتهت ليبدأ التعافي.",
+                guidance: "• استلقِ وارتح؛ لقد انتهت المعركة ولا داعي لجَلد ذاتك أكثر.\n• اعلم أن وصولك للقاع هو نقطة الارتكاز القوية التي ستدفعك للأعلى مجدداً.\n• ركز على السلام والراحة البدنية والنفسية كأولوية مطلقة الآن.",
+                healing: "جلسة التداوي بالصوت والصمت: اجلس في مكان هادئ واستمع لأواني التبت أو تردد 174Hz (تردد تخفيف الألم وتأمين الأمان النفسي). ضع يدك على قلبك وكرر: 'أنا آمن الآن، المعركة انتهت والسلام يغمر روحي'."
+            },
+            {
+                id: 11,
+                name: "عجلة الحظ (Wheel of Fortune)",
+                symbolism: "الرمزية: عجلة كونية تدور في السماء تحمل رموزاً كيمياوية وأجنحة، يحيط بها كائنات نورانية.",
+                unified: "تخبرك هذه البطاقة أن الانفصال جزء من التغيرات القدرية والدورات الكارمية في حياتك. هناك تحولات كبرى خارجة عن إرادتك حدثت لإعادة ترتيب مسار حياتك لصالح نموك الروحي. الدرس الباطني هنا يتلخص في تعلم التواجد في 'مركز العجلة الثابت' (روحك ووعيك الداخلي) بدلاً من التأرجح مع حركتها الخارجية والمتغيرة. الانفصال ليس مصادفة، بل هو استيفاء لكارما معينة وانتقال حتمي إلى مرحلة أعلى.",
+                guidance: "• ثق بالتدفق الإلهي واعلم أن ما أخطأك لم يكن ليصيبك وما أصابك لم يكن ليخطئك.\n• سلم أمرك للدورة القدرية الجديدة دون مقاومة التغيرات الحاصلة.\n• ابقَ مرناً ومستعداً للفرص والتحولات المباغتة التي ستظهر قريبًا.",
+                healing: "مانترا الانسجام الكوني: اجلس في وضعية مريحة وكرر لمدة 10 دقائق: 'أنا أتنسجم مع القدر الإلهي، وأسمح للتغيرات بأن تأخذني نحو خير روحي الأسمى'. استخدم حجر العقيق أو عين النمر لتعزيز الثبات الطاقي."
+            },
+            {
+                id: 12,
+                name: "النجمة (The Star)",
+                symbolism: "الرمزية: امرأة تسكب الماء النقي على الأرض وفي الجدول تحت سماء مرصعة بالنجوم المضيئة.",
+                unified: "تشرق هذه البطاقة في سماء قراءتك لتبث في قلبك السلام والطمأنينة بعد عاصفة الانفصال. إنها تتنبأ بشفاء عاطفي قريب وبداية مرحلة من الصفاء الروحي. سكب الماء على الأرض والجدول يرمز لإعادة توازن طاقاتك العاطفية والجسدية. روحياً، هالتك تتلقى الآن إمدادات نورانية عالية لغسل آثار الجروح القديمة. النجمة هي وعد كوني بأن الأمل لم يضع، وأن روحك تستعيد نضارتها إشراقها لتستقبل الحب الشافي والحقيقي.",
+                guidance: "• افتح قلبك للشفاء والأمل مجدداً دون خوف من التعرض للأذى.\n• صب اهتمامك وطاقتك في مشاريعك الإبداعية وأحلامك الخاصة.\n• كن صبوراً مع نفسك؛ فالنجمة تنير الطريق ببطء ويثبات.",
+                healing: "تأمل النور والأمل: اجلس ليلاً تحت السماء، واستشعر أن هناك شعاعاً نورانياً أبيض صافياً ينزل من أكبر نجمة متجهاً إلى شاكرا العين الثالثة ثم التاج والقلب. استمع لتردد 852Hz لتصفية الذهن العاطفي وتنشيط البصيرة."
+            }
+        ];
+
+        // مصفوفات الرسائل الإضافية لدمج الاحتمالات ديناميكياً
+        const dynamicCosmicMessages = [
+            "الكون يرسل لك إشارة: التوافق الطاقي بينكما يتطلب منك إعادة بناء استقلالك أولاً.",
+            "رسالة من مرشديك الروحيين: الصبر في هذه المرحلة يفتح لك أبواباً لم تكن تتوقعها.",
+            "طاقة اليوم تدعوك لإغلاق الهاتف والارتباط بالطبيعة لاستعادة توازن هالتك.",
+            "ملاحظة كونية: الروابط الأثيرية تمر بمرحلة إعادة ضبط شديدة، أتح لنفسك المساحة."
+        ];
+
+        // التحقق من الحد اليومي للسحب (24 ساعة)
+        function checkDailyLimit() {
+            const lastDraw = localStorage.getItem('last_tarot_draw');
+            const drawBtn = document.getElementById('drawBtn');
+            const timerMsg = document.getElementById('timerMsg');
+
+            if (lastDraw) {
+                const now = new Date().getTime();
+                const timePassed = now - parseInt(lastDraw);
+                const twentyFourHours = 24 * 60 * 60 * 1000;
+
+                if (timePassed < twentyFourHours) {
+                    const remainingTime = twentyFourHours - timePassed;
+                    const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+                    const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    drawBtn.disabled = true;
+                    drawBtn.innerText = "تم سحب بطاقة اليوم";
+                    timerMsg.style.display = "block";
+                    timerMsg.innerText = `عد بعد ${hours} ساعة و ${minutes} دقيقة لسحب بطاقتك التالية.`;
+                    
+                    const savedReading = localStorage.getItem('current_reading');
+                    if (savedReading) {
+                        displayReading(JSON.parse(savedReading));
+                    }
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // دالة سحب البطاقة ودمج التفسيرات العشوائية
+        function drawCard() {
+            if (!checkDailyLimit()) return;
+
+            const drawBtn = document.getElementById('drawBtn');
+            const mainCard = document.getElementById('mainCard');
+            
+            // تأثير دوران البطاقة
+            mainCard.style.transform = "rotateY(180deg) scale(1.05)";
+            drawBtn.disabled = true;
+
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * cardsData.length);
+                let selectedCards = cardsData[randomIndex];
+
+                // دمج رسالة كونية ديناميكية منعاً للتكرار
+                const randomCosmicMsg = dynamicCosmicMessages[Math.floor(Math.random() * dynamicCosmicMessages.length)];
+                
+                const finalReading = {
+                    ...selectedCards,
+                    guidance: selectedCards.guidance + "\n\n✦ إرشاد اليوم: " + randomCosmicMsg
+                };
+
+                localStorage.setItem('last_tarot_draw', new Date().getTime().toString());
+                localStorage.setItem('current_reading', JSON.stringify(finalReading));
+
+                displayReading(finalReading);
+                checkDailyLimit();
+            }, 600);
+        }
+
+        // عرض القراءة في واجهة المستخدم
+        function displayReading(data) {
+            document.getElementById('cardName').innerText = data.name;
+            document.getElementById('cardSymbolism').innerText = data.symbolism;
+            document.getElementById('unifiedReading').innerText = data.unified;
+            document.getElementById('guidanceReading').innerText = data.guidance;
+            document.getElementById('healingReading').innerText = data.healing;
+
+            const container = document.getElementById('readingContainer');
+            container.style.display = "block";
+            
+            container.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // عند فتح التطبيق
+        window.onload = function() {
+            checkDailyLimit();
+        };
+    </script>
+</body>
+</html>
